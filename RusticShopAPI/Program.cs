@@ -1,5 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using RusticShopAPI.Data;
+using RusticShopAPI.Data.Models;
+using RusticShopAPI.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,22 +22,78 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddIdentityCore<User>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+})
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            builder.Configuration["JwtSettings:Key"]))
+    });
+
+builder.Services.AddScoped<JwtService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+var scope = app.Services.CreateScope();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    var scope = app.Services.CreateScope();
+    // Recreating database
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     dbContext.Database.EnsureDeleted();
     dbContext.Database.EnsureCreated();
 }
 
+// Creating default roles
+var roleManager = scope
+    .ServiceProvider
+    .GetRequiredService<RoleManager<IdentityRole>>();
+var roleNames = new string[]
+{
+    app.Configuration["Roles:Cx"]!,
+    app.Configuration["Roles:Admin"]!
+};
+foreach (var role in roleNames)
+{
+    var result = await roleManager.FindByNameAsync(role);
+    if (result == null)
+    {
+        var creation = await roleManager.CreateAsync(new IdentityRole
+        {
+            Name = role
+        });
+
+        if (!creation.Succeeded)
+        {
+            throw new Exception("No se pudieron crear los roles por defecto");
+        }
+    }
+}
+
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

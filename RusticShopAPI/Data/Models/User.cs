@@ -1,18 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RusticShopAPI.Data.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public long Id { get; set; }
+        // IdentityUser already has an Id, a Phone Number, an Email and a password hash
+        [ProtectedPersonalData]
         public string? IdentificationCardNumber { get; set; }
+        [PersonalData]
         public string? FirstName { get; set; }
+        [PersonalData]
         public string? LastName { get; set;}
-        public string? Username { get; set; }
-        public string? PhoneNumber { get; set; }
-        public string Email { get; set; } = null!;
-        public string PasswordHash { get; set; } = null!;
-        public bool IsAdmin { get; set; } = false;
 
         // Metadata
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
