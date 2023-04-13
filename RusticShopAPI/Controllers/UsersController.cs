@@ -64,28 +64,20 @@ namespace RusticShopAPI.Controllers
 
             return CreatedAtAction(
                 nameof(GetUser), 
-                new { username = request.UserName},
-                new
-                {
-                    UserName = request.UserName,
-                    Email = request.Email
-                });
+                new { username = request.UserName },
+                UserDTO.From(user));
         }
 
         [HttpGet("{username}")]
-        public async Task<ActionResult<User>> GetUser(string username)
+        public async Task<ActionResult<UserDTO>> GetUser(string username)
         {
             User user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            return new User
-            {
-                UserName = username,
-                Email = user.Email
-            };
+            return UserDTO.From(user);
         }
 
         [HttpPost("Login")]
@@ -113,6 +105,50 @@ namespace RusticShopAPI.Controllers
             var token = _jwtService.CreateToken(user);
 
             return Ok(token);
+        }
+
+        [HttpPut("{username}")]
+        public async Task<IActionResult> DeleteUser(string username, UserDTO userData)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            user.UserName = userData.UserName;
+            user.PhoneNumber = userData.PhoneNumber;
+            user.FirstName = userData.FirstName;
+            user.LastName = userData.LastName;
+            user.IdentificationCardNumber = userData.IdentificationCardNumber;
+            user.Email = userData.Email;
+            user.UpdatedAt = DateTime.UtcNow;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{username}")]
+        public async Task<IActionResult> DeleteUser(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return NoContent();
         }
     }
 }
