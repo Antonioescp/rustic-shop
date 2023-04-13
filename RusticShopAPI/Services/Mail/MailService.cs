@@ -1,6 +1,7 @@
 ﻿using MailKit;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
+using Microsoft.Identity.Client;
 using MimeKit;
 
 namespace RusticShopAPI.Services.Mail
@@ -8,6 +9,7 @@ namespace RusticShopAPI.Services.Mail
     public class MailService : IMailService
     {
         private readonly MailSettings _mailSettings;
+        private static readonly string TemplatePath = @"Services/Mail/Templates/";
 
         public MailService(IOptions<MailSettings> mailSettingsOptions)
         {
@@ -31,7 +33,7 @@ namespace RusticShopAPI.Services.Mail
                 emailMessage.Subject = mailData.EmailSubject;
                 var emailBodyBuilder = new BodyBuilder
                 {
-                    TextBody = mailData.EmailBody
+                    HtmlBody = mailData.EmailBody
                 };
                 emailMessage.Body = emailBodyBuilder.ToMessageBody();
 
@@ -52,6 +54,22 @@ namespace RusticShopAPI.Services.Mail
             {
                 return false;
             }
+        }
+
+        public async Task<bool> SendEmailTemplateAsync(
+            MailData mailData, 
+            string templateName,
+            params object?[] replacements)
+        {
+            var templateBody = await File.ReadAllTextAsync(
+                TemplatePath + templateName + ".html");
+            var body = String.Format(
+                format: templateBody,
+                args: replacements);
+
+            mailData.EmailBody = body;
+
+            return await SendEmailAsync(mailData);
         }
     }
 }
