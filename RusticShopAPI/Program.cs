@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Services;
+using RusticShopAPI.Services.Mail;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,7 +34,8 @@ builder.Services.AddIdentityCore<User>(options =>
     options.Password.RequireUppercase = true;
 })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
@@ -49,6 +51,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddScoped<JwtService>();
+
+// Setting SMTP
+builder.Services.Configure<MailSettings>(
+    builder.Configuration.GetSection("Mail"));
+builder.Services.AddTransient<IMailService, MailService>();
 
 var app = builder.Build();
 

@@ -15,7 +15,7 @@ namespace RusticShopAPI.Services
             _configuration = configuration;
         }
 
-        public LoginResponse CreateToken(User user)
+        public AuthenticationResponse CreateToken(User user)
         {
             var expiration = DateTime.Now.AddMinutes(Convert.ToDouble(
                 _configuration["JwtSettings:ExpirationInMinutes"]));
@@ -27,7 +27,7 @@ namespace RusticShopAPI.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            return new LoginResponse
+            return new AuthenticationResponse
             {
                 Success = true,
                 Message = "Autenticación con éxito",
