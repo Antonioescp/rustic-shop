@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.EventLog;
-using NuGet.ProjectModel;
-using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Services;
 using RusticShopAPI.Services.Mail;
@@ -37,20 +32,9 @@ namespace RusticShopAPI.Controllers
             _mailService = mailService;
         }
 
-        /// <summary>
-        /// Creates a new user account, with its default role to admin
-        /// </summary>
-        /// <param name="request">The user data</param>
-        /// <returns>The operation result</returns>
         [HttpPost]
-        public async Task<IActionResult> RegisterUser(
-            RegistrationRequest request)
+        public async Task<IActionResult> RegisterUser(RegistrationRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var user = new User
             {
                 UserName = request.UserName,
@@ -69,7 +53,7 @@ namespace RusticShopAPI.Controllers
             if (!result.Succeeded)
             {
                 await _userManager.DeleteAsync(user);
-                return StatusCode(500, result.Errors);
+                return BadRequest(result.Errors);
             }
 
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -88,39 +72,14 @@ namespace RusticShopAPI.Controllers
                 EmailToName = request.UserName
             }, "ConfirmAccount", confirmUrl);
 
-            return CreatedAtAction(
-                nameof(GetUser), 
-                new { username = request.UserName },
-                new
-                {
-                    UserData = UserDTO.From(user),
-                    EmailSent = mailSent
-                });
-        }
-
-        /// <summary>
-        /// Gets the user given its username
-        /// </summary>
-        /// <param name="username">The user's username</param>
-        /// <returns>The user's public data</returns>
-        [HttpGet("{username}")]
-        public async Task<ActionResult<UserDTO>> GetUser(string username)
-        {
-            User user = await _userManager.FindByNameAsync(username);
-            if (user == null)
+            return Ok(new 
             {
-                return BadRequest();
-            }
-
-            return UserDTO.From(user);
+                UserData = UserDTO.From(user),
+                EmailSent = mailSent
+            });
         }
 
-        /// <summary>
-        /// Verifies user's information and logs in
-        /// </summary>
-        /// <param name="loginRequest">The user's login data</param>
-        /// <returns>The status of the operation and a JWT if succeeded</returns>
-        [HttpPost("Login")]
+        [HttpPost("auth/login")]
         public async Task<ActionResult<AuthenticationResponse>> Login(LoginRequest loginRequest)
         {
             if (!ModelState.IsValid)
@@ -133,7 +92,7 @@ namespace RusticShopAPI.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(loginRequest.Email);
-            if (user == null 
+            if (user == null
                 || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
             {
                 return new AuthenticationResponse
@@ -143,51 +102,40 @@ namespace RusticShopAPI.Controllers
                 };
             }
 
-            var token = _jwtService.CreateToken(user);
+            var authResponse = _jwtService.CreateToken(user);
 
-            return Ok(token);
+            return Ok(authResponse);
         }
 
-        /// <summary>
-        /// Updates the given user
-        /// </summary>
-        /// <param name="username">The user's username</param>
-        /// <param name="userData">The user's new data</param>
-        /// <returns>No content</returns>
-        [HttpPut("{username}")]
-        public async Task<IActionResult> DeleteUser(string username, UserDTO userData)
+        [Authorize]
+        [HttpGet("account")]
+        public async Task<ActionResult<UserDTO>> GetAccount()
         {
+            var username = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+            if (username == null)
+            {
+                return Unauthorized();
+            }
+
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
-            user.UserName = userData.UserName;
-            user.PhoneNumber = userData.PhoneNumber;
-            user.FirstName = userData.FirstName;
-            user.LastName = userData.LastName;
-            user.IdentificationCardNumber = userData.IdentificationCardNumber;
-            user.Email = userData.Email;
-            user.UpdatedAt = DateTime.UtcNow;
-
-            var result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            return NoContent();
+            return Ok(UserDTO.From(user));
         }
 
-        /// <summary>
-        /// Deletes the given user
-        /// </summary>
-        /// <param name="username">The user's username</param>
-        /// <returns>No Content</returns>
-        [HttpDelete("{username}")]
-        public async Task<IActionResult> DeleteUser(string username)
+        [Authorize]
+        [HttpDelete("account")]
+        public async Task<IActionResult> DeleteAccount()
         {
+            var username = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+            if (username == null)
+            {
+                return Unauthorized();
+            }
+
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
@@ -197,20 +145,22 @@ namespace RusticShopAPI.Controllers
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
             {
-                return BadRequest(result.Errors);
+                return BadRequest();
             }
 
             return NoContent();
         }
 
-        /// <summary>
-        /// Sends a verification token to the user's email
-        /// </summary>
-        /// <param name="username">The user's username</param>
-        /// <returns>Ok</returns>
-        [HttpGet("{username}/send-email-confirmation")]
-        public async Task<ActionResult<AuthenticationResponse>> SendConfirmationEmail(string username)
+        [Authorize]
+        [HttpPost("auth/send-email-confirmation")]
+        public async Task<ActionResult<AuthenticationResponse>> SendConfirmationEmail()
         {
+            var username = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+            if (username == null)
+            {
+                return Unauthorized();
+            }
+
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
@@ -222,12 +172,12 @@ namespace RusticShopAPI.Controllers
             }
 
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmUrl = Request.Scheme + "://" + Request.Host
-                + Url.Action("ConfirmEmail", "Users", new
-                {
-                    username,
-                    token = emailToken
-                });
+            var confirmUrl = Url.Action(
+                nameof(ConfirmEmail),
+                "Users",
+                new { username = user.UserName, token = emailToken },
+                Request.Scheme,
+                Request.Host.Value)?.Replace("api/", "");
 
             var mailSent = await _mailService.SendEmailTemplateAsync(new MailData
             {
@@ -246,7 +196,7 @@ namespace RusticShopAPI.Controllers
             }
         }
 
-        [HttpGet("auth/confirm-email")]
+        [HttpPost("auth/confirm-email")]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string username, [FromQuery] string token)
         {
             var user = await _userManager.FindByNameAsync(username);
