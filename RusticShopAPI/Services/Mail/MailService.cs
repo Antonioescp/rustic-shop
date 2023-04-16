@@ -1,7 +1,5 @@
-﻿using MailKit;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
 using MimeKit;
 
 namespace RusticShopAPI.Services.Mail
