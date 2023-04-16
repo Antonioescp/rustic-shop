@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace RusticShopAPI.Data.Models
+namespace RusticShopAPI.Data.Models.Users
 {
     public class LoginRequest
     {

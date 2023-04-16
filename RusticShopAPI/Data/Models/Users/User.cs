@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RusticShopAPI.Data.Models
+namespace RusticShopAPI.Data.Models.Users
 {
     public class User : IdentityUser
     {
@@ -11,7 +11,7 @@ namespace RusticShopAPI.Data.Models
         [PersonalData]
         public string? FirstName { get; set; }
         [PersonalData]
-        public string? LastName { get; set;}
+        public string? LastName { get; set; }
 
         // Metadata
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

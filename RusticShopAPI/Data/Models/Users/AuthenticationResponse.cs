@@ -1,4 +1,4 @@
-﻿namespace RusticShopAPI.Data.Models
+﻿namespace RusticShopAPI.Data.Models.Users
 {
     public class AuthenticationResponse
     {

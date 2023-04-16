@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RusticShopAPI.Data.Models;
+using RusticShopAPI.Data.Models.Users;
 
 namespace RusticShopAPI.Data
 {
