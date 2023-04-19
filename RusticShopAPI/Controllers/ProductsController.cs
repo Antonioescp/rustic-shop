@@ -37,10 +37,10 @@ namespace RusticShopAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(long id)
         {
-          if (_context.Products == null)
-          {
-              return NotFound();
-          }
+            if (_context.Products == null)
+            {
+                return NotFound();
+            }
             var product = await _context.Products.FindAsync(id);
 
             if (product == null)
