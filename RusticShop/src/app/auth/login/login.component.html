@@ -1,0 +1,30 @@
+<div class="login">
+  <h1>Login</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <p>
+      <span class="error" *ngIf="loginResponse">
+        <strong>Error</strong>: {{ loginResponse.message }}
+      </span>
+    </p>
+
+    <div class="field">
+      <label for="email">Email: </label>
+      <input type="email" name="email" formControlName="email" required placeholder="fulano@ejemplo.com" />
+      <div class="error" *ngFor="let error of getErrors(form.get('email')!, 'Email')">
+        {{ error }}
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password">Contraseña: </label>
+      <input type="password" name="password" formControlName="password" required placeholder="***********" />
+      <div class="error" *ngFor="let error of getErrors(form.get('password')!, 'Contraseña')">
+        {{ error }}
+      </div>
+    </div>
+
+    <button type="submit">Ingresar</button>
+
+  </form>
+</div>
