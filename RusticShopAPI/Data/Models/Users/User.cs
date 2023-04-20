@@ -16,5 +16,9 @@ namespace RusticShopAPI.Data.Models.Users
         // Metadata
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation Properties
+        public ICollection<Product>? Cart { get; set; } = null!;
+        public ICollection<Product>? Wishlist { get; set; } = null!;
     }
 }

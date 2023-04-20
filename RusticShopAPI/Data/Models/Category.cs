@@ -14,6 +14,6 @@ namespace RusticShopAPI.Data.Models
         public string Name { get; set; } = null!;
 
         // Navigations
-        public ICollection<Product> Products { get; set; } = null!;
+        public ICollection<Product>? Products { get; set; } = null!;
     }
 }

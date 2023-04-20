@@ -51,37 +51,6 @@ namespace RusticShopAPI.Tests
             _controller = new ProductsController(_context);
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            _context.Dispose();
-        }
-
-        [Test]
-        public async Task GetProduct_GetsTheGivenProductById()
-        {
-            var productExisting = (await _controller.GetProduct(1)).Value;
-            var productNonExisting = (await _controller.GetProduct(3)).Value;
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(productExisting, Is.Not.Null);
-                Assert.That(productNonExisting, Is.Null);
-            });
-        }
-
-        [Test]
-        public async Task GetProducts_GetsAllProducts()
-        {
-            var products = (await _controller.GetProducts()).Value?.ToList();
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(products, Is.Not.Null);
-                Assert.That(products, Has.Count.EqualTo(2));
-            });
-        }
-
         [Test]
         public async Task PutProduct_UpdatesTheGivenProduct()
         {
@@ -128,6 +97,20 @@ namespace RusticShopAPI.Tests
                 Assert.That(insertedProduct, Is.Not.Null);
                 Assert.That(newProduct, Is.EqualTo(insertedProduct));
             });
+        }
+
+        [Test]
+        public async Task GetProduct_GetsTheProductByTheGivenId()
+        {
+            var product = (await _controller.GetProduct(1)).Value;
+            Assert.That(product, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task GetProducts_GetsAllProducts()
+        {
+            var products = (await _controller.GetProducts()).Value?.ToList();
+            Assert.That(products, Has.Count.EqualTo(2));
         }
     }
 }

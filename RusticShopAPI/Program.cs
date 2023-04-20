@@ -7,12 +7,19 @@ using RusticShopAPI.Data.Models.Users;
 using RusticShopAPI.Services;
 using RusticShopAPI.Services.Mail;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(
@@ -22,7 +29,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddIdentityCore<User>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
     options.User.RequireUniqueEmail = true;
@@ -32,13 +39,17 @@ builder.Services.AddIdentityCore<User>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
 })
-    .AddRoles<IdentityRole>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
     {
+        RequireExpirationTime = true,
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
@@ -49,7 +60,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             builder.Configuration["JwtSettings:Key"]))
     });
 
-builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<JwtHandler>();
 
 // Setting SMTP
 builder.Services.Configure<MailSettings>(
@@ -67,32 +78,61 @@ if (app.Environment.IsDevelopment())
 
     // Recreating database
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate();
-}
+    dbContext.Database.EnsureDeleted();
+    dbContext.Database.EnsureCreated();
 
-// Creating default roles
-var roleManager = scope
-    .ServiceProvider
-    .GetRequiredService<RoleManager<IdentityRole>>();
-var roleNames = new string[]
-{
-    app.Configuration["Roles:Cx"]!,
-    app.Configuration["Roles:Admin"]!
-};
-foreach (var role in roleNames)
-{
-    var result = await roleManager.FindByNameAsync(role);
-    if (result == null)
+    // Creating default roles
+    var roleManager = scope
+        .ServiceProvider
+        .GetRequiredService<RoleManager<IdentityRole>>();
+    var roleNames = new string[]
     {
-        var creation = await roleManager.CreateAsync(new IdentityRole
+        app.Configuration["Roles:Cx"]!,
+        app.Configuration["Roles:Admin"]!
+    };
+    foreach (var role in roleNames)
+    {
+        var existingRole = await roleManager.FindByNameAsync(role);
+        if (existingRole == null)
         {
-            Name = role
-        });
+            var creation = await roleManager.CreateAsync(new IdentityRole
+            {
+                Name = role
+            });
 
-        if (!creation.Succeeded)
-        {
-            throw new Exception("No se pudieron crear los roles por defecto");
+            if (!creation.Succeeded)
+            {
+                throw new Exception("No se pudieron crear los roles por defecto");
+            }
         }
+    }
+
+    // Creating admin in dev
+    var admin = new User
+    {
+        UserName = "ton1uwu",
+        Email = "packageinstaller2@gmail.com",
+        EmailConfirmed = true,
+        LockoutEnabled = false,
+    };
+
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var result = await userManager.CreateAsync(admin, "Flordeloto1!");
+    if (!result.Succeeded)
+    {
+        throw new Exception("No se pudo crear el administrador");
+    }
+
+    var addedToAdministrators = await userManager.AddToRoleAsync(admin, "Administrator");
+    if (!addedToAdministrators.Succeeded)
+    {
+        throw new Exception("No se pudo asignar el administrador");
+    }
+
+    var isInRole = await userManager.IsInRoleAsync(admin, "Administrator");
+    if (!isInRole)
+    {
+        throw new Exception("No se pudo asignar el administrador");
     }
 }
 

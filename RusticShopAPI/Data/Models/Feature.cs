@@ -21,6 +21,6 @@ namespace RusticShopAPI.Data.Models
         public string Value { get; set; } = null!;
 
         // Navigations
-        public Product Product { get; set; } = null!;
+        public Product? Product { get; set; } = null!;
     }
 }

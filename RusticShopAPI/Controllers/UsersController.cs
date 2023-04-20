@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -17,18 +18,18 @@ namespace RusticShopAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
-        private readonly JwtService _jwtService;
+        private readonly JwtHandler _jwtHandler;
         private readonly IConfiguration _configuration;
         private readonly IMailService _mailService;
 
         public UsersController(
             UserManager<User> userManager,
-            JwtService jwtService,
+            JwtHandler jwtHandler,
             IConfiguration configuration,
             IMailService mailService)
         {
             _userManager = userManager;
-            _jwtService = jwtService;
+            _jwtHandler = jwtHandler;
             _configuration = configuration;
             _mailService = mailService;
         }
@@ -73,16 +74,22 @@ namespace RusticShopAPI.Controllers
             if (user == null
                 || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
             {
-                return new AuthenticationResponse
+                return Unauthorized(new AuthenticationResponse
                 {
                     Success = false,
-                    Message = "Correo o contraseña equivocada"
-                };
+                    Message = "Correo electronico o contraseña invalida"
+                });
             }
 
-            var authResponse = _jwtService.CreateToken(user);
+            var token = await _jwtHandler.GetTokenAsync(user);
+            var secToken = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return Ok(authResponse);
+            return Ok(new AuthenticationResponse
+            {
+                Success = true,
+                Token = secToken,
+                Message = "Inicio de sesion correcto"
+            });
         }
 
         [Authorize]

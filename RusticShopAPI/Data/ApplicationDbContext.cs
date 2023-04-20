@@ -19,19 +19,23 @@ namespace RusticShopAPI.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Cart>()
-                .HasMany(c => c.Products)
+            builder.Entity<User>()
+                .HasMany(u => u.Wishlist)
+                .WithMany(p => p.Wishlists)
+                .UsingEntity<Wishlist>();
+
+            builder.Entity<User>()
+                .HasMany(u => u.Cart)
                 .WithMany(p => p.Carts)
-                .UsingEntity<CartProduct>(
-                    j => j.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()"));
+                .UsingEntity<Cart>();
         }
 
-        public DbSet<Category> Categories { get; set; } = null!;
-        public DbSet<Product> Products { get; set; } = null!;
-        public DbSet<Feature> Features { get; set; } = null!;
-        public DbSet<ProductImage> ProductImages { get; set; } = null!;
-        public DbSet<Wishlist> Wishlists { get; set; } = null!;
-        public DbSet<Cart> Carts { get; set; } = null!;
-        public DbSet<CartProduct> CartProducts { get; set; } = null!;
+        public DbSet<Category> Categories => Set<Category>();
+        public DbSet<Product> Products => Set<Product>();  
+        public DbSet<Feature> Features => Set<Feature>();
+        public DbSet<ProductImage> ProductImages => Set<ProductImage>();
+        public DbSet<Wishlist> Wishlists => Set<Wishlist>();
+        public DbSet<Cart> Carts => Set<Cart>();
+        public DbSet<Cart> CartProducts => Set<Cart>();
     }
 }

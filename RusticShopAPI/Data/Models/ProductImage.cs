@@ -19,6 +19,6 @@ namespace RusticShopAPI.Data.Models
         public string Url { get; set; } = null!;
 
         // Navigations
-        public Product Product { get; set; } = null!;
+        public Product? Product { get; set; } = null!;
     }
 }

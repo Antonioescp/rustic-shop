@@ -9,14 +9,21 @@ namespace RusticShopAPI.Data.Models
     {
         [Required]
         [Key]
-        public long Id { get; set; }
-
-        [Required]
         [ForeignKey(nameof(User))]
         public string UserId { get; set; } = null!;
 
-        // Navigations
-        public List<Product> Products { get; } = new();
-        public User User { get; set; } = null!;
+        [Required]
+        [ForeignKey(nameof(Product))]
+        public long ProductId { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        public DateTime? UpdatedAt { get; set; } = null;
+
+        // Navigation Properties
+        public User? User { get; set; } = null!;
+        public Product? Product { get; set; } = null!;
     }
 }

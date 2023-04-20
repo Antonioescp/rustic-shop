@@ -1,4 +1,5 @@
 ﻿using RusticShopAPI.Data.Models.Users;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,16 +9,20 @@ namespace RusticShopAPI.Data.Models
     public class Cart
     {
         [Required]
-        [Key]
-        public long Id { get; set; }
-
-        [Required]
         [ForeignKey(nameof(User))]
         public string UserId { get; set; } = null!;
 
+        [Required]
+        [ForeignKey(nameof(Product))]
+        public long ProductId { get; set; }
+
+        [Required]
+        public int Quantity { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; } = null;
+
         // Navigations
-        public User User { get; set; } = null!;
-        public List<Product> Products { get; } = new();
-        public List<CartProduct> CartProducts { get; } = new();
+        public User? User { get; set; } = null!;
+        public Product? Product { get; set; } = null!;
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using RusticShopAPI.Data.Models.Users;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RusticShopAPI.Data.Models
@@ -27,17 +29,18 @@ namespace RusticShopAPI.Data.Models
         [Required]
         public int Stock { get; set; }
 
+        [Required]
+        public bool IsPublished { get; set; } = true;
+
         // Metadata
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-
         // Navigations
-        public Category Category { get; set; } = null!;
-        public List<Feature> Features { get; } = new();
-        public List<ProductImage> Images { get; } = new();
-        public List<Wishlist> Wishlists { get; } = new();
-        public List<Cart> Carts { get; } = new();
-        public List<CartProduct> CartProducts { get; } = new();
+        public Category? Category { get; set; } = null!;
+        public ICollection<Feature>? Features { get; set; } = null!;
+        public ICollection<ProductImage>? Images { get; set; } = null!;
+        public ICollection<User>? Wishlists { get; set; } = null!;
+        public ICollection<User>? Carts { get; set; } = null!;
     }
 }
