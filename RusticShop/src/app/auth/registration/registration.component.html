@@ -1,1 +1,60 @@
-<p>registration works!</p>
+<div class="registration">
+  <h1>Registro</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="error" *ngIf="this.form.errors">
+      <p *ngFor="let error of getErrors(this.form, '', {
+        matchFields: 'Las contraseñas deben coincidir.'
+      })">
+        <strong>ERROR: </strong>{{ error }}
+      </p>
+    </div>
+
+    <div class="error" *ngIf="registrationResponse && registrationResponse.errors.length > 0">
+      <p *ngFor="let error of registrationResponse.errors">
+        {{ error }}
+      </p>
+    </div>
+
+    <div class="field">
+      <label for="username">Username: </label>
+      <input type="text" name="text" formControlName="username" placeholder="Fulanito de tal" required />
+      <div class="error"
+        *ngFor="let error of getErrors(form.get('username')!, 'Usuario', { minlength: 'debe tener al menos 8 caracteres'})">
+        {{ error }}
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="email">Email: </label>
+      <input type="email" name="email" formControlName="email" placeholder="fulanito@ejemplo.com" required />
+      <div class="error" *ngFor="let error of getErrors(form.get('email')!, 'Email')">
+        {{ error }}
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password">Password: </label>
+      <input type="password" name="password" formControlName="password" required placeholder="************" />
+      <div class="error"
+        *ngFor="let error of getErrors(form.get('password')!, 'Contraseña', { matchField: 'debe coincidir.' })">
+        {{ error }}
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password">Confirmar contraseña: </label>
+      <input type="password" name="confirm-password" formControlName="confirmPassword" required
+        placeholder="************" />
+      <div class="error"
+        *ngFor="let error of getErrors(form.get('confirmPassword')!, 'Confirmar contraseña', { matchField: 'debe coincidir.' })">
+        {{ error }}
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="this.form.invalid">
+      Registrarse
+    </button>
+
+  </form>
+</div>

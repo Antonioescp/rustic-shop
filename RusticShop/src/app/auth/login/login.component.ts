@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, AbstractControl, AsyncValidatorFn } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { BaseFormComponent } from '../../base-form.component';
 import { AuthService } from '../../auth.service';
@@ -18,7 +18,6 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
   loginResponse?: LoginResponse;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService
   ) { super(); }
@@ -39,14 +38,12 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
       .login(loginRequest)
       .subscribe({
         next: result => {
-          console.log(result);
           this.loginResponse = result;
           if (result.success) {
             this.router.navigate(['/']);
           }
         },
         error: error => {
-          console.log(error);
           if (error.status === 401) {
             this.loginResponse = error.error;
           }

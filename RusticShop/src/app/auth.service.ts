@@ -5,6 +5,8 @@ import { Observable, Subject, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { LoginRequest } from './auth/login/login-request';
 import { LoginResponse } from './auth/login/login-response';
+import { RegistrationRequest } from './auth/registration/registration-request';
+import { RegistrationResponse } from './auth/registration/registration-response';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +38,7 @@ export class AuthService {
   }
 
   login(item: LoginRequest): Observable<LoginResponse> {
-    var url = environment.baseUrl + "api/Users/auth/login";
+    const url = environment.baseUrl + "api/Users/auth/login";
     return this.http.post<LoginResponse>(url, item)
       .pipe(tap(loginResponse => {
         if (loginResponse.success && loginResponse.token) {
@@ -49,6 +51,11 @@ export class AuthService {
   logout() {
     localStorage.removeItem(this.tokenKey);
     this.updatedAuthStatus = false;
+  }
+
+  register(registrationRequest: RegistrationRequest) {
+    const url = environment.baseUrl + "api/Users";
+    return this.http.post<RegistrationResponse>(url, registrationRequest);
   }
 
   init() {

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.Users;
 using RusticShopAPI.Services;
 using RusticShopAPI.Services.Mail;
@@ -35,7 +36,7 @@ namespace RusticShopAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser(RegistrationRequest request)
+        public async Task<ActionResult<RegistrationResponse>> RegisterUser(RegistrationRequest request)
         {
             var user = new User
             {
@@ -46,7 +47,14 @@ namespace RusticShopAPI.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(result.Errors);
+                var response = new RegistrationResponse
+                {
+                    Success = false,
+                    Message = "Han ocurrido algunos errores",
+                    Errors = result.Errors.Select(error => error.Description).ToList(),
+                    EmailSent = false
+                };
+                return BadRequest(response);
             }
 
             result = await _userManager
@@ -55,14 +63,23 @@ namespace RusticShopAPI.Controllers
             if (!result.Succeeded)
             {
                 await _userManager.DeleteAsync(user);
-                return BadRequest(result.Errors);
+
+                var response = new RegistrationResponse
+                {
+                    Success = false,
+                    Message = "Han ocurrido algunos errores",
+                    Errors = result.Errors.Select(error => error.Description).ToList(),
+                    EmailSent = false
+                };
+                return BadRequest(response);
             }
 
             var mailSent = await SendConfirmationEmail(user);
 
-            return Ok(new 
+            return Ok(new RegistrationResponse
             {
-                UserData = UserDTO.From(user),
+                Success = true,
+                Message = $"Registrado con éxito{(mailSent ? ", correo de confirmación enviado" : "")}.",
                 EmailSent = mailSent
             });
         }
