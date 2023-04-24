@@ -6,6 +6,10 @@
       <span class="error" *ngIf="loginResponse">
         <strong>Error</strong>: {{ loginResponse.message }}
       </span>
+      <span class="error" *ngIf="accountLocked">
+        <strong>Cuenta bloqueada: </strong>
+        <a [routerLink]="['/Users/auth/request-account-unlock']">Solicita un desbloqueo.</a>
+      </span>
     </p>
 
     <div class="field">

@@ -1,0 +1,18 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <div class="field">
+    <label for="email">Email:</label>
+    <input type="email" name="email" formControlName="email" required placeholder="fulanito@example.com">
+
+    <div class="errors">
+      <p *ngFor="let error of getErrors(form.get('email')!, 'Email')">
+        {{ error }}
+      </p>
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="this.form.invalid">
+    Solicitar
+  </button>
+
+</form>

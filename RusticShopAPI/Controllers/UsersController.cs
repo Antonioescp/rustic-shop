@@ -70,10 +70,29 @@ namespace RusticShopAPI.Controllers
         public async Task<ActionResult<AuthenticationResponse>> Login(LoginRequest loginRequest)
         {
             var user = await _userManager.FindByEmailAsync(loginRequest.Email);
-            if (user == null
-                || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
+            if (user == null)
+            {
+                return BadRequest(new AuthenticationResponse
+                {
+                    Success = false,
+                    Message = "Correo electronico o contraseña invalida"
+                });
+            }
+
+            if (await _userManager.IsLockedOutAsync(user))
             {
                 return Unauthorized(new AuthenticationResponse
+                {
+                    Success = false,
+                    Message = "Tu cuenta ha sido bloqueada por demasiados intentos de inicio de sesión."
+                });
+            }
+
+            if (!await _userManager.CheckPasswordAsync(user, loginRequest.Password))
+            {
+                await _userManager.AccessFailedAsync(user);
+
+                return BadRequest(new AuthenticationResponse
                 {
                     Success = false,
                     Message = "Correo electronico o contraseña invalida"
@@ -82,6 +101,8 @@ namespace RusticShopAPI.Controllers
 
             var token = await _jwtHandler.GetTokenAsync(user);
             var secToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+            await _userManager.ResetAccessFailedCountAsync(user);
 
             return Ok(new AuthenticationResponse
             {
@@ -227,6 +248,84 @@ namespace RusticShopAPI.Controllers
             }, "PasswordReseted", user.UserName, url);
 
             return Ok();
+        }
+
+        [HttpPost("auth/request-account-unlock")]
+        public async Task<IActionResult> RequestAccountUnlock(AccountUnlockRequest data)
+        {
+            var user = await _userManager.FindByEmailAsync(data.Email);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (!await _userManager.IsLockedOutAsync(user))
+            {
+                return BadRequest();
+            }
+
+            var token = await _userManager.GenerateUserTokenAsync(
+                user,
+                TokenOptions.DefaultProvider,
+                "UnlockAccount");
+
+            if (token == null)
+            {
+                return StatusCode(500);
+            }
+
+            var url = Url.Action(
+                nameof(UnlockAccount),
+                "Users",
+                new
+                {
+                    Username = user.UserName,
+                    Token = token
+                },
+                Request.Scheme,
+                Request.Host.Value)?.Replace("api/", "");
+
+            if (url == null)
+            {
+                return StatusCode(500);
+            }
+
+            var emailSent = await _mailService.SendEmailTemplateAsync(new MailData
+            {
+                EmailSubject = "Desbloqueo de cuenta",
+                EmailToId = user.Email,
+                EmailToName = user.Email
+            }, "AccountUnlockRequest", user.UserName, url);
+
+            if (emailSent)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("auth/unlock-account")]
+        public async Task<IActionResult> UnlockAccount(
+            AccountUnlockData data)
+        {
+            var user = await _userManager.FindByNameAsync(data.Username);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            if (await _userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, "UnlockAccount", data.Token))
+            {
+                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [Authorize]

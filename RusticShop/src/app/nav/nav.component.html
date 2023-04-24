@@ -1,7 +1,8 @@
 <nav>
   <ul>
-    <li><a [routerLink]="['/']">Home</a></li>
-    <li *ngIf="!isLoggedIn"><a [routerLink]="['/login']">Login</a></li>
-    <li *ngIf="isLoggedIn"><a href="#" (click)="onLogout()">Logout</a></li>
+    <li><a [routerLink]="['/']">Inicio</a></li>
+    <li *ngIf="!isLoggedIn"><a [routerLink]="['/Users/auth/login']">Iniciar Sesión</a></li>
+    <li *ngIf="!isLoggedIn"><a [routerLink]="['/Users/auth/registration']">Registrarse</a></li>
+    <li *ngIf="isLoggedIn"><a href="#" (click)="onLogout()">Cerrar Sesión</a></li>
   </ul>
 </nav>

@@ -7,6 +7,8 @@ import { LoginRequest } from './auth/login/login-request';
 import { LoginResponse } from './auth/login/login-response';
 import PasswordResetRequest from './auth/password-reset-request/password-reset-request';
 import PasswordResetData from './auth/password-reset/password-reset-data';
+import RequestAccountUnlockRequest from './auth/request-account-unlock/request-account-unlock-request';
+import UnlockAccountRequest from './auth/unlock-account/UnlockAccountRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -77,6 +79,28 @@ export class AuthService {
       data,
       {
         observe: 'response',
+      }
+    );
+  }
+
+  requestAccountUnlock(data: RequestAccountUnlockRequest): Observable<HttpResponse<Response>> {
+    const url = `${environment.apiBaseUrl}${environment.requestAccountUnlockEndpoint}`;
+    return this.http.post<Response>(
+      url,
+      data,
+      {
+        observe: 'response'
+      }
+    );
+  }
+
+  unlockAccount(data: UnlockAccountRequest): Observable<HttpResponse<Response>> {
+    const url = `${environment.apiBaseUrl}${environment.unlockAccountEndpoint}`;
+    return this.http.post<Response>(
+      url,
+      data,
+      {
+        observe: 'response'
       }
     );
   }

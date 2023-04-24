@@ -12,6 +12,8 @@ import { NavComponent } from './nav/nav.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
 import { PasswordResetRequestComponent } from './auth/password-reset-request/password-reset-request.component';
 import { PasswordResetComponent } from './auth/password-reset/password-reset.component';
+import { RequestAccountUnlockComponent } from './auth/request-account-unlock/request-account-unlock.component';
+import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { PasswordResetComponent } from './auth/password-reset/password-reset.com
     NavComponent,
     RegistrationComponent,
     PasswordResetRequestComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    RequestAccountUnlockComponent,
+    UnlockAccountComponent
   ],
   imports: [
     BrowserModule,

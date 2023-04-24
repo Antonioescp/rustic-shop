@@ -3,5 +3,7 @@ export const environment = {
   baseUrl: '/',
   apiBaseUrl: '/api/',
   requestResetPasswordEndpoint: 'Users/auth/request-password-reset',
-  passworResetEndpoint: 'Users/auth/reset-password'
+  passworResetEndpoint: 'Users/auth/reset-password',
+  requestAccountUnlockEndpoint: 'Users/auth/request-account-unlock',
+  unlockAccountEndpoint: 'Users/auth/unlock-account'
 };
