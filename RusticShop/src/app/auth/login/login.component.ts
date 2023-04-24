@@ -6,6 +6,7 @@ import { BaseFormComponent } from '../../base-form.component';
 import { AuthService } from '../../auth.service';
 import { LoginRequest } from './login-request';
 import { LoginResponse } from './login-response';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
 
   title?: string;
   loginResponse?: LoginResponse;
+  accountLocked: boolean = false;
 
   constructor(
     private router: Router,
@@ -44,8 +46,17 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
           }
         },
         error: error => {
-          if (error.status === 401) {
+          console.log(error);
+          
+          this.form.reset();
+
+          if (error.status === HttpStatusCode.Unauthorized 
+            || error.status === HttpStatusCode.BadRequest) {
             this.loginResponse = error.error;
+          }
+
+          if (error.status === HttpStatusCode.Unauthorized) {
+            this.accountLocked = true;
           }
         }
       });

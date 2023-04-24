@@ -10,6 +10,10 @@ import { LoginComponent } from './auth/login/login.component';
 import { AuthInterceptor } from './http-interceptors/AuthInterceptor';
 import { NavComponent } from './nav/nav.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
+import { PasswordResetRequestComponent } from './auth/password-reset-request/password-reset-request.component';
+import { PasswordResetComponent } from './auth/password-reset/password-reset.component';
+import { RequestAccountUnlockComponent } from './auth/request-account-unlock/request-account-unlock.component';
+import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,11 @@ import { RegistrationComponent } from './auth/registration/registration.componen
     HomeComponent,
     LoginComponent,
     NavComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    PasswordResetRequestComponent,
+    PasswordResetComponent,
+    RequestAccountUnlockComponent,
+    UnlockAccountComponent
   ],
   imports: [
     BrowserModule,
