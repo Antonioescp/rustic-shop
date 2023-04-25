@@ -16,10 +16,6 @@ namespace RusticShopAPI.Data.Models.Users
         public string? PhoneNumber { get; set; } = null!;
         public bool EmailConfirmed { get; set; }
 
-        // Metadata
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
         public static UserDTO From(User user)
         {
             return new UserDTO
@@ -30,8 +26,6 @@ namespace RusticShopAPI.Data.Models.Users
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                CreatedAt = user.CreatedAt,
-                UpdatedAt = user.UpdatedAt,
                 EmailConfirmed = user.EmailConfirmed
             };
         }

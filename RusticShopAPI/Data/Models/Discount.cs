@@ -3,8 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RusticShopAPI.Data.Models
 {
-    [Table("Features")]
-    public class Feature
+    public class Discount
     {
         [Required]
         [Key]
@@ -13,8 +12,11 @@ namespace RusticShopAPI.Data.Models
         [Required]
         public string Name { get; set; } = null!;
 
-        // Navigations
+        [Required]
+        [Column(TypeName = "TEXT")]
+        public string Description { get; set; } = null!;
+
         public ICollection<Product>? Products { get; set; } = null!;
-        public ICollection<FeatureProduct>? FeatureProducts { get; set; } = null!;
+        public ICollection<DiscountProduct>? DiscountProducts { get; set; } = null!;
     }
 }

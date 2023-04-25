@@ -18,8 +18,6 @@ namespace RusticShopAPI.Data.Models
 
         [Required]
         public int Quantity { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; } = null;
 
         // Navigations
         public User? User { get; set; } = null!;

@@ -13,12 +13,10 @@ namespace RusticShopAPI.Data.Models.Users
         [PersonalData]
         public string? LastName { get; set; }
 
-        // Metadata
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
         // Navigation Properties
+        public ICollection<BankCard>? BankCards { get; set; } = null!;
         public ICollection<Product>? Cart { get; set; } = null!;
         public ICollection<Product>? Wishlist { get; set; } = null!;
+        public ICollection<Address>? Addresses { get; set; } = null!;
     }
 }

@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
@@ -21,11 +26,10 @@ namespace RusticShopAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            if (_context.Products == null)
-            {
-                return NotFound();
-            }
-
+          if (_context.Products == null)
+          {
+              return NotFound();
+          }
             return await _context.Products.ToListAsync();
         }
 
@@ -33,10 +37,10 @@ namespace RusticShopAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(long id)
         {
-            if (_context.Products == null)
-            {
-                return NotFound();
-            }
+          if (_context.Products == null)
+          {
+              return NotFound();
+          }
             var product = await _context.Products.FindAsync(id);
 
             if (product == null)
@@ -85,10 +89,10 @@ namespace RusticShopAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            if (_context.Products == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Products'  is null.");
-            }
+          if (_context.Products == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Products'  is null.");
+          }
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 

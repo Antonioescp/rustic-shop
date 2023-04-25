@@ -177,7 +177,6 @@ namespace RusticShopAPI.Controllers
             }
 
             user.EmailConfirmed = true;
-            user.UpdatedAt = DateTime.UtcNow;
             result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
@@ -409,7 +408,6 @@ namespace RusticShopAPI.Controllers
             user.FirstName = updatedData.FirstName;
             user.LastName = updatedData.LastName;
             user.PhoneNumber = updatedData.PhoneNumber;
-            user.UpdatedAt = DateTime.UtcNow;
             user.SecurityStamp = Guid.NewGuid().ToString();
 
             if (user.Email != updatedData.Email)
@@ -498,7 +496,6 @@ namespace RusticShopAPI.Controllers
             oldUser.FirstName = user.FirstName;
             oldUser.LastName = user.LastName;
             oldUser.Email = user.Email;
-            oldUser.UpdatedAt = DateTime.UtcNow;
             oldUser.IdentificationCardNumber = user.IdentificationCardNumber;
             oldUser.SecurityStamp = Guid.NewGuid().ToString();
 

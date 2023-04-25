@@ -85,8 +85,7 @@ if (app.Environment.IsDevelopment())
 
     // Recreating database
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.EnsureDeleted();
-    dbContext.Database.EnsureCreated();
+    dbContext.Database.Migrate();
 
     // Creating default roles
     var roleManager = scope
@@ -120,26 +119,30 @@ if (app.Environment.IsDevelopment())
         UserName = "ton1uwu",
         Email = "packageinstaller2@gmail.com",
         EmailConfirmed = true,
-        LockoutEnabled = false,
+        LockoutEnabled = true,
     };
 
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    var result = await userManager.CreateAsync(admin, "Flordeloto1!");
-    if (!result.Succeeded)
+    var userAdmin = await userManager.FindByEmailAsync(admin.Email);
+    if (userAdmin == null)
     {
-        throw new Exception("No se pudo crear el administrador");
-    }
+        var result = await userManager.CreateAsync(admin, "Flordeloto1!");
+        if (!result.Succeeded)
+        {
+            throw new Exception("No se pudo crear el administrador");
+        }
 
-    var addedToAdministrators = await userManager.AddToRoleAsync(admin, "Administrator");
-    if (!addedToAdministrators.Succeeded)
-    {
-        throw new Exception("No se pudo asignar el administrador");
-    }
+        var addedToAdministrators = await userManager.AddToRoleAsync(admin, "Administrator");
+        if (!addedToAdministrators.Succeeded)
+        {
+            throw new Exception("No se pudo asignar el administrador");
+        }
 
-    var isInRole = await userManager.IsInRoleAsync(admin, "Administrator");
-    if (!isInRole)
-    {
-        throw new Exception("No se pudo asignar el administrador");
+        var isInRole = await userManager.IsInRoleAsync(admin, "Administrator");
+        if (!isInRole)
+        {
+            throw new Exception("No se pudo asignar el administrador");
+        }
     }
 }
 
