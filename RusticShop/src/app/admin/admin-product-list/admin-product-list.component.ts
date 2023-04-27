@@ -3,6 +3,7 @@ import { ProductsService } from 'src/app/products.service';
 import VProductSummary, { getVProductSummaryCategories } from 'src/app/shared/models/VProductSummary';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-admin-product-list',
@@ -22,6 +23,7 @@ export class AdminProductListComponent implements OnInit, AfterViewInit {
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor (
     private productsService: ProductsService
@@ -29,6 +31,7 @@ export class AdminProductListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {

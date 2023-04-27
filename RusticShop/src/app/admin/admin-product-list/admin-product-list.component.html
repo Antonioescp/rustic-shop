@@ -4,30 +4,30 @@
     <mat-spinner color="accent"></mat-spinner>
   </div> -->
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por id"> Id </th>
       <td mat-cell *matCellDef="let item">{{ item.id }}</td>
     </ng-container>
 
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
       <td mat-cell *matCellDef="let item">{{ item.name }}</td>
     </ng-container>
 
     <ng-container matColumnDef="shortDescription">
-      <th mat-header-cell *matHeaderCellDef> Descripción Corta </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción Corta </th>
       <td mat-cell *matCellDef="let item">{{ item.shortDescription }}</td>
     </ng-container>
 
     <ng-container matColumnDef="unitPrice">
-      <th mat-header-cell *matHeaderCellDef> Precio Unitario </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Precio Unitario </th>
       <td mat-cell *matCellDef="let item"> C${{ item.unitPrice.toLocaleString() }}</td>
     </ng-container>
 
     <ng-container matColumnDef="categories">
-      <th mat-header-cell *matHeaderCellDef> Categorías </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Categorías </th>
       <td mat-cell *matCellDef="let item">
         <ng-container *ngFor="let cat of getCategories(item)">
           <mat-chip color="primary" class="category-chip">
@@ -38,12 +38,12 @@
     </ng-container>
 
     <ng-container matColumnDef="imagesCount">
-      <th mat-header-cell *matHeaderCellDef> Imágenes </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Imágenes </th>
       <td mat-cell *matCellDef="let item">{{ item.imagesCount }}</td>
     </ng-container>
 
     <ng-container matColumnDef="isPublished">
-      <th mat-header-cell *matHeaderCellDef> Público </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Público </th>
       <td mat-cell *matCellDef="let item">
         <mat-checkbox [checked]="item.isPublished" disabled></mat-checkbox>
       </td>
