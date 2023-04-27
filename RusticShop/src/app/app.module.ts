@@ -20,6 +20,7 @@ import { AdminProductListComponent } from './admin/admin-product-list/admin-prod
 
 import { AuthService } from './auth.service';
 import { AuthInterceptor } from './http-interceptors/AuthInterceptor';
+import { ProductsService } from './products.service';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { AuthInterceptor } from './http-interceptors/AuthInterceptor';
       useClass: AuthInterceptor,
       multi: true
     },
-    { provide: AuthService }
+    { provide: AuthService },
+    { provide: ProductsService },
   ],
   bootstrap: [AppComponent]
 })

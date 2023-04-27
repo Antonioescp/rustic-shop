@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data.Converters;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.Users;
+using RusticShopAPI.Data.Models.Views;
 
 namespace RusticShopAPI.Data
 {
@@ -49,6 +50,11 @@ namespace RusticShopAPI.Data
             builder.Entity<BankCard>()
                 .Property(x => x.ExpirationDate)
                 .HasConversion<DateOnlyConverter, DateOnlyComparer>();
+
+            // Adding views
+            builder.Entity<VProductList>()
+                .ToView(nameof(VProductList))
+                .HasKey(x => x.Id);
         }
 
         public DbSet<FeatureProduct> FeatureProducts => Set<FeatureProduct>();
@@ -60,5 +66,8 @@ namespace RusticShopAPI.Data
         public DbSet<DiscountProduct> DiscountProducts => Set<DiscountProduct>();
         public DbSet<Wishlist> Wishlists => Set<Wishlist>();
         public DbSet<Cart> Carts => Set<Cart>();
+
+        // Views
+        public DbSet<VProductList> ProductListView => Set<VProductList>();
     }
 }

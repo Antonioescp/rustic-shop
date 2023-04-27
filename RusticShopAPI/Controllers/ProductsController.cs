@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using RusticShopAPI.Data.Models.Views;
 
 namespace RusticShopAPI.Controllers
 {
@@ -49,6 +50,14 @@ namespace RusticShopAPI.Controllers
             }
 
             return product;
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("views/product-list")]
+        public async Task<ActionResult<ICollection<VProductList>>> GetProductListView()
+        {
+            var list = await _context.ProductListView.ToListAsync();
+            return Ok(list);
         }
 
         // PUT: api/Products/5
