@@ -52,8 +52,8 @@ namespace RusticShopAPI.Data
                 .HasConversion<DateOnlyConverter, DateOnlyComparer>();
 
             // Adding views
-            builder.Entity<VProductList>()
-                .ToView(nameof(VProductList))
+            builder.Entity<VProductSummary>()
+                .ToView(nameof(VProductSummary))
                 .HasKey(x => x.Id);
         }
 
@@ -68,6 +68,6 @@ namespace RusticShopAPI.Data
         public DbSet<Cart> Carts => Set<Cart>();
 
         // Views
-        public DbSet<VProductList> ProductListView => Set<VProductList>();
+        public DbSet<VProductSummary> ProductListView => Set<VProductSummary>();
     }
 }

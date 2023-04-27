@@ -19,7 +19,7 @@ export abstract class BaseFormComponent {
           errors.push(`${displayName} ${customMessages?.[key] ?? 'es requerido.'}`);
           break;
         case 'pattern':
-          errors.push(`${displayName} ${customMessages?.[key] ?? 'contiene carácteres invalidos.'}`);
+          errors.push(`${displayName} ${customMessages?.[key] ?? 'contiene caracteres inválidos.'}`);
           break;
         case 'isDupeField':
           errors.push(`${displayName} ${customMessages?.[key] ?? 'ya existe: por favor escoja otro.'}`);

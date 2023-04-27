@@ -1,69 +1,60 @@
 <h1>Lista de productos</h1>
-<table mat-table [dataSource]="tableData">
+<div class="table-container">
+  <!-- <div class="shadow-over" *ngIf="isLoading">
+    <mat-spinner color="accent"></mat-spinner>
+  </div> -->
 
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef> Id </th>
-    <td mat-cell *matCellDef="let item">{{ item.id }}</td>
-  </ng-container>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Nombre </th>
-    <td mat-cell *matCellDef="let item">{{ item.name }}</td>
-  </ng-container>
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <td mat-cell *matCellDef="let item">{{ item.id }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="shortDescription">
-    <th mat-header-cell *matHeaderCellDef> Descripción Corta </th>
-    <td mat-cell *matCellDef="let item">{{ item.shortDescription }}</td>
-  </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="description">
-    <th mat-header-cell *matHeaderCellDef> Descripción </th>
-    <td mat-cell *matCellDef="let item">{{ item.description }}</td>
-  </ng-container>
+    <ng-container matColumnDef="shortDescription">
+      <th mat-header-cell *matHeaderCellDef> Descripción Corta </th>
+      <td mat-cell *matCellDef="let item">{{ item.shortDescription }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="unitPrice">
-    <th mat-header-cell *matHeaderCellDef> Precio Unitario </th>
-    <td mat-cell *matCellDef="let item">{{ item.unitPrice }}</td>
-  </ng-container>
+    <ng-container matColumnDef="unitPrice">
+      <th mat-header-cell *matHeaderCellDef> Precio Unitario </th>
+      <td mat-cell *matCellDef="let item"> C${{ item.unitPrice.toLocaleString() }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="categories">
-    <th mat-header-cell *matHeaderCellDef> Categorías </th>
-    <td mat-cell *matCellDef="let item">
-      <ng-container *ngFor="let cat of getCategories(item)">
-        <mat-chip color="primary" class="category-chip">
-          {{ cat }}
-        </mat-chip>
-      </ng-container>
-    </td>
-  </ng-container>
+    <ng-container matColumnDef="categories">
+      <th mat-header-cell *matHeaderCellDef> Categorías </th>
+      <td mat-cell *matCellDef="let item">
+        <ng-container *ngFor="let cat of getCategories(item)">
+          <mat-chip color="primary" class="category-chip">
+            {{ cat }}
+          </mat-chip>
+        </ng-container>
+      </td>
+    </ng-container>
 
-  <ng-container matColumnDef="features">
-    <th mat-header-cell *matHeaderCellDef> Características </th>
-    <td mat-cell *matCellDef="let item">
-      <mat-list>
-        <mat-list-item *ngFor="let feature of getFeatures(item)">
-          <span matListItemTitle>{{ feature.name }}</span>
-          <span matListItemLine>{{ feature.content }}</span>
-        </mat-list-item>
-      </mat-list>
-    </td>
-  </ng-container>
+    <ng-container matColumnDef="imagesCount">
+      <th mat-header-cell *matHeaderCellDef> Imágenes </th>
+      <td mat-cell *matCellDef="let item">{{ item.imagesCount }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="imagesCount">
-    <th mat-header-cell *matHeaderCellDef> Imágenes </th>
-    <td mat-cell *matCellDef="let item">{{ item.imagesCount }}</td>
-  </ng-container>
+    <ng-container matColumnDef="isPublished">
+      <th mat-header-cell *matHeaderCellDef> Público </th>
+      <td mat-cell *matCellDef="let item">
+        <mat-checkbox [checked]="item.isPublished" disabled></mat-checkbox>
+      </td>
+    </ng-container>
 
-  <ng-container matColumnDef="discountsCount">
-    <th mat-header-cell *matHeaderCellDef> Descuentos </th>
-    <td mat-cell *matCellDef="let item">{{ item.discountsCount }}</td>
-  </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let data; columns: columnsToDisplay"></tr>
+  </table>
 
-  <ng-container matColumnDef="isPublished">
-    <th mat-header-cell *matHeaderCellDef> Público </th>
-    <td mat-cell *matCellDef="let item">{{ item.isPublished }}</td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-  <tr mat-row *matRowDef="let data; columns: columnsToDisplay"></tr>
-</table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                  showFirstLastButtons
+                  aria-label="Selecciona pagina de productos">
+  </mat-paginator>
+</div>

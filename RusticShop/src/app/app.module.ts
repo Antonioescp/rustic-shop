@@ -21,6 +21,7 @@ import { AdminProductListComponent } from './admin/admin-product-list/admin-prod
 import { AuthService } from './auth.service';
 import { AuthInterceptor } from './http-interceptors/AuthInterceptor';
 import { ProductsService } from './products.service';
+import { ProductCardComponent } from './product-card/product-card.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ProductsService } from './products.service';
     RequestAccountUnlockComponent,
     UnlockAccountComponent,
     AdminPanelComponent,
-    AdminProductListComponent
+    AdminProductListComponent,
+    ProductCardComponent
   ],
   imports: [
     BrowserModule,

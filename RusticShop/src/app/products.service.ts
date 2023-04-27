@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import VProductList from './shared/models/VProductList';
+import VProductSummary from './shared/models/VProductSummary';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
@@ -13,8 +13,8 @@ export class ProductsService {
     private http: HttpClient
   ) {}
 
-  getProductListView(): Observable<VProductList[]> {
+  getProductListView(): Observable<VProductSummary[]> {
     const url = `${environment.apiBaseUrl}${environment.productListViewEndpoint}`;
-    return this.http.get<VProductList[]>(url);
+    return this.http.get<VProductSummary[]>(url);
   }
 }

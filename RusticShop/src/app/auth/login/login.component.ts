@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { BaseFormComponent } from '../../base-form.component';
+import { BaseFormComponent } from '../../shared/components/base-form.component';
 import { AuthService } from '../../auth.service';
 import { LoginRequest } from './login-request';
 import { LoginResponse } from './login-response';
@@ -47,10 +47,10 @@ export class LoginComponent extends BaseFormComponent implements OnInit {
         },
         error: error => {
           console.log(error);
-          
+
           this.form.reset();
 
-          if (error.status === HttpStatusCode.Unauthorized 
+          if (error.status === HttpStatusCode.Unauthorized
             || error.status === HttpStatusCode.BadRequest) {
             this.loginResponse = error.error;
           }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/auth.service';
-import { BaseFormComponent } from 'src/app/base-form.component';
+import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import PasswordResetRequest from './password-reset-request';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,9 +15,9 @@ export class PasswordResetRequestComponent extends BaseFormComponent {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) { 
+  ) {
     super();
-    
+
     this.form = new FormGroup({
       email: new FormControl<string>('', [
         Validators.required,

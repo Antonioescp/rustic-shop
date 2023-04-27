@@ -8,13 +8,12 @@ namespace RusticShopAPI.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-			migrationBuilder.Sql(@"CREATE VIEW VProductList
+			migrationBuilder.Sql(@"CREATE VIEW VProductSummary
 				AS
 				SELECT 
 					p.Id,
 					p.Name,
 					p.ShortDescription,
-					p.Description,
 					p.UnitPrice,
 					(
 						SELECT STRING_AGG(c.Name, ',') FROM Categories c
@@ -22,9 +21,7 @@ namespace RusticShopAPI.Data.Migrations
 						WHERE cp.ProductsId = p.Id
 					) AS Categories,
 					(
-						SELECT STRING_AGG(CONCAT_WS(':', f.Name, fp.Content), ';') FROM Features f
-						JOIN FeatureProducts fp ON fp.FeatureId = f.Id
-						WHERE fp.ProductId = p.Id
+						SELECT COUNT(fp.Content) FROM FeatureProducts fp WHERE fp.ProductId = p.Id
 					) AS Features,
 					(
 						SELECT COUNT(pimg.Id) FROM ProductImage pimg WHERE pimg.ProductId = p.Id
@@ -38,7 +35,7 @@ namespace RusticShopAPI.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-			migrationBuilder.Sql(@"DROP VIEW VProductList");
+			migrationBuilder.Sql(@"DROP VIEW VProductSummary");
         }
     }
 }

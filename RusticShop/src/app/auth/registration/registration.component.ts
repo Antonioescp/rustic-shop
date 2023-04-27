@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AuthService } from '../../auth.service';
-import { BaseFormComponent } from '../../base-form.component';
+import { BaseFormComponent } from '../../shared/components/base-form.component';
 import { RegistrationRequest } from './registration-request';
 import { CustomValidators } from 'src/app/shared/custom-validators';
 import { RegistrationResponse } from './registration-response';

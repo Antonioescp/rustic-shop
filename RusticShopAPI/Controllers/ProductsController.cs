@@ -54,7 +54,7 @@ namespace RusticShopAPI.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpGet("views/product-list")]
-        public async Task<ActionResult<ICollection<VProductList>>> GetProductListView()
+        public async Task<ActionResult<ICollection<VProductSummary>>> GetProductListView()
         {
             var list = await _context.ProductListView.ToListAsync();
             return Ok(list);

@@ -1,7 +1,32 @@
 .category-chip {
-  margin-top: 10px;
+  margin: 10px 0 0 10px;
+}
+
+td {
+  .category-chip:last-child {
+    margin-bottom: 10px;
+  }
 }
 
 table {
+  margin-top: 15px;
+}
+
+.mat-column-isPublished {
+  text-align: center;
+}
+
+.table-container {
+  position: relative;
+}
+
+.shadow-over {
+  background-color: rgba(0, 0, 0, 0.50);
+  position: absolute;
   width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
