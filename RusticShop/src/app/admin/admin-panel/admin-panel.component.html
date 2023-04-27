@@ -1,0 +1,18 @@
+<mat-toolbar color="primary" role="heading">
+  <span>Rustic Shop - Panel de administración</span>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav position="start" opened="true" mode="side" class="sidenav">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let link of links">
+        <mat-icon matListItemIcon>{{ link.iconName }}</mat-icon>
+        <a matListItemTitle [routerLink]="[link.path]">
+          {{ link.label }}
+        </a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="container">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

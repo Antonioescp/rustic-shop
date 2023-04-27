@@ -7,14 +7,33 @@ import { PasswordResetRequestComponent } from './auth/password-reset-request/pas
 import { PasswordResetComponent } from './auth/password-reset/password-reset.component';
 import { RequestAccountUnlockComponent } from './auth/request-account-unlock/request-account-unlock.component';
 import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { AdminProductListComponent } from './admin/admin-product-list/admin-product-list.component';
 
 const routes: Routes = [
-  { path: 'Users/auth/unlock-account', component: UnlockAccountComponent },
-  { path: 'Users/auth/request-account-unlock', component: RequestAccountUnlockComponent },
-  { path: 'Users/auth/request-password-reset', component: PasswordResetRequestComponent },
-  { path: 'Users/auth/reset-password', component: PasswordResetComponent },
-  { path: 'Users/auth/login', component: LoginComponent },
-  { path: 'Users/auth/registration', component: RegistrationComponent },
+  {
+    path: 'Users',
+    children: [
+      {
+        path: 'auth',
+        children: [
+          { path: 'unlock-account', component: UnlockAccountComponent },
+          { path: 'request-account-unlock', component: RequestAccountUnlockComponent },
+          { path: 'request-password-reset', component: PasswordResetRequestComponent },
+          { path: 'reset-password', component: PasswordResetComponent },
+          { path: 'login', component: LoginComponent },
+          { path: 'registration', component: RegistrationComponent },
+        ]
+      }
+    ]
+  },
+  {
+    path: 'admin/panel',
+    component: AdminPanelComponent,
+    children: [
+      { path: 'productos', component: AdminProductListComponent },
+    ],
+  },
   { path: '', component: HomeComponent, pathMatch: 'full' },
 ];
 

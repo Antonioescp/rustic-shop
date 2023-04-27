@@ -13,6 +13,11 @@
   <ItemGroup>
     <Folder Include="src\app\http-interceptors\" />
     <Folder Include="src\environments\" />
-    <Folder Include="src\models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\models\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\models\**" />
   </ItemGroup>
 </Project>
