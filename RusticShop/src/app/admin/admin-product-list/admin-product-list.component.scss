@@ -10,6 +10,9 @@ td {
 
 table {
   margin-top: 15px;
+  width: 80%;
+  height: 80%;
+  table-layout: fixed;
 }
 
 .mat-column-isPublished {

@@ -4,6 +4,7 @@ import VProductSummary, { getVProductSummaryCategories } from 'src/app/shared/mo
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-product-list',
@@ -25,9 +26,11 @@ export class AdminProductListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  filter = new FormControl<string>('');
+
   constructor (
     private productsService: ProductsService
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -38,6 +41,10 @@ export class AdminProductListComponent implements OnInit, AfterViewInit {
     this.productsService.getProductListView().subscribe(
       res => this.dataSource.data = res
     );
+
+    this.filter.valueChanges.subscribe(filter => {
+      if (filter) this.dataSource.filter = filter.trim().toLowerCase();
+    });
   }
 
   getCategories(item: VProductSummary): string[] {
