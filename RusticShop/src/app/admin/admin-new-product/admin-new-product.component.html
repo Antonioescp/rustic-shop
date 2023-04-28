@@ -1,0 +1,73 @@
+<h1>Nuevo Producto</h1>
+
+<mat-stepper orientation="horizontal" linear="false">
+  <mat-step [stepControl]="productForm">
+    <form [formGroup]="productForm" class="mat-form">
+      <ng-template matStepLabel>Describe el producto</ng-template>
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name">
+        <mat-error *ngFor="let error of getErrors(productForm.get('name')!, 'Nombre')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Descripción Corta</mat-label>
+        <input matInput formControlName="shortDescription" #shortDescInput>
+        <mat-error *ngFor="let error of getErrors(productForm.get('shortDescription')!, 'Descripción Corta')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Descripción</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+        <mat-error *ngFor="let error of getErrors(productForm.get('description')!, 'Descripción')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Precio Unitario</mat-label>
+        <input matInput formControlName="unitPrice" type="number" placeholder="0">
+        <span matTextPrefix>C$&nbsp;</span>
+        <mat-error *ngFor="let error of getErrors(productForm.get('unitPrice')!, 'Precio Unitario')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-checkbox [checked]="false">Publicar</mat-checkbox>
+
+      <button mat-button color="primary" matStepperNext>Siguiente</button>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="featuresForm">
+    <form [formGroup]="featuresForm" class="mat-form">
+      <ng-template matStepLabel>Asigna las características</ng-template>
+      <button mat-button color="primary" matStepperPrevious type="button">Anterior</button>
+      <button mat-button color="primary" matStepperNext type="button">Siguiente</button>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="categoriesForm">
+    <form [formGroup]="categoriesForm" class="mat-form">
+      <ng-template matStepLabel>Asigna las categorías</ng-template>
+
+      <mat-form-field class="small">
+        <mat-label>Categoría</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let cat of availableCategories" [value]="cat.id">
+            {{ cat.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-button color="primary" type="button">Agregar</button>
+
+      <div class="row">
+        <button mat-button color="primary" matStepperPrevious type="button">Anterior</button>
+        <button mat-button color="primary" type="button" (click)="onSubmit()">Terminar</button>
+      </div>
+    </form>
+  </mat-step>
+</mat-stepper>
