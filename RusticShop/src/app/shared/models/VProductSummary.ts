@@ -1,5 +1,5 @@
 import { CollectionViewer, DataSource } from "@angular/cdk/collections";
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ProductsService } from "src/app/products.service";
 
 export default interface VProductSummary {

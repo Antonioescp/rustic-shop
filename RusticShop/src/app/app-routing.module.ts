@@ -9,6 +9,7 @@ import { RequestAccountUnlockComponent } from './auth/request-account-unlock/req
 import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { AdminProductListComponent } from './admin/admin-product-list/admin-product-list.component';
+import { AdminNewProductComponent } from './admin/admin-new-product/admin-new-product.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
     component: AdminPanelComponent,
     children: [
       { path: 'productos', component: AdminProductListComponent },
+      { path: 'productos/nuevo', component: AdminNewProductComponent },
     ],
   },
   { path: '', component: HomeComponent, pathMatch: 'full' },

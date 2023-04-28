@@ -37,7 +37,7 @@ namespace RusticShopAPI.Data.Models
         public ICollection<DiscountProduct>? DiscountProducts { get; set; } = null!; 
         public ICollection<User>? Wishlists { get; set; } = null!;
         public ICollection<User>? Carts { get; set; } = null!;
-        public ICollection<Transaction> Transactions { get; set; } = null!;
+        public ICollection<Transaction>? Transactions { get; set; } = null!;
         public ICollection<ProductTransaction>? ProductTransactions { get; set; } = null!;
     }
 }
