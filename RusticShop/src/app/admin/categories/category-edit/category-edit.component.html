@@ -1,0 +1,28 @@
+<div class="category">
+  <h1>{{ title }}</h1>
+
+  <div class="loading-view" *ngIf="this.id && !category">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="(this.id === 0 || this.id && category)">
+
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" required>
+      <mat-error *ngFor="let error of getErrors(form.get('name')!, 'Nombre')">
+        {{ error }}
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" [disabled]="form.invalid"
+            type="submit">
+      {{ this.id ? "Guardar cambios" : "Crear" }}
+    </button>
+    <button mat-flat-button color="secondary"
+            type="button" [routerLink]="['/admin/panel/categorias']">
+      Cancelar
+    </button>
+
+  </form>
+</div>

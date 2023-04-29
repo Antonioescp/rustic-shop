@@ -22,6 +22,12 @@ namespace RusticShopAPI.Controllers
             _context = context;
         }
 
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<Category>>> GetAllCategories()
+        {
+            return await _context.Categories.ToListAsync();
+        }
+
         // GET: api/Categories
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<Category>>> GetCategories(

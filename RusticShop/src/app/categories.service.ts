@@ -27,11 +27,12 @@ export class CategoriesService {
   ) { }
 
   getCategory(id: number): Observable<Category> {
-    return this.http.get<Category>(this.url);
+    const categoryUrl = `${this.url}${id}`;
+    return this.http.get<Category>(categoryUrl);
   }
 
   getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.url);
+    return this.http.get<Category[]>(this.url + 'all');
   }
 
   getPaginatedCategories(pagination: Pagination): Observable<any> {
@@ -58,7 +59,13 @@ export class CategoriesService {
     return this.http.post<Response>(this.url, { name }, { observe: 'response' });
   }
 
-  deleteCategory(name: string): Observable<HttpResponse<Response>> {
-    return this.http.delete<Response>(this.url, { observe: 'response' });
+  deleteCategory(id: number): Observable<HttpResponse<Response>> {
+    const deleteUrl = `${this.url}${id}`;
+    return this.http.delete<Response>(deleteUrl, { observe: 'response' });
+  }
+
+  updateCategory(category: Category): Observable<HttpResponse<any>> {
+    const updateUrl = `${this.url}${category.id}`;
+    return this.http.put<any>(updateUrl, category);
   }
 }

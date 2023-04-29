@@ -1,15 +1,11 @@
-.loading-shade {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 table {
   width: 100%;
   margin-top: 15px;
+  table-layout: fixed;
+}
+
+mat-paginator {
+  margin-bottom: 15px;
 }
 
 mat-form-field {
@@ -23,5 +19,13 @@ mat-form-field {
 
   button {
     margin-left: 10px;
+  }
+}
+
+.categories {
+  margin: 25px;
+
+  button {
+    margin-top: 15px;
   }
 }

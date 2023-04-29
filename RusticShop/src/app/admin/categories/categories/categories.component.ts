@@ -23,6 +23,8 @@ export class CategoriesComponent implements OnInit {
   defaultFilterColumn: string = 'name';
   filterQuery?: string;
 
+  isLoadingAction: boolean = false;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -58,9 +60,24 @@ export class CategoriesComponent implements OnInit {
         this.paginator.pageIndex = result.pageIndex;
         this.paginator.pageSize = result.pageSize;
         this.categories = new MatTableDataSource(result.data);
+        this.isLoadingAction = false;
       },
       error: error => {
         console.log(error);
+        this.isLoadingAction = false;
+      }
+    });
+  }
+
+  deleteCategory(category: Category) {
+    this.isLoadingAction = true;
+    this.categoriesService.deleteCategory(category.id).subscribe({
+      next: result => {
+        this.loadData();
+      },
+      error: error => {
+        console.error(error);
+        this.isLoadingAction = false;
       }
     });
   }
