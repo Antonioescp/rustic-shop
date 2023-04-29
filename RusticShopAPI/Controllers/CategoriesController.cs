@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using RusticShopAPI.Data.Models.DTOs;
 
 namespace RusticShopAPI.Controllers
 {
@@ -23,13 +24,26 @@ namespace RusticShopAPI.Controllers
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<PaginatedResult<Category>>> GetCategories(
+            int pageIndex = 0,
+            int pageSize = 10,
+            string? sortColumn = null,
+            string? sortOrder = null,
+            string? filterColumn = null,
+            string? filterQuery = null)
         {
-          if (_context.Categories == null)
-          {
-              return NotFound();
-          }
-            return await _context.Categories.ToListAsync();
+            if (_context.Categories == null)
+            {
+                return NotFound();
+            }
+            return await PaginatedResult<Category>.CreateAsync(
+                _context.Categories.AsNoTracking(),
+                pageIndex,
+                pageSize,
+                sortColumn,
+                sortOrder,
+                filterColumn,
+                filterQuery);
         }
 
         // GET: api/Categories/5

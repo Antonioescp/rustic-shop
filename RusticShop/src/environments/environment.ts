@@ -6,5 +6,8 @@ export const environment = {
   passworResetEndpoint: 'Users/auth/reset-password',
   requestAccountUnlockEndpoint: 'Users/auth/request-account-unlock',
   unlockAccountEndpoint: 'Users/auth/unlock-account',
-  productListViewEndpoint: 'Products/views/product-list'
+  productListViewEndpoint: 'Products/views/product-list',
+  categoryEndpoint: 'Categories/',
+  featureEndpoint: 'Features/',
+  productsEndpoint: 'Products/',
 };

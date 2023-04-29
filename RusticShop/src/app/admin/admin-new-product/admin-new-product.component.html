@@ -1,6 +1,6 @@
 <h1>Nuevo Producto</h1>
 
-<mat-stepper orientation="horizontal" linear="false">
+<mat-stepper orientation="horizontal" linear>
   <mat-step [stepControl]="productForm">
     <form [formGroup]="productForm" class="mat-form">
       <ng-template matStepLabel>Describe el producto</ng-template>
@@ -37,32 +37,70 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-checkbox [checked]="false">Publicar</mat-checkbox>
+      <mat-checkbox checked="false">Publicar</mat-checkbox>
 
       <button mat-button color="primary" matStepperNext>Siguiente</button>
     </form>
   </mat-step>
-  <mat-step [stepControl]="featuresForm">
-    <form [formGroup]="featuresForm" class="mat-form">
+  <mat-step [stepControl]="featuresForm" optional>
+    <form class="mat-form" [formGroup]="featuresForm">
       <ng-template matStepLabel>Asigna las características</ng-template>
-      <button mat-button color="primary" matStepperPrevious type="button">Anterior</button>
-      <button mat-button color="primary" matStepperNext type="button">Siguiente</button>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="categoriesForm">
-    <form [formGroup]="categoriesForm" class="mat-form">
-      <ng-template matStepLabel>Asigna las categorías</ng-template>
 
-      <mat-form-field class="small">
-        <mat-label>Categoría</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let cat of availableCategories" [value]="cat.id">
-            {{ cat.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <h3>Categorías</h3>
 
-      <button mat-button color="primary" type="button">Agregar</button>
+      <mat-chip-listbox multiple>
+        <mat-chip-option *ngFor="let cat of availableCategories"
+          (selectionChange)="categoryChipSelectionChange($event)"
+          [value]="cat.id"
+          >
+          {{ cat.name }}
+        </mat-chip-option>
+      </mat-chip-listbox>
+
+      <mat-divider></mat-divider>
+
+      <div class="feature-container">
+        <div class="feature-input">
+          <h3>Característica nueva</h3>
+          <mat-form-field>
+            <mat-label>
+              Nombre
+            </mat-label>
+            <mat-select formControlName="feature">
+              <mat-option *ngFor="let feature of availableFeatures" [value]="feature">
+                {{ feature.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngFor="let error of getErrors(featuresForm.get('feature')!, 'Característica')">
+              {{ error }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Contenido</mat-label>
+            <input matInput formControlName="content">
+            <mat-error *ngFor="let error of getErrors(featuresForm.get('content')!, 'Contenido')">
+              {{ error }}
+            </mat-error>
+          </mat-form-field>
+
+          <button mat-raised-button type="submit" color="primary" (click)="addFeature()" [disabled]="featuresForm.invalid">
+            <mat-icon>add</mat-icon>
+            Agregar característica
+          </button>
+        </div>
+
+        <div class="feature-preview">
+          <h3>Previsualización</h3>
+          <mat-list>
+            <mat-list-item *ngFor="let feature of addedFeatures">
+              <mat-icon matListItemIcon (click)="removeFeature(feature)">delete</mat-icon>
+              <span matListItemTitle>{{ feature.name }}</span>
+              <span matListItemLine>{{ feature.content }}</span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
 
       <div class="row">
         <button mat-button color="primary" matStepperPrevious type="button">Anterior</button>

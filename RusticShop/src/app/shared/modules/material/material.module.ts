@@ -17,6 +17,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const materialModules = [
   MatSidenavModule,
@@ -36,8 +38,9 @@ const materialModules = [
   MatButtonModule,
   MatStepperModule,
   MatSelectModule,
+  MatDividerModule,
+  MatTooltipModule,
 ];
-
 
 @NgModule({
   declarations: [],

@@ -26,3 +26,23 @@ mat-form-field {
     font-size: 12px;
   }
 }
+
+.feature-container {
+  display: flex;
+  flex-flow: row nowrap;
+
+  .feature-input {
+    flex: 1 2 auto;
+  }
+
+  .feature-preview {
+    flex: 2 0 70%;
+    border-left: 1px solid black;
+    padding-left: 15px;
+    margin-left: 15px;
+  }
+}
+
+mat-chip-listbox {
+  padding: 15px 0 15px 0;
+}
