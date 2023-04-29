@@ -12,6 +12,8 @@ import { AdminProductListComponent } from './admin/admin-product-list/admin-prod
 import { AdminNewProductComponent } from './admin/admin-new-product/admin-new-product.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { CategoryEditComponent } from './admin/categories/category-edit/category-edit.component';
+import { FeaturesComponent } from './admin/features/features/features.component';
+import { FeatureEditComponent } from './admin/features/feature-edit/feature-edit.component';
 
 const routes: Routes = [
   {
@@ -39,6 +41,9 @@ const routes: Routes = [
       { path: 'categorias', component: CategoriesComponent },
       { path: 'categoria/:id', component: CategoryEditComponent },
       { path: 'categoria', component: CategoryEditComponent },
+      { path: 'caracteristicas', component: FeaturesComponent },
+      { path: 'caracteristica/:id', component: FeatureEditComponent },
+      { path: 'caracteristica', component: FeatureEditComponent },
     ],
   },
   { path: '', component: HomeComponent, pathMatch: 'full' },

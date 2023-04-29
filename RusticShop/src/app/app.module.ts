@@ -25,6 +25,8 @@ import { ProductCardComponent } from './product-card/product-card.component';
 import { AdminNewProductComponent } from './admin/admin-new-product/admin-new-product.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { CategoryEditComponent } from './admin/categories/category-edit/category-edit.component';
+import { FeaturesComponent } from './admin/features/features/features.component';
+import { FeatureEditComponent } from './admin/features/feature-edit/feature-edit.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { CategoryEditComponent } from './admin/categories/category-edit/category
     ProductCardComponent,
     AdminNewProductComponent,
     CategoriesComponent,
-    CategoryEditComponent
+    CategoryEditComponent,
+    FeaturesComponent,
+    FeatureEditComponent
   ],
   imports: [
     BrowserModule,

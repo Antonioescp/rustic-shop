@@ -14,7 +14,8 @@ interface SideNavLink {
 export class AdminPanelComponent {
   links: SideNavLink[] = [
     { label: 'Productos', path: 'productos', iconName: 'inventory_2' },
-    { label: 'Categorias', path: 'categorias', iconName: 'category' },
+    { label: 'Categorías', path: 'categorias', iconName: 'category' },
+    { label: 'Características', path: 'caracteristicas', iconName: 'schema' },
     { label: 'Descuentos', path: 'descuentos', iconName: 'percent' },
     { label: 'Transacciones', path: 'transacciones', iconName: 'receipt_long' },
   ];
