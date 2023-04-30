@@ -19,6 +19,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const materialModules = [
   MatSidenavModule,
@@ -40,6 +41,7 @@ const materialModules = [
   MatSelectModule,
   MatDividerModule,
   MatTooltipModule,
+  MatExpansionModule,
 ];
 
 @NgModule({

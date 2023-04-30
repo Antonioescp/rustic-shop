@@ -1,6 +1,14 @@
 .sidenav {
   width: 250px;
   overflow: auto;
+
+  mat-nav-list {
+    padding: 0;
+  }
+
+  .mat-expansion-panel {
+    border: 0;
+  }
 }
 
 .main-container {
