@@ -1,11 +1,12 @@
 <div class="main-container">
   <mat-toolbar color="primary" role="heading">
-    <span>Rustic Shop - Panel de administración</span>
+    <img src="assets/logo2.png" width="100px">
+    <h1>Panel de administración</h1>
   </mat-toolbar>
   <mat-sidenav-container class="panel-container">
     <mat-sidenav position="start" opened="true" mode="side" class="sidenav">
 
-      <mat-accordion multi displayMode="flat">
+      <mat-accordion displayMode="flat">
         <mat-nav-list>
 
           <ng-container *ngFor="let expandable of links">
@@ -22,6 +23,7 @@
               </mat-list-item>
 
             </mat-expansion-panel>
+            <mat-divider></mat-divider>
           </ng-container>
 
         </mat-nav-list>
