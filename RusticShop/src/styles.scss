@@ -14,6 +14,31 @@
 // hue. Available color palettes: https://material.io/design/color/
 $RusticShop-primary: mat.define-palette(mat.$indigo-palette);
 $RusticShop-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$RusticShop-primary-palette: (
+  50 : #fdfce5,
+  100 : #fbf6c0,
+  200 : #f8f095,
+  300 : #f5ea6b,
+  400 : #f2e548,
+  500 : #f0e020,
+  600 : #f0cf1c,
+  700 : #efb710,
+  800 : #ee9f02,
+  900 : #eb7600,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #000000
+  )
+);
+$RusticShop-primary-2: mat.define-palette($RusticShop-primary-palette, 800, 700, 900, 800);
 
 // The warn palette is optional (defaults to red).
 $RusticShop-warn: mat.define-palette(mat.$red-palette);
@@ -22,7 +47,7 @@ $RusticShop-warn: mat.define-palette(mat.$red-palette);
 // theming systems such as "color" or "typography".
 $RusticShop-theme: mat.define-light-theme((
   color: (
-    primary: $RusticShop-primary,
+    primary: $RusticShop-primary-2,
     accent: $RusticShop-accent,
     warn: $RusticShop-warn,
   )

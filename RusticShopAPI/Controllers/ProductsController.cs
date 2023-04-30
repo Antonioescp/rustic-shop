@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Immutable;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
@@ -52,7 +45,6 @@ namespace RusticShopAPI.Controllers
             return product;
         }
 
-        [Authorize(Roles = "Administrator")]
         [HttpGet("views/product-list")]
         public async Task<ActionResult<ICollection<VProductSummary>>> GetProductListView()
         {
@@ -62,7 +54,6 @@ namespace RusticShopAPI.Controllers
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(long id, Product product)
         {
@@ -94,7 +85,6 @@ namespace RusticShopAPI.Controllers
 
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
@@ -109,7 +99,6 @@ namespace RusticShopAPI.Controllers
         }
 
         // DELETE: api/Products/5
-        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(long id)
         {

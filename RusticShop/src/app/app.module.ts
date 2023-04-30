@@ -27,6 +27,8 @@ import { CategoriesComponent } from './admin/categories/categories/categories.co
 import { CategoryEditComponent } from './admin/categories/category-edit/category-edit.component';
 import { FeaturesComponent } from './admin/features/features/features.component';
 import { FeatureEditComponent } from './admin/features/feature-edit/feature-edit.component';
+import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
+import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-edit.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { FeatureEditComponent } from './admin/features/feature-edit/feature-edit
     CategoriesComponent,
     CategoryEditComponent,
     FeaturesComponent,
-    FeatureEditComponent
+    FeatureEditComponent,
+    DiscountsComponent,
+    DiscountEditComponent
   ],
   imports: [
     BrowserModule,

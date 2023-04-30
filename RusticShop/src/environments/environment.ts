@@ -10,4 +10,5 @@ export const environment = {
   categoryEndpoint: 'Categories/',
   featureEndpoint: 'Features/',
   productsEndpoint: 'Products/',
+  discountsEndpoint: 'Discounts/',
 };

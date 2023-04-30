@@ -14,6 +14,8 @@ import { CategoriesComponent } from './admin/categories/categories/categories.co
 import { CategoryEditComponent } from './admin/categories/category-edit/category-edit.component';
 import { FeaturesComponent } from './admin/features/features/features.component';
 import { FeatureEditComponent } from './admin/features/feature-edit/feature-edit.component';
+import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
+import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-edit.component';
 
 const routes: Routes = [
   {
@@ -44,6 +46,9 @@ const routes: Routes = [
       { path: 'caracteristicas', component: FeaturesComponent },
       { path: 'caracteristica/:id', component: FeatureEditComponent },
       { path: 'caracteristica', component: FeatureEditComponent },
+      { path: 'descuentos', component: DiscountsComponent },
+      { path: 'descuento/:id', component: DiscountEditComponent },
+      { path: 'descuento', component: DiscountEditComponent }
     ],
   },
   { path: '', component: HomeComponent, pathMatch: 'full' },
