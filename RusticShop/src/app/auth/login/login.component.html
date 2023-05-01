@@ -31,8 +31,10 @@
     <button type="submit" [disabled]="this.form.invalid">Ingresar</button>
 
   </form>
-
-  <a [routerLink]="['/Users/auth/request-password-reset']">
-    ¿No recuerdas tu contraseña? Restablecela
-  </a>
+  <p>
+    ¿No recuerdas tu contraseña?
+    <a [routerLink]="['/Users/auth/request-password-reset']">
+      Restablecela
+    </a>
+  </p>
 </div>

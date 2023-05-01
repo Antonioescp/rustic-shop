@@ -1,0 +1,114 @@
+/* Font Family */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@0,100;0,400;1,200&display=swap');
+
+/* anchos de letras */
+$thin: 100;
+$light: 300;
+$regular: 400;
+$semibold: 500;
+$bold: 700;
+$ultra: 800;
+
+/* base de las fuentes */
+$base-font-family: 'Poppins', sans-serif;
+$base-font-size: 14px;
+$base-font-weight: $regular;
+$base-line-height: 1.6em;
+
+/* colores */
+$black: #0b0C0D;
+$orange: #EA9F4C;
+$darkgray: #54514E;
+$lightgray: #7C7C7D;
+$gray: #7C747C;
+$white: #FFFF;
+
+/* Dimensiones del formulario */
+$max-width: 600px;
+$max-height: 400px;
+$gutters: 24px;
+
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 750px;
+    background: $darkgray;
+    color: $orange;
+    font-family: $base-font-family;
+    border-radius: 10px;
+    margin: 50px auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+form
+{
+    width: 100%; 
+}
+h1 {
+    color: $orange;
+    font-family: $base-font-family;
+    font-style: normal;
+    font-weight: $bold;
+    font-size: 60px;
+    text-transform: uppercase;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 2px solid $lightgray;
+    margin: 30px 0;
+    width: 100%;
+    font-family: $base-font-family;
+}
+.field label {
+    padding-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: $bold;
+    transition: top 0.3s, font-size 0.3s;
+}
+
+.field input {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 5px;
+    background: $lightgray;
+    color: $white;
+    font-family: $base-font-family;
+    padding: 5px;
+    border: none;
+}
+::placeholder {
+    color: $orange;
+}   
+button
+{
+    width: 30%;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 5px;
+    background: $orange;
+    color: $black;
+    font-family: $base-font-family;
+    font-weight: $bold;
+    text-transform: uppercase;
+    padding: 5px;
+    margin: 0 35%;
+    border: none;
+    cursor: pointer;
+}
+button:hover
+{
+    background: $black;
+    color: $orange;
+}
+a
+{
+    color: $orange;
+    text-decoration: none;
+    font-weight: $bold;
+}
