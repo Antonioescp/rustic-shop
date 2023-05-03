@@ -8,21 +8,17 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-password-reset',
   templateUrl: './password-reset-request.component.html',
-  styleUrls: ['./password-reset-request.component.scss']
+  styleUrls: ['./password-reset-request.component.scss'],
 })
 export class PasswordResetRequestComponent extends BaseFormComponent {
-
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor(private authService: AuthService, private router: Router) {
     super();
 
     this.form = new FormGroup({
       email: new FormControl<string>('', [
         Validators.required,
-        Validators.email
-      ])
+        Validators.email,
+      ]),
     });
   }
 
@@ -31,13 +27,15 @@ export class PasswordResetRequestComponent extends BaseFormComponent {
       return;
     }
 
-    this.authService.requestPasswordReset({
-      email: this.form.controls['email'].value
-    }).subscribe({
-      next: res => {
-        this.router.navigate(['/']);
-      },
-      error: error => console.error(error)
-    });
+    this.authService
+      .requestPasswordReset({
+        email: this.form.controls['email'].value,
+      })
+      .subscribe({
+        next: (res) => {
+          this.router.navigate(['/']);
+        },
+        error: (error) => console.error(error),
+      });
   }
 }

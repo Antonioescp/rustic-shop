@@ -8,10 +8,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-password-reset',
   templateUrl: './password-reset.component.html',
-  styleUrls: ['./password-reset.component.scss']
+  styleUrls: ['./password-reset.component.scss'],
 })
-export class PasswordResetComponent extends BaseFormComponent implements OnInit {
-
+export class PasswordResetComponent
+  extends BaseFormComponent
+  implements OnInit
+{
   username!: string;
   token!: string;
 
@@ -32,13 +34,12 @@ export class PasswordResetComponent extends BaseFormComponent implements OnInit 
       confirmPassword: new FormControl<string>('', [
         Validators.required,
         // TODO(Add validator for matching fields)
-      ])
+      ]),
     });
-
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe( map => {
+    this.route.queryParams.subscribe((map) => {
       this.username = map['Username'];
       this.token = map['Token'];
     });
@@ -53,19 +54,18 @@ export class PasswordResetComponent extends BaseFormComponent implements OnInit 
       password: this.form.controls['password'].value,
       confirmPassword: this.form.controls['confirmPassword'].value,
       username: this.username,
-      token: this.token
+      token: this.token,
     };
 
     console.dir(request, { depth: null, colors: true });
 
     this.authService.resetPassword(request).subscribe({
-      next: res => {
+      next: (res) => {
         if (res.ok) {
           this.router.navigate(['/']);
         }
       },
-      error: err => console.error(err)
+      error: (err) => console.error(err),
     });
   }
-
 }

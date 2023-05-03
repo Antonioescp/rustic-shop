@@ -13,11 +13,10 @@ import RequestAccountUnlockRequest from './auth/request-account-unlock/request-a
 import UnlockAccountRequest from './auth/unlock-account/UnlockAccountRequest';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
-  private tokenKey: string = "token";
+  private tokenKey: string = 'token';
 
   private _authStatus = new Subject<boolean>();
 
@@ -29,9 +28,7 @@ export class AuthService {
     this._authStatus.next(newValue);
   }
 
-  constructor(
-    protected http: HttpClient
-  ) { }
+  constructor(protected http: HttpClient) {}
 
   public get isAuthenticated(): boolean {
     return this.token !== null;
@@ -48,14 +45,15 @@ export class AuthService {
   }
 
   login(item: LoginRequest): Observable<LoginResponse> {
-    const url = environment.baseUrl + "api/Users/auth/login";
-    return this.http.post<LoginResponse>(url, item)
-      .pipe(tap(loginResponse => {
+    const url = environment.baseUrl + 'api/Users/auth/login';
+    return this.http.post<LoginResponse>(url, item).pipe(
+      tap((loginResponse) => {
         if (loginResponse.success && loginResponse.token) {
           localStorage.setItem(this.tokenKey, loginResponse.token);
           this.updatedAuthStatus = true;
         }
-      }));
+      })
+    );
   }
 
   logout() {
@@ -64,51 +62,41 @@ export class AuthService {
   }
 
   register(registrationRequest: RegistrationRequest) {
-    const url = environment.baseUrl + "api/Users";
+    const url = environment.baseUrl + 'api/Users';
     return this.http.post<RegistrationResponse>(url, registrationRequest);
   }
 
-  requestPasswordReset(body: PasswordResetRequest): Observable<HttpResponse<Response>> {
+  requestPasswordReset(
+    body: PasswordResetRequest
+  ): Observable<HttpResponse<Response>> {
     const url = `${environment.apiBaseUrl}${environment.requestResetPasswordEndpoint}`;
-    return this.http.post<Response>(
-      url,
-      body,
-      {
-        observe: 'response'
-      }
-    );
+    return this.http.post<Response>(url, body, {
+      observe: 'response',
+    });
   }
 
   resetPassword(data: PasswordResetData): Observable<HttpResponse<Response>> {
     const url = `${environment.apiBaseUrl}${environment.passworResetEndpoint}`;
-    return this.http.post<Response>(
-      url,
-      data,
-      {
-        observe: 'response',
-      }
-    );
+    return this.http.post<Response>(url, data, {
+      observe: 'response',
+    });
   }
 
-  requestAccountUnlock(data: RequestAccountUnlockRequest): Observable<HttpResponse<Response>> {
+  requestAccountUnlock(
+    data: RequestAccountUnlockRequest
+  ): Observable<HttpResponse<Response>> {
     const url = `${environment.apiBaseUrl}${environment.requestAccountUnlockEndpoint}`;
-    return this.http.post<Response>(
-      url,
-      data,
-      {
-        observe: 'response'
-      }
-    );
+    return this.http.post<Response>(url, data, {
+      observe: 'response',
+    });
   }
 
-  unlockAccount(data: UnlockAccountRequest): Observable<HttpResponse<Response>> {
+  unlockAccount(
+    data: UnlockAccountRequest
+  ): Observable<HttpResponse<Response>> {
     const url = `${environment.apiBaseUrl}${environment.unlockAccountEndpoint}`;
-    return this.http.post<Response>(
-      url,
-      data,
-      {
-        observe: 'response'
-      }
-    );
+    return this.http.post<Response>(url, data, {
+      observe: 'response',
+    });
   }
 }
