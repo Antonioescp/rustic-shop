@@ -20,11 +20,30 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/Products
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var list = await _context.Products.ToListAsync();
             return Ok(list);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PaginatedResult<Product>>> GetPaginatedProducts(
+            int pageIndex = 0,
+            int pageSize = 10,
+            string? sortColumn = null,
+            string? sortOrder = null,
+            string? filterColumn = null,
+            string? filterQuery = null)
+        {
+            return await PaginatedResult<Product>.CreateAsync(
+                _context.Products,
+                pageIndex,
+                pageSize,
+                sortColumn,
+                sortOrder,
+                filterColumn,
+                filterQuery); 
         }
 
         // GET: api/Products/5

@@ -1,13 +1,14 @@
-<h1>Nuevo Producto</h1>
+<div class="new-product">
+  <h1>Nuevo Producto</h1>
 
 <mat-stepper orientation="horizontal" linear>
-  <mat-step [stepControl]="productForm">
-    <form [formGroup]="productForm" class="mat-form">
+  <mat-step [stepControl]="form">
+    <form [formGroup]="form" class="mat-form">
       <ng-template matStepLabel>Describe el producto</ng-template>
       <mat-form-field>
         <mat-label>Nombre</mat-label>
         <input matInput formControlName="name">
-        <mat-error *ngFor="let error of getErrors(productForm.get('name')!, 'Nombre')">
+        <mat-error *ngFor="let error of getErrors(form.get('name')!, 'Nombre')">
           {{ error }}
         </mat-error>
       </mat-form-field>
@@ -15,7 +16,7 @@
       <mat-form-field>
         <mat-label>Descripción Corta</mat-label>
         <input matInput formControlName="shortDescription" #shortDescInput>
-        <mat-error *ngFor="let error of getErrors(productForm.get('shortDescription')!, 'Descripción Corta')">
+        <mat-error *ngFor="let error of getErrors(form.get('shortDescription')!, 'Descripción Corta')">
           {{ error }}
         </mat-error>
       </mat-form-field>
@@ -23,7 +24,7 @@
       <mat-form-field>
         <mat-label>Descripción</mat-label>
         <textarea matInput formControlName="description"></textarea>
-        <mat-error *ngFor="let error of getErrors(productForm.get('description')!, 'Descripción')">
+        <mat-error *ngFor="let error of getErrors(form.get('description')!, 'Descripción')">
           {{ error }}
         </mat-error>
       </mat-form-field>
@@ -32,14 +33,17 @@
         <mat-label>Precio Unitario</mat-label>
         <input matInput formControlName="unitPrice" type="number" placeholder="0">
         <span matTextPrefix>C$&nbsp;</span>
-        <mat-error *ngFor="let error of getErrors(productForm.get('unitPrice')!, 'Precio Unitario')">
+        <mat-error *ngFor="let error of getErrors(form.get('unitPrice')!, 'Precio Unitario')">
           {{ error }}
         </mat-error>
       </mat-form-field>
 
       <mat-checkbox checked="false">Publicar</mat-checkbox>
 
-      <button mat-button color="primary" matStepperNext>Siguiente</button>
+      <div class="row">
+        <button mat-button color="warn" [routerLink]="['/admin/panel/productos']">Cancelar</button>
+        <button mat-flat-button color="primary" matStepperNext>Siguiente</button>
+      </div>
     </form>
   </mat-step>
   <mat-step [stepControl]="featuresForm" optional>
@@ -49,10 +53,7 @@
       <h3>Categorías</h3>
 
       <mat-chip-listbox multiple>
-        <mat-chip-option *ngFor="let cat of availableCategories"
-          (selectionChange)="categoryChipSelectionChange($event)"
-          [value]="cat.id"
-          >
+        <mat-chip-option *ngFor="let cat of availableCategories" [value]="cat.id">
           {{ cat.name }}
         </mat-chip-option>
       </mat-chip-listbox>
@@ -93,7 +94,7 @@
         <div class="feature-preview">
           <h3>Previsualización</h3>
           <mat-list>
-            <mat-list-item *ngFor="let feature of addedFeatures">
+            <mat-list-item *ngFor="let feature of selectedFeatures">
               <mat-icon matListItemIcon (click)="removeFeature(feature)">delete</mat-icon>
               <span matListItemTitle>{{ feature.name }}</span>
               <span matListItemLine>{{ feature.content }}</span>
@@ -103,9 +104,13 @@
       </div>
 
       <div class="row">
-        <button mat-button color="primary" matStepperPrevious type="button">Anterior</button>
-        <button mat-button color="primary" type="button" (click)="onSubmit()">Terminar</button>
+        <button mat-button color="secondary" matStepperPrevious type="button">Anterior</button>
+        <button mat-flat-button color="primary" type="button" (click)="onSubmit()">
+          {{ this.id ? "Guardar cambios" : "Crear" }}
+        </button>
       </div>
     </form>
   </mat-step>
 </mat-stepper>
+
+</div>

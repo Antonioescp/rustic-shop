@@ -29,6 +29,8 @@ import { FeaturesComponent } from './admin/features/features/features.component'
 import { FeatureEditComponent } from './admin/features/feature-edit/feature-edit.component';
 import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
 import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-edit.component';
+import { ProductsComponent } from './admin/products/products/products.component';
+import { ProductEditComponent } from './admin/products/product-edit/product-edit.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-
     FeaturesComponent,
     FeatureEditComponent,
     DiscountsComponent,
-    DiscountEditComponent
+    DiscountEditComponent,
+    ProductsComponent,
+    ProductEditComponent
   ],
   imports: [
     BrowserModule,
