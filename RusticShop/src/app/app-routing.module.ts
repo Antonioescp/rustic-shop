@@ -16,7 +16,6 @@ import { DiscountsComponent } from './admin/discounts/discounts/discounts.compon
 import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-edit.component';
 import { ProductsComponent } from './admin/products/products/products.component';
 import { ProductEditComponent } from './admin/products/product-edit/product-edit.component';
-import { AdminNewProductComponent } from './admin/admin-new-product/admin-new-product.component';
 
 const routes: Routes = [
   {
@@ -47,7 +46,6 @@ const routes: Routes = [
     children: [
       { path: 'productos', component: ProductsComponent },
       { path: 'producto', component: ProductEditComponent },
-      { path: 'producto/old', component: AdminNewProductComponent },
       { path: 'producto/:id', component: ProductEditComponent },
       { path: 'categorias', component: CategoriesComponent },
       { path: 'categoria', component: CategoryEditComponent },

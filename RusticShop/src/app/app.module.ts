@@ -16,13 +16,11 @@ import { PasswordResetComponent } from './auth/password-reset/password-reset.com
 import { RequestAccountUnlockComponent } from './auth/request-account-unlock/request-account-unlock.component';
 import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
-import { AdminProductListComponent } from './admin/admin-product-list/admin-product-list.component';
 
 import { AuthService } from './auth.service';
 import { AuthInterceptor } from './http-interceptors/AuthInterceptor';
 import { ProductsService } from './products.service';
 import { ProductCardComponent } from './product-card/product-card.component';
-import { AdminNewProductComponent } from './admin/admin-new-product/admin-new-product.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { CategoryEditComponent } from './admin/categories/category-edit/category-edit.component';
 import { FeaturesComponent } from './admin/features/features/features.component';
@@ -44,9 +42,7 @@ import { ProductEditComponent } from './admin/products/product-edit/product-edit
     RequestAccountUnlockComponent,
     UnlockAccountComponent,
     AdminPanelComponent,
-    AdminProductListComponent,
     ProductCardComponent,
-    AdminNewProductComponent,
     CategoriesComponent,
     CategoryEditComponent,
     FeaturesComponent,
@@ -54,7 +50,7 @@ import { ProductEditComponent } from './admin/products/product-edit/product-edit
     DiscountsComponent,
     DiscountEditComponent,
     ProductsComponent,
-    ProductEditComponent
+    ProductEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,17 +58,17 @@ import { ProductEditComponent } from './admin/products/product-edit/product-edit
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
+      multi: true,
     },
     { provide: AuthService },
     { provide: ProductsService },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
