@@ -98,6 +98,11 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
         next: (result) => {
           this.selectedFeatures = [...result];
           this.alreadySelectedFeatures = [...result];
+          this.availableFeatures = this.availableFeatures.filter((feat) => {
+            return !this.selectedFeatures.some((selected) => {
+              return feat.id === selected.id;
+            });
+          });
         },
         error: (error) => console.error(error),
       });
