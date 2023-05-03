@@ -152,6 +152,10 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
   onSubmit(): void {
     const product = this.product ? this.product : <Product>{};
     product.name = this.form.controls['name'].value;
+    product.description = this.form.controls['description'].value;
+    product.shortDescription = this.form.controls['shortDescription'].value;
+    product.isPublished = this.form.controls['isPublished'].value;
+    product.unitPrice = this.form.controls['unitPrice'].value;
 
     if (this.id) {
       this.submitProductUpdate(product);
@@ -242,7 +246,7 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
   submitProductCreation(product: Product): void {
     this.productsService.addProduct(product).subscribe({
       next: (result) => {
-        this.router.navigate(['/admin/panel/productos']);
+        console.log(`product added ${result}`);
       },
       error: (error) => console.error(error),
     });

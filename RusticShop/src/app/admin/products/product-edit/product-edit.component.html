@@ -38,10 +38,10 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-checkbox checked="false">Publicar</mat-checkbox>
+      <mat-checkbox checked="false" formControlName="isPublished">Publicar</mat-checkbox>
 
       <div class="row">
-        <button mat-button color="warn" [routerLink]="['/admin/panel/productos']">Cancelar</button>
+        <button mat-button type="button" color="warn" [routerLink]="['/admin/panel/productos']">Cancelar</button>
         <button mat-flat-button color="primary" matStepperNext>Siguiente</button>
       </div>
     </form>
