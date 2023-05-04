@@ -11,4 +11,5 @@ export const environment = {
   featureEndpoint: 'Features/',
   productsEndpoint: 'Products/',
   discountsEndpoint: 'Discounts/',
+  usersEndpoint: 'Users/',
 };

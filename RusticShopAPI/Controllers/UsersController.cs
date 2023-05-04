@@ -10,6 +10,7 @@ using RusticShopAPI.Services;
 using RusticShopAPI.Services.Mail;
 using System.Linq;
 using RusticShopAPI.Data.Models.Auth;
+using RusticShopAPI.Data.Models.DTOs;
 
 namespace RusticShopAPI.Controllers
 {
@@ -448,6 +449,20 @@ namespace RusticShopAPI.Controllers
             }, "ConfirmAccount", user.UserName, confirmationUrl);
         }
 
+        [HttpPost("email-availability")]
+        public async Task<bool> CheckEmailAvailability(EmailOnlyDto data)
+        {
+            var user = await _userManager.FindByEmailAsync(data.Email);
+            return user == null;
+        }
+
+        [HttpPost("username-availability")]
+        public async Task<bool> CheckUserNameAvailability(UserNameOnlyDto data)
+        {
+            var user = await _userManager.FindByNameAsync(data.Username);
+            return user == null;
+        } 
+
         #region AdminCRUD
 
         [Authorize(Roles = "Administrator")]
@@ -541,3 +556,4 @@ namespace RusticShopAPI.Controllers
         #endregion
     }
 }
+

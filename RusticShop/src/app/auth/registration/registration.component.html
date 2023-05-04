@@ -20,15 +20,15 @@
       <label for="username">Username: </label>
       <input type="text" name="text" formControlName="username" placeholder="Fulanito de tal" required />
       <div class="error"
-        *ngFor="let error of getErrors(form.get('username')!, 'Usuario', { minlength: 'debe tener al menos 8 caracteres'})">
+        *ngFor="let error of getErrors(form.get('username')!, 'Usuario', { minlength: 'debe tener al menos 8 caracteres', usernameNotAvailable: 'ya se encuentra en uso.'})">
         {{ error }}
       </div>
     </div>
 
     <div class="field">
       <label for="email">Email: </label>
-      <input type="email" name="email" formControlName="email" placeholder="fulanito@ejemplo.com" required />
-      <div class="error" *ngFor="let error of getErrors(form.get('email')!, 'Email')">
+      <input type="email" name="email" formControlName="email" placeholder="fulanito@ejemplo.com" required #emailInput />
+      <div class="error" *ngFor="let error of getErrors(form.get('email')!, 'Email', { emailNotAvailable: 'ya se encuentra en uso.'})">
         {{ error }}
       </div>
     </div>

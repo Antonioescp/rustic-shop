@@ -1,12 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  AsyncValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 
 import { BaseFormComponent } from '../../shared/components/base-form.component';
 import { AuthService } from '../../auth.service';
 import { LoginRequest } from './login-request';
 import { LoginResponse } from './login-response';
 import { HttpStatusCode } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-login',

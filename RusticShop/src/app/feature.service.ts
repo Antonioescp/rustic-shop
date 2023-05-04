@@ -6,18 +6,19 @@ import { Observable } from 'rxjs';
 import { Pagination } from './categories.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FeatureService {
-
   readonly featureUrl = `${environment.apiBaseUrl}${environment.featureEndpoint}`;
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   addFeature(name: string): Observable<HttpResponse<Response>> {
-    return this.http.post<Response>(this.featureUrl, { name }, { observe: 'response' });
+    return this.http.post<Response>(
+      this.featureUrl,
+      { name },
+      { observe: 'response' }
+    );
   }
 
   getFeature(id: number): Observable<Feature> {
@@ -34,12 +35,16 @@ export class FeatureService {
     let params = new HttpParams()
       .set('pageIndex', pagination.pageIndex)
       .set('pageSize', pagination.pageSize)
-      .set('sortColumn', (pagination.sort)
-        ? pagination.sort.active
-        : pagination.defaultSortColumn)
-      .set('sortOrder', (pagination.sort)
-        ? pagination.sort.direction
-        : pagination.defaultSortOrder);
+      .set(
+        'sortColumn',
+        pagination.sort ? pagination.sort.active : pagination.defaultSortColumn
+      )
+      .set(
+        'sortOrder',
+        pagination.sort
+          ? pagination.sort.direction
+          : pagination.defaultSortOrder
+      );
 
     if (pagination.filterQuery) {
       params = params
@@ -57,5 +62,10 @@ export class FeatureService {
   updateFeature(feature: Feature): Observable<HttpResponse<any>> {
     const url = `${this.featureUrl}${feature.id}`;
     return this.http.put<any>(url, feature);
+  }
+
+  isNameUnique(name: string): Observable<boolean> {
+    const url = `${this.featureUrl}name-availability`;
+    return this.http.post<boolean>(url, { name });
   }
 }
