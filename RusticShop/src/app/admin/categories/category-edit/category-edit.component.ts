@@ -1,7 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, map } from 'rxjs';
 import { CategoriesService } from 'src/app/categories.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import Category from 'src/app/shared/models/Category';
@@ -9,7 +17,7 @@ import Category from 'src/app/shared/models/Category';
 @Component({
   selector: 'app-category-edit',
   templateUrl: './category-edit.component.html',
-  styleUrls: ['./category-edit.component.scss']
+  styleUrls: ['./category-edit.component.scss'],
 })
 export class CategoryEditComponent extends BaseFormComponent implements OnInit {
   title?: string;
@@ -27,9 +35,7 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl('', [
-        Validators.required
-      ])
+      name: new FormControl('', [Validators.required], this.isNameTaken()),
     });
 
     this.loadData();
@@ -41,15 +47,14 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
 
     if (this.id) {
       this.categoriesService.getCategory(this.id).subscribe({
-        next: result => {
+        next: (result) => {
           this.category = result;
           this.title = `Editar - ${this.category.name}`;
           this.form.patchValue(this.category);
         },
-        error: error => console.error(error)
+        error: (error) => console.error(error),
       });
-    }
-    else {
+    } else {
       this.title = 'Nueva Categoría';
     }
   }
@@ -62,19 +67,29 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
       // Modo de edicion
       category.id = this.id;
       this.categoriesService.updateCategory(category).subscribe({
-        next: result => {
+        next: (result) => {
           this.router.navigate(['/admin/panel/categorias']);
         },
-        error: error => console.error(error)
+        error: (error) => console.error(error),
       });
     } else {
       // Modo de creacion
       this.categoriesService.addCategory(category.name).subscribe({
-        next: result => {
+        next: (result) => {
           this.router.navigate(['/admin/panel/categorias']);
         },
-        error: error => console.error(error)
+        error: (error) => console.error(error),
       });
     }
+  }
+
+  isNameTaken(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return this.categoriesService.checkNameUniqueness(control.value).pipe(
+        map((exists) => {
+          return exists ? { nameTaken: true } : null;
+        })
+      );
+    };
   }
 }

@@ -16,7 +16,7 @@ namespace RusticShopAPI.Data.Models
         public long BillingAddressId { get; set; }
 
         [Required]
-        public string CardHolderName { get; set; } = null!;
+        public string NameOnCard { get; set; } = null!;
 
         [Required]
         [CreditCard]

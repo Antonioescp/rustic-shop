@@ -1,6 +1,7 @@
-table {
+table.mat-mdc-table {
+  white-space: nowrap;
   width: 100%;
-  margin-top: 15px;
+  max-width: 100%;
   table-layout: fixed;
 }
 

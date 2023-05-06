@@ -140,5 +140,12 @@ namespace RusticShopAPI.Controllers
         {
             return (_context.Categories?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        [HttpPost("name-availability")]
+        public bool CategoryNameTaken(CategoryNameOnlyDto data)
+        {
+            return (_context.Categories?.Any(c => c.Name == data.CategoryName))
+                .GetValueOrDefault();
+        }
     }
 }

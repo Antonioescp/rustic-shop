@@ -66,6 +66,6 @@ export class FeatureService {
 
   isNameUnique(name: string): Observable<boolean> {
     const url = `${this.featureUrl}name-availability`;
-    return this.http.post<boolean>(url, { name });
+    return this.http.post<boolean>(url, { featureName: name });
   }
 }

@@ -16,15 +16,12 @@ export interface Pagination {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CategoriesService {
-
   readonly url = `${environment.apiBaseUrl}${environment.categoryEndpoint}`;
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   getCategory(id: number): Observable<Category> {
     const categoryUrl = `${this.url}${id}`;
@@ -40,12 +37,16 @@ export class CategoriesService {
     let params = new HttpParams()
       .set('pageIndex', pagination.pageIndex)
       .set('pageSize', pagination.pageSize)
-      .set('sortColumn', (pagination.sort)
-        ? pagination.sort.active
-        : pagination.defaultSortColumn)
-      .set('sortOrder', (pagination.sort)
-        ? pagination.sort.direction
-        : pagination.defaultSortOrder);
+      .set(
+        'sortColumn',
+        pagination.sort ? pagination.sort.active : pagination.defaultSortColumn
+      )
+      .set(
+        'sortOrder',
+        pagination.sort
+          ? pagination.sort.direction
+          : pagination.defaultSortOrder
+      );
 
     if (pagination.filterQuery) {
       params = params
@@ -56,7 +57,11 @@ export class CategoriesService {
   }
 
   addCategory(name: string): Observable<HttpResponse<Response>> {
-    return this.http.post<Response>(this.url, { name }, { observe: 'response' });
+    return this.http.post<Response>(
+      this.url,
+      { name },
+      { observe: 'response' }
+    );
   }
 
   deleteCategory(id: number): Observable<HttpResponse<Response>> {
@@ -67,5 +72,10 @@ export class CategoriesService {
   updateCategory(category: Category): Observable<HttpResponse<any>> {
     const updateUrl = `${this.url}${category.id}`;
     return this.http.put<any>(updateUrl, category);
+  }
+
+  checkNameUniqueness(name: string): Observable<boolean> {
+    const url = `${this.url}name-availability`;
+    return this.http.post<boolean>(url, { categoryName: name });
   }
 }

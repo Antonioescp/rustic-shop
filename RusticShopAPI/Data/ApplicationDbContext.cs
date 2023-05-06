@@ -55,6 +55,17 @@ namespace RusticShopAPI.Data
             builder.Entity<VProductSummary>()
                 .ToView(nameof(VProductSummary))
                 .HasKey(x => x.Id);
+
+            // Adding extra constraints
+            builder.Entity<Category>(b =>
+            {
+                b.HasIndex(b => b.Name).IsUnique();
+            });
+
+            builder.Entity<Feature>(b =>
+            {
+                b.HasIndex(f => f.Name).IsUnique();
+            });
         }
 
         public DbSet<FeatureProduct> FeatureProducts => Set<FeatureProduct>();

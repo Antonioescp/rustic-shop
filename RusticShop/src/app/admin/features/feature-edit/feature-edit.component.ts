@@ -33,7 +33,7 @@ export class FeatureEditComponent extends BaseFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl('', [Validators.required], this.featureIsUnique),
+      name: new FormControl('', [Validators.required], this.featureIsUnique()),
     });
 
     this.loadData();
@@ -81,11 +81,11 @@ export class FeatureEditComponent extends BaseFormComponent implements OnInit {
     }
   }
 
-  featureIsUnique(
-    control: AbstractControl
-  ): Observable<ValidationErrors | null> {
-    return this.featuresService
-      .isNameUnique(control.value)
-      .pipe(map((result) => (!result ? { nameTaken: true } : null)));
+  featureIsUnique(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return this.featuresService
+        .isNameUnique(control.value)
+        .pipe(map((result) => (result ? { nameTaken: true } : null)));
+    };
   }
 }
