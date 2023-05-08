@@ -1,20 +1,18 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import Feature from './shared/models/Feature';
+import Attribute from './shared/models/Attribute';
 import { environment } from 'src/environments/environment';
 import Discount from './shared/models/Discount';
 import { Pagination } from './categories.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DiscountsService {
   readonly discountsUrl = `${environment.apiBaseUrl}${environment.discountsEndpoint}`;
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   getDiscount(id: number): Observable<Discount> {
     return this.http.get<Discount>(this.discountsUrl + id);
@@ -28,12 +26,16 @@ export class DiscountsService {
     let params = new HttpParams()
       .set('pageIndex', pagination.pageIndex)
       .set('pageSize', pagination.pageSize)
-      .set('sortColumn', (pagination.sort)
-        ? pagination.sort.active
-        : pagination.defaultSortColumn)
-      .set('sortOrder', (pagination.sort)
-        ? pagination.sort.direction
-        : pagination.defaultSortOrder);
+      .set(
+        'sortColumn',
+        pagination.sort ? pagination.sort.active : pagination.defaultSortColumn
+      )
+      .set(
+        'sortOrder',
+        pagination.sort
+          ? pagination.sort.direction
+          : pagination.defaultSortOrder
+      );
 
     if (pagination.filterQuery) {
       params = params

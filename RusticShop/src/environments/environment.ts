@@ -8,7 +8,7 @@ export const environment = {
   unlockAccountEndpoint: 'Users/auth/unlock-account',
   productListViewEndpoint: 'Products/views/product-list',
   categoryEndpoint: 'Categories/',
-  featureEndpoint: 'Features/',
+  attributesEndpoint: 'Attributes/',
   productsEndpoint: 'Products/',
   discountsEndpoint: 'Discounts/',
   usersEndpoint: 'Users/',

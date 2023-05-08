@@ -9,24 +9,27 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
-import { FeatureService } from 'src/app/feature.service';
+import { AttributesService } from 'src/app/attributes.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
-import Feature from 'src/app/shared/models/Feature';
+import Attribute from 'src/app/shared/models/Attribute';
 
 @Component({
-  selector: 'app-feature-edit',
-  templateUrl: './feature-edit.component.html',
-  styleUrls: ['./feature-edit.component.scss'],
+  selector: 'app-attribute-edit',
+  templateUrl: './attribute-edit.component.html',
+  styleUrls: ['./attribute-edit.component.scss'],
 })
-export class FeatureEditComponent extends BaseFormComponent implements OnInit {
+export class AttributeEditComponent
+  extends BaseFormComponent
+  implements OnInit
+{
   title?: string;
-  feature?: Feature;
+  attribute?: Attribute;
   id?: number;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private featuresService: FeatureService
+    private featuresService: AttributesService
   ) {
     super();
   }
@@ -44,11 +47,11 @@ export class FeatureEditComponent extends BaseFormComponent implements OnInit {
     this.id = idParam ? +idParam : 0;
 
     if (this.id) {
-      this.featuresService.getFeature(this.id).subscribe({
+      this.featuresService.getAttribute(this.id).subscribe({
         next: (result) => {
-          this.feature = result;
-          this.title = `Editar - ${this.feature.name}`;
-          this.form.patchValue(this.feature);
+          this.attribute = result;
+          this.title = `Editar - ${this.attribute.name}`;
+          this.form.patchValue(this.attribute);
         },
         error: (error) => console.error(error),
       });
@@ -58,13 +61,13 @@ export class FeatureEditComponent extends BaseFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const feature = this.feature ? this.feature : <Feature>{};
-    feature.name = this.form.controls['name'].value;
+    const attribute = this.attribute ? this.attribute : <Attribute>{};
+    attribute.name = this.form.controls['name'].value;
 
     if (this.id) {
       // Modo de edicion
-      feature.id = this.id;
-      this.featuresService.updateFeature(feature).subscribe({
+      attribute.id = this.id;
+      this.featuresService.updateAttribute(attribute).subscribe({
         next: (result) => {
           this.router.navigate(['/admin/panel/caracteristicas']);
         },
@@ -72,7 +75,7 @@ export class FeatureEditComponent extends BaseFormComponent implements OnInit {
       });
     } else {
       // Modo de creacion
-      this.featuresService.addFeature(feature.name).subscribe({
+      this.featuresService.addAttribute(attribute.name).subscribe({
         next: (result) => {
           this.router.navigate(['/admin/panel/caracteristicas']);
         },
@@ -83,9 +86,13 @@ export class FeatureEditComponent extends BaseFormComponent implements OnInit {
 
   featureIsUnique(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (this.id && this.attribute && this.attribute.name == control.value) {
+        return new Observable((sub) => sub.next(null));
+      }
+
       return this.featuresService
         .isNameUnique(control.value)
-        .pipe(map((result) => (result ? { nameTaken: true } : null)));
+        .pipe(map((isAvailable) => (isAvailable ? null : { nameTaken: true })));
     };
   }
 }

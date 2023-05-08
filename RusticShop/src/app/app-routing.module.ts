@@ -10,8 +10,8 @@ import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.com
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { CategoryEditComponent } from './admin/categories/category-edit/category-edit.component';
-import { FeaturesComponent } from './admin/features/features/features.component';
-import { FeatureEditComponent } from './admin/features/feature-edit/feature-edit.component';
+import { AttributesComponent } from './admin/attributes/attributes/attributes.component';
+import { AttributeEditComponent } from './admin/attributes/attribute-edit/attribute-edit.component';
 import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
 import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-edit.component';
 import { ProductsComponent } from './admin/products/products/products.component';
@@ -50,9 +50,9 @@ const routes: Routes = [
       { path: 'categorias', component: CategoriesComponent },
       { path: 'categoria', component: CategoryEditComponent },
       { path: 'categoria/:id', component: CategoryEditComponent },
-      { path: 'caracteristicas', component: FeaturesComponent },
-      { path: 'caracteristica', component: FeatureEditComponent },
-      { path: 'caracteristica/:id', component: FeatureEditComponent },
+      { path: 'caracteristicas', component: AttributesComponent },
+      { path: 'caracteristica', component: AttributeEditComponent },
+      { path: 'caracteristica/:id', component: AttributeEditComponent },
       { path: 'descuentos', component: DiscountsComponent },
       { path: 'descuento', component: DiscountEditComponent },
       { path: 'descuento/:id', component: DiscountEditComponent },

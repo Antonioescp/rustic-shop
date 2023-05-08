@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import Feature from './shared/models/Feature';
+import Attribute from './shared/models/Attribute';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { Pagination } from './categories.service';
@@ -8,30 +8,30 @@ import { Pagination } from './categories.service';
 @Injectable({
   providedIn: 'root',
 })
-export class FeatureService {
-  readonly featureUrl = `${environment.apiBaseUrl}${environment.featureEndpoint}`;
+export class AttributesService {
+  readonly attributesUrl = `${environment.apiBaseUrl}${environment.attributesEndpoint}`;
 
   constructor(private http: HttpClient) {}
 
-  addFeature(name: string): Observable<HttpResponse<Response>> {
+  addAttribute(name: string): Observable<HttpResponse<Response>> {
     return this.http.post<Response>(
-      this.featureUrl,
+      this.attributesUrl,
       { name },
       { observe: 'response' }
     );
   }
 
-  getFeature(id: number): Observable<Feature> {
-    const url = `${this.featureUrl}/${id}`;
-    return this.http.get<Feature>(url);
+  getAttribute(id: number): Observable<Attribute> {
+    const url = `${this.attributesUrl}/${id}`;
+    return this.http.get<Attribute>(url);
   }
 
-  getFeatures(): Observable<Feature[]> {
-    return this.http.get<Feature[]>(this.featureUrl + 'all');
+  getAttributes(): Observable<Attribute[]> {
+    return this.http.get<Attribute[]>(this.attributesUrl + 'all');
   }
 
-  getPaginatedFeatures(pagination: Pagination): Observable<any> {
-    const url = `${environment.apiBaseUrl}${environment.featureEndpoint}`;
+  getPaginatedAttributes(pagination: Pagination): Observable<any> {
+    const url = `${environment.apiBaseUrl}${environment.attributesEndpoint}`;
     let params = new HttpParams()
       .set('pageIndex', pagination.pageIndex)
       .set('pageSize', pagination.pageSize)
@@ -54,18 +54,18 @@ export class FeatureService {
     return this.http.get<any>(url, { params });
   }
 
-  deleteFeature(id: number): Observable<HttpResponse<Response>> {
-    const url = `${this.featureUrl}/${id}`;
+  deleteAttribute(id: number): Observable<HttpResponse<Response>> {
+    const url = `${this.attributesUrl}/${id}`;
     return this.http.delete<Response>(url, { observe: 'response' });
   }
 
-  updateFeature(feature: Feature): Observable<HttpResponse<any>> {
-    const url = `${this.featureUrl}${feature.id}`;
-    return this.http.put<any>(url, feature);
+  updateAttribute(attribute: Attribute): Observable<HttpResponse<any>> {
+    const url = `${this.attributesUrl}${attribute.id}`;
+    return this.http.put<any>(url, attribute);
   }
 
   isNameUnique(name: string): Observable<boolean> {
-    const url = `${this.featureUrl}name-availability`;
-    return this.http.post<boolean>(url, { featureName: name });
+    const url = `${this.attributesUrl}name-availability`;
+    return this.http.post<boolean>(url, { name });
   }
 }

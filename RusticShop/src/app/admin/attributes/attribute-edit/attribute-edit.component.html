@@ -1,11 +1,11 @@
 <div class="feature">
   <h1>{{ title }}</h1>
 
-  <div class="loading-view" *ngIf="this.id && !feature">
+  <div class="loading-view" *ngIf="this.id && !attribute">
     <mat-spinner></mat-spinner>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="(this.id === 0 || this.id && feature)">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="(this.id === 0 || this.id && attribute)">
 
     <mat-form-field>
       <mat-label>Nombre</mat-label>

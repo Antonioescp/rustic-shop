@@ -1,19 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  MatChipListbox,
-  MatChipListboxChange,
-  MatChipOption,
-  MatChipSelectionChange,
-} from '@angular/material/chips';
+import { MatChipListbox } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoriesService } from 'src/app/categories.service';
-import { FeatureService } from 'src/app/feature.service';
+import { AttributesService } from 'src/app/attributes.service';
 import { ProductsService } from 'src/app/products.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import ProductFeature from 'src/app/shared/dtos/Product/product-feature';
 import Category from 'src/app/shared/models/Category';
-import Feature from 'src/app/shared/models/Feature';
+import Attribute from 'src/app/shared/models/Attribute';
 import { Product } from 'src/app/shared/models/Product';
 import { lastValueFrom } from 'rxjs';
 
@@ -28,7 +23,7 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
   id?: number;
 
   featuresForm!: FormGroup;
-  availableFeatures!: Feature[];
+  availableFeatures!: Attribute[];
   selectedFeatures: ProductFeature[] = [];
   alreadySelectedFeatures: ProductFeature[] = [];
 
@@ -41,7 +36,7 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private productsService: ProductsService,
-    private featuresService: FeatureService,
+    private attributesService: AttributesService,
     private categoriesService: CategoriesService
   ) {
     super();
@@ -76,8 +71,8 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     this.id = idParam ? +idParam : 0;
 
-    this.featuresService
-      .getFeatures()
+    this.attributesService
+      .getAttributes()
       .subscribe((res) => (this.availableFeatures = [...res]));
 
     this.categoriesService
