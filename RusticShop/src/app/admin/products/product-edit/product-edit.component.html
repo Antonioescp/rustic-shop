@@ -14,6 +14,18 @@
       </mat-form-field>
 
       <mat-form-field>
+        <mat-label>Marca</mat-label>
+        <mat-select formControlName="brandId">
+          <mat-option *ngFor="let brand of brands" [value]="brand.id">
+            {{ brand.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngFor="let error of getErrors(form.get('brandId')!, 'Marca')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
         <mat-label>Descripción Corta</mat-label>
         <input matInput formControlName="shortDescription" #shortDescInput>
         <mat-error *ngFor="let error of getErrors(form.get('shortDescription')!, 'Descripción Corta')">
@@ -29,85 +41,11 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Precio Unitario</mat-label>
-        <input matInput formControlName="unitPrice" type="number" placeholder="0">
-        <span matTextPrefix>C$&nbsp;</span>
-        <mat-error *ngFor="let error of getErrors(form.get('unitPrice')!, 'Precio Unitario')">
-          {{ error }}
-        </mat-error>
-      </mat-form-field>
-
       <mat-checkbox checked="false" formControlName="isPublished">Publicar</mat-checkbox>
 
       <div class="row">
         <button mat-button type="button" color="warn" [routerLink]="['/admin/panel/productos']">Cancelar</button>
-        <button mat-flat-button color="primary" matStepperNext>Siguiente</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="featuresForm" optional>
-    <form class="mat-form" [formGroup]="featuresForm">
-      <ng-template matStepLabel>Asigna las características</ng-template>
-
-      <h3>Categorías</h3>
-
-      <mat-chip-listbox multiple>
-        <mat-chip-option *ngFor="let cat of availableCategories" [value]="cat.id">
-          {{ cat.name }}
-        </mat-chip-option>
-      </mat-chip-listbox>
-
-      <mat-divider></mat-divider>
-
-      <div class="feature-container">
-        <div class="feature-input">
-          <h3>Característica nueva</h3>
-          <mat-form-field>
-            <mat-label>
-              Nombre
-            </mat-label>
-            <mat-select formControlName="feature">
-              <mat-option *ngFor="let feature of availableFeatures" [value]="feature">
-                {{ feature.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngFor="let error of getErrors(featuresForm.get('feature')!, 'Característica')">
-              {{ error }}
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Contenido</mat-label>
-            <input matInput formControlName="content">
-            <mat-error *ngFor="let error of getErrors(featuresForm.get('content')!, 'Contenido')">
-              {{ error }}
-            </mat-error>
-          </mat-form-field>
-
-          <button mat-raised-button type="submit" color="primary" (click)="addFeature()" [disabled]="featuresForm.invalid">
-            <mat-icon>add</mat-icon>
-            Agregar característica
-          </button>
-        </div>
-
-        <div class="feature-preview">
-          <h3>Previsualización</h3>
-          <mat-list>
-            <mat-list-item *ngFor="let feature of selectedFeatures">
-              <mat-icon matListItemIcon (click)="removeFeature(feature)">delete</mat-icon>
-              <span matListItemTitle>{{ feature.name }}</span>
-              <span matListItemLine>{{ feature.content }}</span>
-            </mat-list-item>
-          </mat-list>
-        </div>
-      </div>
-
-      <div class="row">
-        <button mat-button color="secondary" matStepperPrevious type="button">Anterior</button>
-        <button mat-flat-button color="primary" type="button" (click)="onSubmit()">
-          {{ this.id ? "Guardar cambios" : "Crear" }}
-        </button>
+        <button mat-flat-button color="primary" (click)="onSubmit()">Terminar</button>
       </div>
     </form>
   </mat-step>

@@ -8,16 +8,16 @@ import { Product } from 'src/app/shared/models/Product';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+  styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
   products!: MatTableDataSource<Product>;
   displayedColumns = [
     'id',
-    'isPublished',
     'name',
     'shortDescription',
-    'unitPrice',
+    'description',
+    'isPublished',
     'actions',
   ];
 
@@ -33,11 +33,7 @@ export class ProductsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(
-    private productsService: ProductsService
-  ) {
-
-  }
+  constructor(private productsService: ProductsService) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -52,39 +48,41 @@ export class ProductsComponent implements OnInit {
   }
 
   getData(event: PageEvent): void {
-    this.productsService.getPaginatedProducts({
-      defaultSortColumn: this.defaultSortColumn,
-      defaultSortOrder: this.defaultSortOrder,
-      pageIndex: event.pageIndex,
-      pageSize: event.pageSize,
-      sort: this.sort,
-      defaultFilterColumn: this.defaultFilterColumn,
-      filterQuery: this.filterQuery
-    }).subscribe({
-      next: result => {
-        this.paginator.length = result.totalCount;
-        this.paginator.pageIndex = result.pageIndex;
-        this.paginator.pageSize = result.pageSize;
-        this.products = new MatTableDataSource(result.data);
-        this.isLoadingAction = false;
-      },
-      error: error => {
-        console.log(error);
-        this.isLoadingAction = false;
-      }
-    });
+    this.productsService
+      .getPaginatedProducts({
+        defaultSortColumn: this.defaultSortColumn,
+        defaultSortOrder: this.defaultSortOrder,
+        pageIndex: event.pageIndex,
+        pageSize: event.pageSize,
+        sort: this.sort,
+        defaultFilterColumn: this.defaultFilterColumn,
+        filterQuery: this.filterQuery,
+      })
+      .subscribe({
+        next: (result) => {
+          this.paginator.length = result.totalCount;
+          this.paginator.pageIndex = result.pageIndex;
+          this.paginator.pageSize = result.pageSize;
+          this.products = new MatTableDataSource(result.data);
+          this.isLoadingAction = false;
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoadingAction = false;
+        },
+      });
   }
 
   deleteProduct(product: Product) {
     this.isLoadingAction = true;
     this.productsService.deleteProduct(product.id).subscribe({
-      next: result => {
+      next: (result) => {
         this.loadData();
       },
-      error: error => {
+      error: (error) => {
         console.error(error);
         this.isLoadingAction = false;
-      }
+      },
     });
   }
 }

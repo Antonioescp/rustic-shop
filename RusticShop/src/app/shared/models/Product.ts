@@ -1,8 +1,8 @@
 export interface Product {
   id: number;
+  brandId: number;
   name: string;
   shortDescription: string;
   description: string | null;
-  unitPrice: number;
   isPublished: boolean;
 }

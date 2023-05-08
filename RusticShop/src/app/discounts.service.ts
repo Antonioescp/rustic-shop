@@ -1,7 +1,6 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import Attribute from './shared/models/Attribute';
 import { environment } from 'src/environments/environment';
 import Discount from './shared/models/Discount';
 import { Pagination } from './categories.service';

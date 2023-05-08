@@ -23,13 +23,6 @@
       <td mat-cell *matCellDef="let product">{{ product.id }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="isPublished">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Público </th>
-      <td mat-cell *matCellDef="let product">
-        {{ product.isPublished ? 'Si' : 'No' }}
-      </td>
-    </ng-container>
-
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
       <td mat-cell *matCellDef="let product">{{ product.name }}</td>
@@ -40,9 +33,16 @@
       <td mat-cell *matCellDef="let product">{{ product.shortDescription }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="unitPrice">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Precio Unitario </th>
-      <td mat-cell *matCellDef="let product">{{ product.unitPrice | currency:'NIO':'symbol-narrow' }}</td>
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+      <td mat-cell *matCellDef="let product">{{ product.description }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="isPublished">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Público </th>
+      <td mat-cell *matCellDef="let product">
+        {{ product.isPublished ? 'Si' : 'No' }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
