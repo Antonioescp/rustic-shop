@@ -291,7 +291,7 @@ namespace RusticShopAPI.Controllers
                 });
             }
 
-            var newEntry = new FeatureProduct
+            var newEntry = new ProductAttribute
             {
                 FeatureId = featureId,
                 ProductId = id,

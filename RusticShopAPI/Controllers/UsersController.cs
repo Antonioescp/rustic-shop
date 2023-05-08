@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data.Models;
-using RusticShopAPI.Data.Models.Users;
 using RusticShopAPI.Services;
 using RusticShopAPI.Services.Mail;
 using System.Linq;

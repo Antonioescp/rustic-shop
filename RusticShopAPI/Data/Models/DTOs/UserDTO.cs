@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace RusticShopAPI.Data.Models.Users
+namespace RusticShopAPI.Data.Models.DTOs
 {
     public class UserDTO
     {

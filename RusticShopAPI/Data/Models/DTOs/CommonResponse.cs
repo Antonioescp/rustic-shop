@@ -1,6 +1,6 @@
 ﻿using System.Security;
 
-namespace RusticShopAPI.Data.Models
+namespace RusticShopAPI.Data.Models.DTOs
 {
     public class CommonResponse
     {

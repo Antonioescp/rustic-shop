@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RusticShopAPI.Data;
-using RusticShopAPI.Data.Models.Users;
+using RusticShopAPI.Data.Models;
 using RusticShopAPI.Services;
 using RusticShopAPI.Services.Mail;
 using System.Text;

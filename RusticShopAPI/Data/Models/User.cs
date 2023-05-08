@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RusticShopAPI.Data.Models.Users
+namespace RusticShopAPI.Data.Models
 {
     public class User : IdentityUser
     {
@@ -12,11 +12,5 @@ namespace RusticShopAPI.Data.Models.Users
         public string? FirstName { get; set; }
         [PersonalData]
         public string? LastName { get; set; }
-
-        // Navigation Properties
-        public ICollection<BankCard>? BankCards { get; set; } = null!;
-        public ICollection<Product>? Cart { get; set; } = null!;
-        public ICollection<Product>? Wishlist { get; set; } = null!;
-        public ICollection<Address>? Addresses { get; set; } = null!;
     }
 }

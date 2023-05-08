@@ -24,7 +24,7 @@ namespace RusticShopAPI.Controllers
 
         // GET: api/Features
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<Feature>>> GetAllFeatures()
+        public async Task<ActionResult<IEnumerable<Data.Models.Attribute>>> GetAllFeatures()
         {
           if (_context.Features == null)
           {
@@ -34,7 +34,7 @@ namespace RusticShopAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PaginatedResult<Feature>>> GetFeatures(
+        public async Task<ActionResult<PaginatedResult<Data.Models.Attribute>>> GetFeatures(
             int pageIndex = 0,
             int pageSize = 10,
             string? sortColumn = null,
@@ -42,7 +42,7 @@ namespace RusticShopAPI.Controllers
             string? filterColumn = null,
             string? filterQuery = null)
         {
-            return await PaginatedResult<Feature>.CreateAsync(
+            return await PaginatedResult<Data.Models.Attribute>.CreateAsync(
                 _context.Features,
                 pageIndex,
                 pageSize,
@@ -54,7 +54,7 @@ namespace RusticShopAPI.Controllers
 
         // GET: api/Features/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Feature>> GetFeature(long id)
+        public async Task<ActionResult<Data.Models.Attribute>> GetFeature(long id)
         {
           if (_context.Features == null)
           {
@@ -73,7 +73,7 @@ namespace RusticShopAPI.Controllers
         // PUT: api/Features/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFeature(long id, Feature feature)
+        public async Task<IActionResult> PutFeature(long id, Data.Models.Attribute feature)
         {
             if (id != feature.Id)
             {
@@ -104,7 +104,7 @@ namespace RusticShopAPI.Controllers
         // POST: api/Features
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Feature>> PostFeature(Feature feature)
+        public async Task<ActionResult<Data.Models.Attribute>> PostFeature(Data.Models.Attribute feature)
         {
           if (_context.Features == null)
           {
