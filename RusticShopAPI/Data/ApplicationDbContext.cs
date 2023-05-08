@@ -24,5 +24,8 @@ namespace RusticShopAPI.Data
             // Applying all settings in assembly
             builder.ApplyConfigurationsFromAssembly(typeof(CityEntityTypeConfiguration).Assembly);
         }
+
+        public DbSet<City> Cities => Set<City>();
+        public DbSet<Neighborhood> Neighborhoods => Set<Neighborhood>();
     }
 }
