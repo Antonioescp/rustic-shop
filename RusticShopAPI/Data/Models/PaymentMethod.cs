@@ -9,6 +9,7 @@
         public DateTime ExpirationDate { get; set; }
 
         public User? CardHolder { get; set; }
+        public ICollection<Order>? Orders { get; set; }
 
     }
 }

@@ -12,5 +12,6 @@
         // Nav properties
         public User? User { get; set; }
         public Neighborhood? Neighborhood { get; set; }
+        public ICollection<Order>? Orders { get; set; }
     }
 }
