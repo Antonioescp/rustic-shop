@@ -15,5 +15,6 @@ namespace RusticShopAPI.Data.Models
         public Brand? Brand { get; set; }
         public ICollection<ProductVariant>? Variants { get; set; }
         public ICollection<Attribute>? Attributes { get; set; }
+        public ICollection<Category>? Categories { get; set; }
     }
 }
