@@ -11,5 +11,6 @@
 
         // Nav properties
         public Brand? Brand { get; set; }
+        public ICollection<ProductVariant>? Variants { get; set; }
     }
 }
