@@ -1,4 +1,6 @@
-﻿namespace RusticShopAPI.Data.Models
+﻿using Org.BouncyCastle.Asn1.Cms;
+
+namespace RusticShopAPI.Data.Models
 {
     public class Product
     {
@@ -12,5 +14,6 @@
         // Nav properties
         public Brand? Brand { get; set; }
         public ICollection<ProductVariant>? Variants { get; set; }
+        public ICollection<Attribute>? Attributes { get; set; }
     }
 }

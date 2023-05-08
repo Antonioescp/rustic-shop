@@ -2,10 +2,9 @@
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RusticShopAPI.Data.Converters;
+using Org.BouncyCastle.Asn1.Cms;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.Settings;
-using RusticShopAPI.Data.Models.Views;
 
 namespace RusticShopAPI.Data
 {
@@ -39,6 +38,6 @@ namespace RusticShopAPI.Data
         public DbSet<Discount> Discounts => Set<Discount>();
         public DbSet<Product> Products => Set<Product>();
         public DbSet<ProductVariant> ProductVariants => Set<ProductVariant>();
-
+        public DbSet<Models.Attribute> Attributes => Set<Models.Attribute>();
     }
 }
