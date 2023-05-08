@@ -38,6 +38,11 @@ namespace RusticShopAPI.Data.Models.Settings
                 .HasMany(pv => pv.Images)
                 .WithMany(pi => pi.ProductVariants)
                 .UsingEntity<ProductVariantImage>();
+
+            builder
+                .HasMany(pv => pv.Discounts)
+                .WithMany(d => d.ProductVariants)
+                .UsingEntity<ProductVariantDiscount>();
                 
         }
     }

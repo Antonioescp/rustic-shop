@@ -13,5 +13,7 @@
         public ICollection<ProductVariantAttribute>? ProductVariantAttributes { get; set; }
         public ICollection<ProductAttribute>? ProductAttributes { get; set; }
         public ICollection<ProductImage>? Images { get; set; }
+        public ICollection<Discount>? Discounts { get; set; }
+        public ICollection<ProductVariantDiscount>? ProductVariantDiscounts { get; set; }
     }
 }

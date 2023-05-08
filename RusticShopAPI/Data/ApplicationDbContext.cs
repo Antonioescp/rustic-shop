@@ -1,8 +1,5 @@
-﻿
-
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Cms;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.Settings;
 
@@ -62,5 +59,6 @@ namespace RusticShopAPI.Data
         public DbSet<ProductImage> ProductImages => Set<ProductImage>();
         public DbSet<ProductVariantImage> ProductVariantImages => Set<ProductVariantImage>();
         public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
+        public DbSet<ProductVariantDiscount> ProductVariantDiscounts => Set<ProductVariantDiscount>();
     }
 }
