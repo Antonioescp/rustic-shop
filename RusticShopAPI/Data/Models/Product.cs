@@ -16,5 +16,8 @@ namespace RusticShopAPI.Data.Models
         public ICollection<ProductVariant>? Variants { get; set; }
         public ICollection<Attribute>? Attributes { get; set; }
         public ICollection<Category>? Categories { get; set; }
+        public ICollection<User>? CartUsers { get; set; }
+        public ICollection<Cart>? Carts { get; set; }
+        public ICollection<User>? WishlistedByUsers { get; set; }
     }
 }

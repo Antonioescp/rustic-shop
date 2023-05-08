@@ -24,9 +24,21 @@ namespace RusticShopAPI.Data
             builder.ApplyConfigurationsFromAssembly(typeof(CityEntityTypeConfiguration).Assembly);
 
             // Relationships
-            builder.Entity<User>(b =>
+            builder.Entity<User>(userBuilder =>
             {
-                b.HasMany(u => u.Addresses).WithOne(a => a.User);
+                userBuilder
+                    .HasMany(u => u.Addresses)
+                    .WithOne(a => a.User);
+
+                userBuilder
+                    .HasMany(u => u.CartProducts)
+                    .WithMany(p => p.CartUsers)
+                    .UsingEntity<Cart>();
+
+                userBuilder
+                    .HasMany(u => u.WishlistedProducts)
+                    .WithMany(p => p.WishlistedByUsers)
+                    .UsingEntity<Wishlist>();
             });
         }
 
@@ -40,5 +52,7 @@ namespace RusticShopAPI.Data
         public DbSet<ProductVariant> ProductVariants => Set<ProductVariant>();
         public DbSet<Models.Attribute> Attributes => Set<Models.Attribute>();
         public DbSet<ProductVariantAttribute> ProductVariantAttributes => Set<ProductVariantAttribute>();
+        public DbSet<Cart> Carts => Set<Cart>();
+        public DbSet<Wishlist> Wishlists => Set<Wishlist>();
     }
 }

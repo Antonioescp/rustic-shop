@@ -15,5 +15,8 @@ namespace RusticShopAPI.Data.Models
 
         // Nav properties
         public ICollection<Address>? Addresses { get; set; }
+        public ICollection<Product>? CartProducts { get; set; }
+        public ICollection<Product>? WishlistedProducts { get; set; }
+        public ICollection<Cart>? Cart { get; set; }
     }
 }
