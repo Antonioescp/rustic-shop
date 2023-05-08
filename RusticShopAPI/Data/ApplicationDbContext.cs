@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data.Converters;
 using RusticShopAPI.Data.Models;
+using RusticShopAPI.Data.Models.Settings;
 using RusticShopAPI.Data.Models.Views;
 
 namespace RusticShopAPI.Data
@@ -19,6 +20,9 @@ namespace RusticShopAPI.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            // Applying all settings in assembly
+            builder.ApplyConfigurationsFromAssembly(typeof(CityEntityTypeConfiguration).Assembly);
         }
     }
 }
