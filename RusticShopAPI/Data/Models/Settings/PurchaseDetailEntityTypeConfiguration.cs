@@ -17,6 +17,7 @@ namespace RusticShopAPI.Data.Models.Settings
 
             builder
                 .Property(pd => pd.UnitPrice)
+                .HasColumnType("MONEY")
                 .IsRequired();
 
             builder
