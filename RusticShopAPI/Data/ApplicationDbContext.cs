@@ -34,6 +34,7 @@ namespace RusticShopAPI.Data
         public DbSet<City> Cities => Set<City>();
         public DbSet<Neighborhood> Neighborhoods => Set<Neighborhood>();
         public DbSet<Address> Addresses => Set<Address>();
+        public DbSet<Brand> Brands => Set<Brand>();
 
     }
 }
