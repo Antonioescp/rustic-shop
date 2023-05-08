@@ -23,9 +23,17 @@ namespace RusticShopAPI.Data
 
             // Applying all settings in assembly
             builder.ApplyConfigurationsFromAssembly(typeof(CityEntityTypeConfiguration).Assembly);
+
+            // Relationships
+            builder.Entity<User>(b =>
+            {
+                b.HasMany(u => u.Addresses).WithOne(a => a.User);
+            });
         }
 
         public DbSet<City> Cities => Set<City>();
         public DbSet<Neighborhood> Neighborhoods => Set<Neighborhood>();
+        public DbSet<Address> Addresses => Set<Address>();
+
     }
 }

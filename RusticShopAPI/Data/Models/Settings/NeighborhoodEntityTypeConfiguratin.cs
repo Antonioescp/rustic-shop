@@ -10,6 +10,11 @@ namespace RusticShopAPI.Data.Models.Settings
             builder.ToTable("Neighborhoods");
             builder.HasKey(n => n.Id);
             builder.Property(n => n.Name).IsRequired();
+
+            // Relationships
+            builder
+                .HasMany(n => n.Addresses)
+                .WithOne(a => a.Neighborhood);
         }
     }
 }

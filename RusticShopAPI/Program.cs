@@ -85,7 +85,8 @@ if (app.Environment.IsDevelopment())
 
     // Recreating database
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate();
+    dbContext.Database.EnsureDeleted();
+    dbContext.Database.EnsureCreated();
 
     // Creating default roles
     var roleManager = scope

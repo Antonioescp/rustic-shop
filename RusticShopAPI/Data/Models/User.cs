@@ -12,5 +12,8 @@ namespace RusticShopAPI.Data.Models
         public string? FirstName { get; set; }
         [PersonalData]
         public string? LastName { get; set; }
+
+        // Nav properties
+        public ICollection<Address>? Addresses { get; set; }
     }
 }
