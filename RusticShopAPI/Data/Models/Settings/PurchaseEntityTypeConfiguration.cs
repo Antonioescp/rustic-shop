@@ -15,6 +15,12 @@ namespace RusticShopAPI.Data.Models.Settings
                 .Property(p => p.Date)
                 .IsRequired();
 
+            // Relationships
+            builder
+                .HasMany(p => p.ProductVariants)
+                .WithMany(pv => pv.Purchases)
+                .UsingEntity<PurchaseDetail>();
+
         }
     }
 }

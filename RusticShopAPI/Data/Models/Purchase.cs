@@ -8,5 +8,7 @@
 
         // Nav properties
         public Provider? Provider { get; set; }
+        public ICollection<ProductVariant>? ProductVariants { get; set; }
+        public ICollection<PurchaseDetail>? PurchaseDetails { get; set; }
     }
 }
