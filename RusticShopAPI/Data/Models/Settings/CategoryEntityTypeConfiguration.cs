@@ -8,9 +8,16 @@ namespace RusticShopAPI.Data.Models.Settings
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.ToTable("Categories");
+
             builder.HasKey(cat => cat.Id);
-            builder.HasIndex(cat => cat.Name).IsUnique();
-            builder.Property(cat => cat.Name).IsRequired();
+
+            builder
+                .HasIndex(cat => cat.Name)
+                .IsUnique();
+
+            builder
+                .Property(cat => cat.Name)
+                .IsRequired();
 
             // Relationships
             builder

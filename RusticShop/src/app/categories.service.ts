@@ -56,10 +56,10 @@ export class CategoriesService {
     return this.http.get<any>(url, { params });
   }
 
-  addCategory(name: string): Observable<HttpResponse<Response>> {
+  addCategory(category: Category): Observable<HttpResponse<Response>> {
     return this.http.post<Response>(
       this.url,
-      { name },
+      category,
       { observe: 'response' }
     );
   }
@@ -76,6 +76,6 @@ export class CategoriesService {
 
   checkNameUniqueness(name: string): Observable<boolean> {
     const url = `${this.url}name-availability`;
-    return this.http.post<boolean>(url, { categoryName: name });
+    return this.http.post<boolean>(url, { name });
   }
 }

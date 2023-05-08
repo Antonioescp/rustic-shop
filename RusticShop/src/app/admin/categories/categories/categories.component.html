@@ -14,9 +14,9 @@
   </mat-form-field>
 
   <table matSort class="mat-elevation-z8" mat-table [dataSource]="categories"
-          (matSortChange)="loadData()"
-          [matSortActive]="defaultSortColumn"
-          [matSortDirection]="defaultSortOrder">
+         (matSortChange)="loadData()"
+         [matSortActive]="defaultSortColumn"
+         [matSortDirection]="defaultSortOrder">
 
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
@@ -28,17 +28,22 @@
       <td mat-cell *matCellDef="let category">{{ category.name }}</td>
     </ng-container>
 
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+      <td mat-cell *matCellDef="let category">{{ category.description }}</td>
+    </ng-container>
+
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Acciones </th>
       <td mat-cell *matCellDef="let category">
         <button mat-icon-button matTooltip="Editar categoría" color="primary"
-          [routerLink]="['/admin/panel/categoria/', category.id]"
-          [disabled]="isLoadingAction">
+                [routerLink]="['/admin/panel/categoria/', category.id]"
+                [disabled]="isLoadingAction">
           <mat-icon>edit</mat-icon>
         </button>
         <button mat-icon-button matTooltip="Borrar categoría" color="warn"
-          (click)="deleteCategory(category)"
-          [disabled]="isLoadingAction">
+                (click)="deleteCategory(category)"
+                [disabled]="isLoadingAction">
           <mat-icon>delete_forever</mat-icon>
         </button>
       </td>

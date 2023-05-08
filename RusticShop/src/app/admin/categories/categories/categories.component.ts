@@ -12,7 +12,7 @@ import Category from 'src/app/shared/models/Category';
 })
 export class CategoriesComponent implements OnInit {
   categories!: MatTableDataSource<Category>;
-  displayedColumns = ['id', 'name', 'actions'];
+  displayedColumns = ['id', 'name', 'description', 'actions'];
 
   defaultPageIndex: number = 0;
   defaultPageSize: number = 10;

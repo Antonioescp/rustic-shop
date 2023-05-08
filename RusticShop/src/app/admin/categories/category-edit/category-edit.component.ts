@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable, map, subscribeOn } from 'rxjs';
 import { CategoriesService } from 'src/app/categories.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import Category from 'src/app/shared/models/Category';
@@ -36,6 +36,7 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({
       name: new FormControl('', [Validators.required], this.isNameTaken()),
+      description: new FormControl('', [Validators.required]),
     });
 
     this.loadData();
@@ -62,6 +63,7 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
   onSubmit() {
     const category = this.category ? this.category : <Category>{};
     category.name = this.form.controls['name'].value;
+    category.description = this.form.controls['description'].value;
 
     if (this.id) {
       // Modo de edicion
@@ -74,7 +76,7 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
       });
     } else {
       // Modo de creacion
-      this.categoriesService.addCategory(category.name).subscribe({
+      this.categoriesService.addCategory(category).subscribe({
         next: (result) => {
           this.router.navigate(['/admin/panel/categorias']);
         },
@@ -85,9 +87,13 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
 
   isNameTaken(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (this.id && this.category && this.category.name == control.value) {
+        return new Observable((sub) => sub.next(null));
+      }
+
       return this.categoriesService.checkNameUniqueness(control.value).pipe(
-        map((exists) => {
-          return exists ? { nameTaken: true } : null;
+        map((isAvailable) => {
+          return isAvailable ? null : { nameTaken: true };
         })
       );
     };

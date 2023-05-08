@@ -15,6 +15,14 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field>
+      <mat-label>Descripción</mat-label>
+      <input matInput formControlName="description" required>
+      <mat-error *ngFor="let error of getErrors(form.get('description')!, 'Descripción')">
+        {{ error }}
+      </mat-error>
+    </mat-form-field>
+
     <button mat-flat-button color="primary" [disabled]="form.invalid"
             type="submit">
       {{ this.id ? "Guardar cambios" : "Crear" }}
