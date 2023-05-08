@@ -11,6 +11,11 @@ namespace RusticShopAPI.Data.Models.Settings
             builder.HasKey("Id");
             builder.Property(b => b.Name).IsRequired();
             builder.HasIndex(b => b.Name).IsUnique();
+
+            // Relationships
+            builder
+                .HasMany(b => b.Products)
+                .WithOne(p => p.Brand);
         }
     }
 }

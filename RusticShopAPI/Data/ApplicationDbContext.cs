@@ -37,6 +37,7 @@ namespace RusticShopAPI.Data
         public DbSet<Brand> Brands => Set<Brand>();
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<Discount> Discounts => Set<Discount>();
+        public DbSet<Product> Products => Set<Product>();
 
     }
 }
