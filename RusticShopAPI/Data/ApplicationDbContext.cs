@@ -66,6 +66,12 @@ namespace RusticShopAPI.Data
             {
                 b.HasIndex(f => f.Name).IsUnique();
             });
+
+            // Brand settings
+            builder.Entity<Brand>(b =>
+            {
+                b.HasIndex(brand => brand.Name).IsUnique();
+            });
         }
 
         public DbSet<FeatureProduct> FeatureProducts => Set<FeatureProduct>();
@@ -77,6 +83,7 @@ namespace RusticShopAPI.Data
         public DbSet<DiscountProduct> DiscountProducts => Set<DiscountProduct>();
         public DbSet<Wishlist> Wishlists => Set<Wishlist>();
         public DbSet<Cart> Carts => Set<Cart>();
+        public DbSet<Brand> Brands => Set<Brand>();
 
         // Views
         public DbSet<VProductSummary> ProductListView => Set<VProductSummary>();
