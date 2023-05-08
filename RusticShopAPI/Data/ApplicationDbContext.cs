@@ -39,6 +39,11 @@ namespace RusticShopAPI.Data
                     .HasMany(u => u.WishlistedProducts)
                     .WithMany(p => p.WishlistedByUsers)
                     .UsingEntity<Wishlist>();
+
+                userBuilder
+                    .HasMany(u => u.PaymentMethods)
+                    .WithOne(pm => pm.CardHolder)
+                    .HasForeignKey(pm => pm.CardHolderId);
             });
         }
 
@@ -56,5 +61,6 @@ namespace RusticShopAPI.Data
         public DbSet<Wishlist> Wishlists => Set<Wishlist>();
         public DbSet<ProductImage> ProductImages => Set<ProductImage>();
         public DbSet<ProductVariantImage> ProductVariantImages => Set<ProductVariantImage>();
+        public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
     }
 }
