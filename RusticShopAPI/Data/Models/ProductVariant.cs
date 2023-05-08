@@ -15,5 +15,7 @@
         public ICollection<ProductImage>? Images { get; set; }
         public ICollection<Discount>? Discounts { get; set; }
         public ICollection<ProductVariantDiscount>? ProductVariantDiscounts { get; set; }
+        public ICollection<Order>? Orders { get; set; }
+        public ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }

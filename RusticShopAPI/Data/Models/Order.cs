@@ -10,14 +10,15 @@
         public DateTime Date { get; set; }
 
         // Computed properties
-        public decimal? Total => Products?.Aggregate(
+        public decimal? Total => ProductVariants?.Aggregate(
                     0M, 
                     (decimal current, ProductVariant product) => current + product.UnitPrice);
 
         // Nav properties
-        public ICollection<ProductVariant>? Products { get; set; } 
         public User? User { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
         public Address? ShippingAddress { get; set; }
+        public ICollection<ProductVariant>? ProductVariants { get; set; }
+        public ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }

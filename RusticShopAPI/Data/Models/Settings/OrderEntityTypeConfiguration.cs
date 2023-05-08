@@ -39,6 +39,11 @@ namespace RusticShopAPI.Data.Models.Settings
                 .HasForeignKey(o => o.ShippingAddressId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder
+                .HasMany(o => o.ProductVariants)
+                .WithMany(pv => pv.Orders)
+                .UsingEntity<OrderDetail>();
+
         }
     }
 }
