@@ -24,6 +24,7 @@ namespace RusticShopAPI.Data.Models.Settings
                 .HasMany(att => att.Products)
                 .WithMany(p => p.Attributes)
                 .UsingEntity<ProductAttribute>();
+                
         }
     }
 }

@@ -39,5 +39,6 @@ namespace RusticShopAPI.Data
         public DbSet<Product> Products => Set<Product>();
         public DbSet<ProductVariant> ProductVariants => Set<ProductVariant>();
         public DbSet<Models.Attribute> Attributes => Set<Models.Attribute>();
+        public DbSet<ProductVariantAttribute> ProductVariantAttributes => Set<ProductVariantAttribute>();
     }
 }

@@ -27,6 +27,12 @@ namespace RusticShopAPI.Data.Models.Settings
                 .Property(pv => pv.IsPublished)
                 .HasDefaultValue(false)
                 .IsRequired();
+
+            // Relationships
+            builder
+                .HasMany(pv => pv.ProductAttributes)
+                .WithMany(pa => pa.ProductVariants)
+                .UsingEntity<ProductVariantAttribute>();
                 
         }
     }
