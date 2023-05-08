@@ -24,6 +24,10 @@ namespace RusticShopAPI.Data.Models.Settings
             builder
                 .HasMany(p => p.Variants)
                 .WithOne(pv => pv.Product);
+
+            builder
+                .HasMany(p => p.Images)
+                .WithOne(pi => pi.Product);
         }
     }
 }

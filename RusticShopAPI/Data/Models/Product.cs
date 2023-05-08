@@ -19,5 +19,7 @@ namespace RusticShopAPI.Data.Models
         public ICollection<User>? CartUsers { get; set; }
         public ICollection<Cart>? Carts { get; set; }
         public ICollection<User>? WishlistedByUsers { get; set; }
+
+        public ICollection<ProductImage>? Images { get; set; }
     }
 }
