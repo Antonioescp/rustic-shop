@@ -7,5 +7,8 @@ namespace RusticShopAPI.Data.Models
     {
         public long Id { get; set; }
         public string Name { get; set; } = null!;
+
+        // Nav properties
+        public ICollection<Neighborhood>? Neighborhoods { get; set; } = null!;
     }
 }
