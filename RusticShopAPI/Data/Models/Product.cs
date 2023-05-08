@@ -13,6 +13,9 @@ namespace RusticShopAPI.Data.Models
         [Key]
         public long Id { get; set; }
 
+        [ForeignKey(nameof(Brand))]
+        public long BrandId { get; set; }
+
         [Required]
         public string Name { get; set; } = null!;
 
@@ -39,5 +42,6 @@ namespace RusticShopAPI.Data.Models
         public ICollection<User>? Carts { get; set; } = null!;
         public ICollection<Transaction>? Transactions { get; set; } = null!;
         public ICollection<ProductTransaction>? ProductTransactions { get; set; } = null!;
+        public Brand? Brand { get; set; }
     }
 }
