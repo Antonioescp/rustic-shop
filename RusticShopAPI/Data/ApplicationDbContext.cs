@@ -55,5 +55,6 @@ namespace RusticShopAPI.Data
         public DbSet<Cart> Carts => Set<Cart>();
         public DbSet<Wishlist> Wishlists => Set<Wishlist>();
         public DbSet<ProductImage> ProductImages => Set<ProductImage>();
+        public DbSet<ProductVariantImage> ProductVariantImages => Set<ProductVariantImage>();
     }
 }
