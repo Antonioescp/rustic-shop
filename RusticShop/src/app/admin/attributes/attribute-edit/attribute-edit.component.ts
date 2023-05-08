@@ -29,14 +29,18 @@ export class AttributeEditComponent
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private featuresService: AttributesService
+    private attributesService: AttributesService
   ) {
     super();
   }
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl('', [Validators.required], this.featureIsUnique()),
+      name: new FormControl(
+        '',
+        [Validators.required],
+        this.attributeIsUnique()
+      ),
     });
 
     this.loadData();
@@ -47,7 +51,7 @@ export class AttributeEditComponent
     this.id = idParam ? +idParam : 0;
 
     if (this.id) {
-      this.featuresService.getAttribute(this.id).subscribe({
+      this.attributesService.getAttribute(this.id).subscribe({
         next: (result) => {
           this.attribute = result;
           this.title = `Editar - ${this.attribute.name}`;
@@ -67,7 +71,7 @@ export class AttributeEditComponent
     if (this.id) {
       // Modo de edicion
       attribute.id = this.id;
-      this.featuresService.updateAttribute(attribute).subscribe({
+      this.attributesService.updateAttribute(attribute).subscribe({
         next: (result) => {
           this.router.navigate(['/admin/panel/caracteristicas']);
         },
@@ -75,7 +79,7 @@ export class AttributeEditComponent
       });
     } else {
       // Modo de creacion
-      this.featuresService.addAttribute(attribute.name).subscribe({
+      this.attributesService.addAttribute(attribute.name).subscribe({
         next: (result) => {
           this.router.navigate(['/admin/panel/caracteristicas']);
         },
@@ -84,13 +88,13 @@ export class AttributeEditComponent
     }
   }
 
-  featureIsUnique(): AsyncValidatorFn {
+  attributeIsUnique(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       if (this.id && this.attribute && this.attribute.name == control.value) {
         return new Observable((sub) => sub.next(null));
       }
 
-      return this.featuresService
+      return this.attributesService
         .isNameUnique(control.value)
         .pipe(map((isAvailable) => (isAvailable ? null : { nameTaken: true })));
     };

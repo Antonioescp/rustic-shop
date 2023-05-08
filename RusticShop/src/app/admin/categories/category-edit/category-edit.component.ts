@@ -27,7 +27,6 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private http: HttpClient,
     private categoriesService: CategoriesService
   ) {
     super();
