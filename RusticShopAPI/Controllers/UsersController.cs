@@ -390,7 +390,7 @@ namespace RusticShopAPI.Controllers
 
         [Authorize]
         [HttpPut("account")]
-        public async Task<ActionResult<UserDTO>> UpdateAccount(UpdateRequest updatedData)
+        public async Task<ActionResult<UserDTO>> UpdateAccount(UserUpdateRequest updatedData)
         {
             var username = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
             if (username == null)

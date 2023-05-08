@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RusticShopAPI.Data.Models.DTOs
 {
-    public class UpdateRequest
+    public class UserUpdateRequest
     {
         [ProtectedPersonalData]
         public string? IdentificationCardNumber { get; set; }

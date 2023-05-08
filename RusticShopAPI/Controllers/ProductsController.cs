@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
-using RusticShopAPI.Data.Models.Views;
 
 namespace RusticShopAPI.Controllers
 {
