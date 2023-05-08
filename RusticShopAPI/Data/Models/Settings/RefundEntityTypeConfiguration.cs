@@ -28,6 +28,11 @@ namespace RusticShopAPI.Data.Models.Settings
             builder
                 .HasOne(r => r.Order)
                 .WithMany(o => o.Refunds);
+
+            builder
+                .HasMany(r => r.RefundedProducts)
+                .WithMany(pv => pv.Refunds)
+                .UsingEntity<RefundDetail>();
         }
     }
 }

@@ -19,5 +19,7 @@
         public ICollection<OrderDetail>? OrderDetails { get; set; }
         public ICollection<Purchase>? Purchases { get; set; } 
         public ICollection<PurchaseDetail>? PurchaseDetails { get; set; }
+        public ICollection<Refund>? Refunds { get; set; }
+        public ICollection<RefundDetail>? RefundDetails { get; set; }
     }
 }

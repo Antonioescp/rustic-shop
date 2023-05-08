@@ -17,7 +17,7 @@ namespace RusticShopAPI.Data
         {
             base.OnModelCreating(builder);
 
-            // Applying all settings in assembly
+            // Applying all settings in assembly (Data/Models/Settings)
             builder.ApplyConfigurationsFromAssembly(typeof(CityEntityTypeConfiguration).Assembly);
 
             // Relationships
@@ -66,5 +66,6 @@ namespace RusticShopAPI.Data
         public DbSet<Purchase> Purchases => Set<Purchase>();
         public DbSet<PurchaseDetail> PurchaseDetails => Set<PurchaseDetail>();
         public DbSet<Refund> Refunds => Set<Refund>();
+        public DbSet<RefundDetail> RefundDetails => Set<RefundDetail>();
     }
 }
