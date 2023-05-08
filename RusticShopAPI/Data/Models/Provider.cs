@@ -6,5 +6,8 @@
         public string Name { get; set; } = null!;
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
+
+        // Nav properties
+        public ICollection<Purchase>? Purchases { get; set; }
     }
 }

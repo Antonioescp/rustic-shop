@@ -14,6 +14,11 @@ namespace RusticShopAPI.Data.Models.Settings
             builder
                 .Property(p => p.Name)
                 .IsRequired();
+
+            // Relationships
+            builder
+                .HasMany(p => p.Purchases)
+                .WithOne(purchase => purchase.Provider);
         }
     }
 }

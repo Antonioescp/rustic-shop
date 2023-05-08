@@ -63,5 +63,7 @@ namespace RusticShopAPI.Data
         public DbSet<Provider> Providers => Set<Provider>();
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
+        public DbSet<Purchase> Purchases => Set<Purchase>();
+
     }
 }
