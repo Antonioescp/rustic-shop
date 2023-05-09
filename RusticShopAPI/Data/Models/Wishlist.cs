@@ -3,6 +3,10 @@
     public class Wishlist
     {
         public string UserId { get; set; } = null!;
-        public long ProductId { get; set; }
+        public long ProductVariantId { get; set; }
+
+        // Nav properties
+        public User? User { get; set; }
+        public ProductVariant? ProductVariant { get; set; }
     }
 }

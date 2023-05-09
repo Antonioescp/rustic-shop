@@ -12,7 +12,7 @@ using RusticShopAPI.Data;
 namespace RusticShopAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230508180723_BaseSchema")]
+    [Migration("20230509155247_BaseSchema")]
     partial class BaseSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -235,7 +235,7 @@ namespace RusticShopAPI.Data.Migrations
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.Cart", b =>
                 {
-                    b.Property<long>("ProductId")
+                    b.Property<long>("ProductVariantId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("UserId")
@@ -244,7 +244,7 @@ namespace RusticShopAPI.Data.Migrations
                     b.Property<long>("Quantity")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ProductId", "UserId");
+                    b.HasKey("ProductVariantId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -867,13 +867,13 @@ namespace RusticShopAPI.Data.Migrations
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.Wishlist", b =>
                 {
-                    b.Property<long>("ProductId")
+                    b.Property<long>("ProductVariantId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ProductId", "UserId");
+                    b.HasKey("ProductVariantId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -952,9 +952,9 @@ namespace RusticShopAPI.Data.Migrations
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.Cart", b =>
                 {
-                    b.HasOne("RusticShopAPI.Data.Models.Product", "Product")
+                    b.HasOne("RusticShopAPI.Data.Models.ProductVariant", "ProductVariant")
                         .WithMany("Carts")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -964,7 +964,7 @@ namespace RusticShopAPI.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductVariant");
 
                     b.Navigation("User");
                 });
@@ -1227,17 +1227,21 @@ namespace RusticShopAPI.Data.Migrations
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.Wishlist", b =>
                 {
-                    b.HasOne("RusticShopAPI.Data.Models.Product", null)
+                    b.HasOne("RusticShopAPI.Data.Models.ProductVariant", "ProductVariant")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RusticShopAPI.Data.Models.User", null)
+                    b.HasOne("RusticShopAPI.Data.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ProductVariant");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.Address", b =>
@@ -1279,8 +1283,6 @@ namespace RusticShopAPI.Data.Migrations
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.Product", b =>
                 {
-                    b.Navigation("Carts");
-
                     b.Navigation("Images");
 
                     b.Navigation("Variants");
@@ -1288,6 +1290,8 @@ namespace RusticShopAPI.Data.Migrations
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.ProductVariant", b =>
                 {
+                    b.Navigation("Carts");
+
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductVariantAttributes");

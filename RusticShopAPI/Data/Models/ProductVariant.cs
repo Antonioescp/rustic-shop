@@ -21,5 +21,8 @@
         public ICollection<PurchaseDetail>? PurchaseDetails { get; set; }
         public ICollection<Refund>? Refunds { get; set; }
         public ICollection<RefundDetail>? RefundDetails { get; set; }
+        public ICollection<User>? CartUsers { get; set; }
+        public ICollection<Cart>? Carts { get; set; }
+        public ICollection<User>? WishlistedByUsers { get; set; }
     }
 }
