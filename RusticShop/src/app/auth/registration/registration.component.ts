@@ -77,7 +77,7 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
       next: (res) => {
         this.registrationResponse = res;
         if (res.success) {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/Users/auth/login']);
         }
       },
       error: (error) => {

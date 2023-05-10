@@ -7,6 +7,7 @@ import { BaseFormComponent } from 'src/app/shared/components/base-form.component
 import { Product } from 'src/app/shared/models/Product';
 import { lastValueFrom } from 'rxjs';
 import Brand from 'src/app/shared/models/Brand';
+import { BrandsService } from '../../../brands.service';
 
 @Component({
   selector: 'app-product-edit',
@@ -26,7 +27,8 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private brandsService: BrandsService,
   ) {
     super();
   }
@@ -68,10 +70,17 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
     } else {
       this.title = 'Nuevo producto';
     }
+
+    // Getting brands
+    this.brandsService.getAll().subscribe({
+      next: brands => this.brands = brands,
+      error: err => console.error(err)
+    });
   }
 
   onSubmit(): void {
     const product = this.product ? this.product : <Product>{};
+    product.brandId = +this.form.controls['brandId'].value;
     product.name = this.form.controls['name'].value;
     product.description = this.form.controls['description'].value;
     product.shortDescription = this.form.controls['shortDescription'].value;

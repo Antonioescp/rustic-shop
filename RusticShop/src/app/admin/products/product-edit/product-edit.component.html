@@ -17,7 +17,7 @@
         <mat-label>Marca</mat-label>
         <mat-select formControlName="brandId">
           <mat-option *ngFor="let brand of brands" [value]="brand.id">
-            {{ brand.name }}
+            {{ brand.name | titlecase }}
           </mat-option>
         </mat-select>
         <mat-error *ngFor="let error of getErrors(form.get('brandId')!, 'Marca')">
