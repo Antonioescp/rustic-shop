@@ -30,7 +30,7 @@ namespace RusticShopAPI.Data.Models.Settings
 
             // Relationships
             builder
-                .HasMany(pv => pv.ProductAttributes)
+                .HasMany(pv => pv.Attributes)
                 .WithMany(pa => pa.ProductVariants)
                 .UsingEntity<ProductVariantAttribute>();
 

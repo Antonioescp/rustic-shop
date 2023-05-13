@@ -8,13 +8,8 @@ namespace RusticShopAPI.Data.Models
         public long ProductId { get; set; }
         public long AttributeId { get; set; }
 
-        [NotMapped]
-        public string? AttributeName => Attribute?.Name;
-
         // Nav properties
         public Product? Product { get; set; }
         public Attribute? Attribute { get; set; }
-
-        public ICollection<ProductVariant>? ProductVariants { get; set; }
     }
 }

@@ -11,7 +11,7 @@
         // Nav properties
         public Product? Product { get; set; }
         public ICollection<ProductVariantAttribute>? ProductVariantAttributes { get; set; }
-        public ICollection<ProductAttribute>? ProductAttributes { get; set; }
+        public ICollection<Attribute>? Attributes { get; set; }
         public ICollection<ProductImage>? Images { get; set; }
         public ICollection<Discount>? Discounts { get; set; }
         public ICollection<ProductVariantDiscount>? ProductVariantDiscounts { get; set; }

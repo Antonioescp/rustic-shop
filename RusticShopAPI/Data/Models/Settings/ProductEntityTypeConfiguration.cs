@@ -9,16 +9,22 @@ namespace RusticShopAPI.Data.Models.Settings
         {
             builder.ToTable("Products");
             builder.HasKey(p => p.Id);
+
             builder
                 .Property(p => p.Name)
                 .IsRequired();
+
             builder
                 .Property(p => p.ShortDescription)
                 .IsRequired();
+
             builder
                 .Property(p => p.IsPublished)
                 .IsRequired()
                 .HasDefaultValue(false);
+
+            builder
+                .Ignore(p => p.Stock);
 
             // Relationships
             builder

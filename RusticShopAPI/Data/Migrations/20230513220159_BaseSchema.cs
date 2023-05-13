@@ -477,7 +477,7 @@ namespace RusticShopAPI.Data.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductAttributeId = table.Column<long>(type: "bigint", nullable: true),
+                    AttributeId = table.Column<long>(type: "bigint", nullable: true),
                     ProductVariantId = table.Column<long>(type: "bigint", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -485,9 +485,9 @@ namespace RusticShopAPI.Data.Migrations
                 {
                     table.PrimaryKey("PK_ProductVariantAttributes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductVariantAttributes_ProductAttributes_ProductAttributeId",
-                        column: x => x.ProductAttributeId,
-                        principalTable: "ProductAttributes",
+                        name: "FK_ProductVariantAttributes_Attributes_AttributeId",
+                        column: x => x.AttributeId,
+                        principalTable: "Attributes",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProductVariantAttributes_ProductVariants_ProductVariantId",
@@ -869,9 +869,9 @@ namespace RusticShopAPI.Data.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductVariantAttributes_ProductAttributeId",
+                name: "IX_ProductVariantAttributes_AttributeId",
                 table: "ProductVariantAttributes",
-                column: "ProductAttributeId");
+                column: "AttributeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductVariantAttributes_ProductVariantId",
@@ -977,6 +977,9 @@ namespace RusticShopAPI.Data.Migrations
                 name: "OrderDetails");
 
             migrationBuilder.DropTable(
+                name: "ProductAttributes");
+
+            migrationBuilder.DropTable(
                 name: "ProductVariantAttributes");
 
             migrationBuilder.DropTable(
@@ -1001,7 +1004,7 @@ namespace RusticShopAPI.Data.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "ProductAttributes");
+                name: "Attributes");
 
             migrationBuilder.DropTable(
                 name: "Discounts");
@@ -1017,9 +1020,6 @@ namespace RusticShopAPI.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductVariants");
-
-            migrationBuilder.DropTable(
-                name: "Attributes");
 
             migrationBuilder.DropTable(
                 name: "Providers");

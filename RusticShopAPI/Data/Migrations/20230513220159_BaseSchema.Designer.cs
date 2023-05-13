@@ -12,7 +12,7 @@ using RusticShopAPI.Data;
 namespace RusticShopAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230509155247_BaseSchema")]
+    [Migration("20230513220159_BaseSchema")]
     partial class BaseSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -579,7 +579,7 @@ namespace RusticShopAPI.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<long?>("ProductAttributeId")
+                    b.Property<long?>("AttributeId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ProductVariantId")
@@ -591,7 +591,7 @@ namespace RusticShopAPI.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductAttributeId");
+                    b.HasIndex("AttributeId");
 
                     b.HasIndex("ProductVariantId");
 
@@ -971,17 +971,21 @@ namespace RusticShopAPI.Data.Migrations
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.CategoryProduct", b =>
                 {
-                    b.HasOne("RusticShopAPI.Data.Models.Category", null)
+                    b.HasOne("RusticShopAPI.Data.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RusticShopAPI.Data.Models.Product", null)
+                    b.HasOne("RusticShopAPI.Data.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.Neighborhood", b =>
@@ -1106,9 +1110,9 @@ namespace RusticShopAPI.Data.Migrations
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.ProductVariantAttribute", b =>
                 {
-                    b.HasOne("RusticShopAPI.Data.Models.ProductAttribute", "ProductAttribute")
-                        .WithMany()
-                        .HasForeignKey("ProductAttributeId");
+                    b.HasOne("RusticShopAPI.Data.Models.Attribute", "Attribute")
+                        .WithMany("ProductVariantAttributes")
+                        .HasForeignKey("AttributeId");
 
                     b.HasOne("RusticShopAPI.Data.Models.ProductVariant", "ProductVariant")
                         .WithMany("ProductVariantAttributes")
@@ -1116,7 +1120,7 @@ namespace RusticShopAPI.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProductAttribute");
+                    b.Navigation("Attribute");
 
                     b.Navigation("ProductVariant");
                 });
@@ -1247,6 +1251,11 @@ namespace RusticShopAPI.Data.Migrations
             modelBuilder.Entity("RusticShopAPI.Data.Models.Address", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("RusticShopAPI.Data.Models.Attribute", b =>
+                {
+                    b.Navigation("ProductVariantAttributes");
                 });
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.Brand", b =>
