@@ -1,9 +1,10 @@
-﻿using System.Collections.Immutable;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
+
+using AttributeModel = RusticShopAPI.Data.Models.Attribute;
 
 namespace RusticShopAPI.Controllers
 {
@@ -133,5 +134,276 @@ namespace RusticShopAPI.Controllers
         {
             return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        #region Nested Resources
+
+        #region Attributes
+
+        [HttpGet("{id}/attributes")]
+        public async Task<ActionResult<IEnumerable<AttributeModel>>> GetProductAttributes(long id)
+        {
+            if (!ProductExists(id))
+            {
+                return NotFound();
+            }
+
+            var productAttributes = await _context.ProductAttributes
+                .Include(pa => pa.Attribute)
+                .Where(pa => pa.ProductId == id)
+                .Select(pa => pa.Attribute!)
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (productAttributes == null)
+            {
+                return NotFound();
+            }
+
+            return productAttributes;
+        }
+
+        [HttpPost("{id}/attributes/{attributeId}")]
+        public async Task<IActionResult> AddProductAttribute(long id, long attributeId)
+        {
+            var product = await _context.Products
+                .Include(p => p.Attributes)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (product == null || product.Attributes == null)
+            {
+                return NotFound();
+            }
+
+            if (product.Attributes.Any(att => att.Id == attributeId))
+            {
+                return BadRequest();
+            }
+
+            var attribute = await _context.Attributes.FindAsync(attributeId);
+
+            if (attribute == null)
+            {
+                return BadRequest();
+            }
+
+            product.Attributes.Add(attribute);
+            var result = await _context.SaveChangesAsync();
+
+            if (result > 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpDelete("{id}/attributes/{attributeId}")]
+        public async Task<IActionResult> RemoveProductAttribute(long id, long attributeId)
+        {
+            var product = await _context.Products
+                .Include(p => p.Attributes)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (product == null || product.Attributes == null)
+            {
+                return NotFound();
+            }
+
+            if (!product.Attributes.Any(att => att.Id == attributeId))
+            {
+                return BadRequest();
+            }
+
+            var attribute = await _context.Attributes.FindAsync(attributeId);
+            if (attribute == null)
+            {
+                return NotFound();
+            }
+
+            product.Attributes.Remove(attribute);
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
+
+        #endregion
+
+        #region Categories
+
+        [HttpGet("{id}/categories")]
+        public async Task<ActionResult<IEnumerable<Category>>> GetProductCategories(long id)
+        {
+            if (!ProductExists(id))
+            {
+                return NotFound();
+            }
+
+            var categories = await _context.CategoryProducts
+                .Where(cp => cp.ProductId == id)
+                .Include(cp => cp.Category)
+                .Select(cp => cp.Category!)
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (categories == null)
+            {
+                return NotFound();
+            }
+
+            return categories;
+        }
+
+        [HttpPost("{id}/categories/{categoryId}")]
+        public async Task<IActionResult> AddProductCategory(long id, long categoryId)
+        {
+            var product = await _context.Products
+                .Include(p => p.Categories)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (product == null || product.Categories == null)
+            {
+                return NotFound();
+            }
+
+            if (product.Categories.Any(c => c.Id == categoryId))
+            {
+                return BadRequest();
+            }
+
+            var category = await _context.Categories.FindAsync(categoryId);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            product.Categories.Add(category);
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+
+        }
+
+        [HttpDelete("{id}/categories/{categoryId}")]
+        public async Task<IActionResult> RemoveProductCategory(long id, long categoryId)
+        {
+            var product = await _context.Products
+                .Include(p => p.Categories)
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (product == null || product.Categories == null)
+            {
+                return NotFound();
+            }
+
+            if (!product.Categories.Any(c => c.Id == categoryId))
+            {
+                return BadRequest();
+            }
+
+            var category = await _context.Categories.FindAsync(categoryId);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            product.Categories.Remove(category);
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
+
+        #endregion
+
+        #region Images
+
+        [HttpGet("{id}/images")]
+        public async Task<ActionResult<IEnumerable<ProductImage>>> GetProductImages(long id)
+        {
+            var images = await _context.ProductImages
+                .Where(pimg => pimg.ProductId == id)
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (images == null)
+            {
+                return NotFound();
+            }
+
+            return images;
+        }
+
+        #endregion
+
+        #region Product Variants
+
+        [HttpGet("{id}/variants")]
+        public async Task<ActionResult<IEnumerable<ProductVariant>>> GetProductVariants(long id)
+        {
+            if (!ProductExists(id))
+            {
+                return NotFound();
+            }
+
+            var variants = await _context.ProductVariants
+                .Where(pv => pv.ProductId == id)
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (variants == null)
+            {
+                return NotFound();
+            }
+
+            return variants;
+        }
+
+        #endregion
+
+        #region Brand
+
+        [HttpGet("{id}/brand")]
+        public async Task<ActionResult<Brand>> GetProductBrand(long id)
+        {
+            var product = await _context.Products
+                .Include(p => p.Brand)
+                .Where(p => p.Id == id)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (product == null || product.Brand == null)
+            {
+                return NotFound();
+            }
+
+            return product.Brand;
+        }
+
+        #endregion
+
+        #endregion
     }
 }

@@ -67,5 +67,7 @@ namespace RusticShopAPI.Data
         public DbSet<PurchaseDetail> PurchaseDetails => Set<PurchaseDetail>();
         public DbSet<Refund> Refunds => Set<Refund>();
         public DbSet<RefundDetail> RefundDetails => Set<RefundDetail>();
+        public DbSet<ProductAttribute> ProductAttributes => Set<ProductAttribute>();
+        public DbSet<CategoryProduct> CategoryProducts => Set<CategoryProduct>();
     }
 }
