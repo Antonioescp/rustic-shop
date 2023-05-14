@@ -6,6 +6,11 @@ namespace RusticShopAPI.Data.Models.DTOs
 {
     public class PaginatedResult<T>
     {
+        public PaginatedResult()
+        {
+            Data = new();
+        }
+
         private PaginatedResult(
             List<T> data,
             int count,
@@ -81,7 +86,7 @@ namespace RusticShopAPI.Data.Models.DTOs
                 filterQuery);
         }
 
-        public static bool IsValidProperty(
+        private static bool IsValidProperty(
             string propertyName,
             bool throwExceptionIfNotFound = true)
         {

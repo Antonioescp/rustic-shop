@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
-
+using RusticShopAPI.Data.Models.DTOs.ProductDtos;
 using AttributeModel = RusticShopAPI.Data.Models.Attribute;
 
 namespace RusticShopAPI.Controllers
@@ -13,10 +14,56 @@ namespace RusticShopAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
+        }
+
+        [HttpGet("details")]
+        public async Task<ActionResult<PaginatedResult<ProductDetailDto>>> GetPaginatedDetailedProducts(
+            int pageIndex = 0,
+            int pageSize = 10,
+            string? sortColumn = null,
+            string? sortOrder = null,
+            string? filterColumn = null,
+            string? filterQuery = null)
+        {
+            var source = _context.Products
+                .Include(p => p.Categories!)
+                .Include(p => p.Brand!)
+                .Include(p => p.Images!)
+                .Include(p => p.Variants!)
+                    .ThenInclude(pv => pv.ProductVariantAttributes!)
+                        .ThenInclude(pva => pva.Attribute)
+                .Include(p => p.Variants!)
+                    .ThenInclude(pv => pv.OrderDetails)
+                .Include(p => p.Variants!)
+                    .ThenInclude(pv => pv.PurchaseDetails)
+                .Include(p => p.Variants!)
+                    .ThenInclude(pv => pv.RefundDetails)
+                .Include(p => p.Variants!)
+                    .ThenInclude(pv => pv.Images)
+                .Include(p => p.Variants!)
+                    .ThenInclude(pv => pv.ProductVariantDiscounts!)
+                        .ThenInclude(pv => pv.Discount)
+                .Include(p => p.Variants!)
+                    .ThenInclude(pv => pv.WishlistedByUsers)
+                .AsSplitQuery()
+                .AsNoTracking();
+
+            var paginated = await PaginatedResult<Product>.CreateAsync(
+                source,
+                pageIndex,
+                pageSize,
+                sortColumn,
+                sortOrder,
+                filterColumn,
+                filterQuery);
+
+            return _mapper.Map<PaginatedResult<ProductDetailDto>>(paginated);
         }
 
         // GET: api/Products

@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Services;
+using RusticShopAPI.Services.AutoMapper;
 using RusticShopAPI.Services.Mail;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -74,77 +75,24 @@ builder.Services.Configure<MailSettings>(
     builder.Configuration.GetSection("Mail"));
 builder.Services.AddTransient<IMailService, MailService>();
 
+// Mapper service
+builder.Services.AddAutoMapper(
+    typeof(MapperSettings),
+    typeof(ProductMapperSettings));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-var scope = app.Services.CreateScope();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    // Recreating database
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate();
-
-    // Creating default roles
-    var roleManager = scope
-        .ServiceProvider
-        .GetRequiredService<RoleManager<IdentityRole>>();
-    var roleNames = new string[]
-    {
-        app.Configuration["Roles:Cx"]!,
-        app.Configuration["Roles:Admin"]!
-    };
-    foreach (var role in roleNames)
-    {
-        var existingRole = await roleManager.FindByNameAsync(role);
-        if (existingRole == null)
-        {
-            var creation = await roleManager.CreateAsync(new IdentityRole
-            {
-                Name = role
-            });
-
-            if (!creation.Succeeded)
-            {
-                throw new Exception("No se pudieron crear los roles por defecto");
-            }
-        }
-    }
-
-    // Creating admin in dev
-    var admin = new User
-    {
-        UserName = "ton1uwu",
-        Email = "packageinstaller2@gmail.com",
-        EmailConfirmed = true,
-        LockoutEnabled = true,
-    };
-
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    var userAdmin = await userManager.FindByEmailAsync(admin.Email);
-    if (userAdmin == null)
-    {
-        var result = await userManager.CreateAsync(admin, "Flordeloto1!");
-        if (!result.Succeeded)
-        {
-            throw new Exception("No se pudo crear el administrador");
-        }
-
-        var addedToAdministrators = await userManager.AddToRoleAsync(admin, "Administrator");
-        if (!addedToAdministrators.Succeeded)
-        {
-            throw new Exception("No se pudo asignar el administrador");
-        }
-
-        var isInRole = await userManager.IsInRoleAsync(admin, "Administrator");
-        if (!isInRole)
-        {
-            throw new Exception("No se pudo asignar el administrador");
-        }
-    }
 }
+
+// Recreating database
+var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+dbContext.Database.Migrate();
 
 app.UseHttpsRedirection();
 

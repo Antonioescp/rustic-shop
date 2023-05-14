@@ -14,6 +14,12 @@ namespace RusticShopAPI.Data.Models.Settings
             builder
                 .Property(pva => pva.Value)
                 .IsRequired();
+
+            // Checks
+            builder
+                .HasCheckConstraint(
+                    "CHK_ProductVariantAttribute_IsValidAttribute",
+                    @"[dbo].IsValidProductVariantAttribute(ProductVariantId, AttributeId) = 1");
         }
     }
 }

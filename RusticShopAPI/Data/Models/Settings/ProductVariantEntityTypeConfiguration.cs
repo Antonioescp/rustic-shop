@@ -28,6 +28,13 @@ namespace RusticShopAPI.Data.Models.Settings
                 .HasDefaultValue(false)
                 .IsRequired();
 
+            builder
+                .Ignore(pv => pv.Stock)
+                .Ignore(pv => pv.CurrentDiscount)
+                .Ignore(pv => pv.HasDiscount)
+                .Ignore(pv => pv.WishlistedCount)
+                .Ignore(pv => pv.DiscountedUnitPrice);
+
             // Relationships
             builder
                 .HasMany(pv => pv.Attributes)
