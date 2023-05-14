@@ -20,6 +20,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatSnackBarModule,
+} from '@angular/material/snack-bar';
 
 const materialModules = [
   MatSidenavModule,
@@ -42,16 +47,16 @@ const materialModules = [
   MatDividerModule,
   MatTooltipModule,
   MatExpansionModule,
+  MatDialogModule,
+  MatSnackBarModule,
 ];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    ...materialModules
+  imports: [CommonModule, ...materialModules],
+  exports: [...materialModules],
+  providers: [
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
   ],
-  exports: [
-    ...materialModules
-  ]
 })
-export class MaterialModule { }
+export class MaterialModule {}

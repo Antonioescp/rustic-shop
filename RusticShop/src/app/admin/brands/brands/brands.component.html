@@ -1,0 +1,81 @@
+<div class="brands">
+  <h2>Marcas</h2>
+
+  <button
+    mat-flat-button
+    color="primary"
+    *ngIf="brands"
+    (click)="onCreateBrand()"
+    [disabled]="isLoadingAction"
+  >
+    <mat-icon>add</mat-icon>
+    Agregar marca
+  </button>
+
+  <mat-form-field>
+    <input
+      matInput
+      #filter
+      (keyup)="loadData(filter.value)"
+      placeholder="Filtra por nombre"
+    />
+  </mat-form-field>
+
+  <table
+    matSort
+    class="mat-elevation-z8"
+    mat-table
+    [dataSource]="brands"
+    (matSortChange)="loadData()"
+    [matSortActive]="defaultSortColumn"
+    [matSortDirection]="defaultSortOrder"
+  >
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+      <td mat-cell *matCellDef="let brand">{{ brand.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+      <td mat-cell *matCellDef="let brand">{{ brand.name | titlecase }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let brand">
+        <button
+          mat-icon-button
+          matTooltip="Editar característica"
+          color="primary"
+          [disabled]="isLoadingAction"
+          (click)="onEditBrand(brand.id)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          matTooltip="Borrar característica"
+          color="warn"
+          (click)="onDeleteBrand(brand)"
+          [disabled]="isLoadingAction"
+        >
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    [hidden]="!brands"
+    [pageSizeOptions]="[10, 20, 50]"
+    [pageSize]="10"
+    (page)="getData($event)"
+    showFirstLastButtons
+    aria-label="Selecciona la pagina de marcas"
+    class="mat-elevation-z8"
+  >
+  </mat-paginator>
+</div>

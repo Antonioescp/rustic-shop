@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using RusticShopAPI.Data.Models.DTOs;
 using RusticShopAPI.Data.Models.DTOs.BrandDtos;
 
 namespace RusticShopAPI.Controllers
@@ -25,8 +26,27 @@ namespace RusticShopAPI.Controllers
 
         #region CRUD
 
-        // GET: api/Brands
         [HttpGet]
+        public async Task<ActionResult<PaginatedResult<Brand>>> GetPaginatedBrands(
+            int pageIndex = 0,
+            int pageSize = 10,
+            string? sortColumn = null,
+            string? sortOrder = null,
+            string? filterColumn = null,
+            string? filterQuery = null)
+        {
+            return await PaginatedResult<Brand>.CreateAsync(
+                _context.Brands,
+                pageIndex,
+                pageSize,
+                sortColumn,
+                sortOrder,
+                filterColumn,
+                filterQuery);
+        }
+
+        // GET: api/Brands
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
         {
           if (_context.Brands == null)

@@ -14,7 +14,7 @@ interface SideNavExpandableItem {
 @Component({
   selector: 'app-admin-panel',
   templateUrl: './admin-panel.component.html',
-  styleUrls: ['./admin-panel.component.scss']
+  styleUrls: ['./admin-panel.component.scss'],
 })
 export class AdminPanelComponent {
   links: SideNavExpandableItem[] = [
@@ -22,10 +22,11 @@ export class AdminPanelComponent {
       label: 'Productos',
       children: [
         { label: 'Ver Productos', path: 'productos', icon: 'inventory_2' },
+        { label: 'Marcas', path: 'marcas', icon: 'grade' },
         { label: 'Categorías', path: 'categorias', icon: 'category' },
         { label: 'Características', path: 'caracteristicas', icon: 'schema' },
         { label: 'Descuentos', path: 'descuentos', icon: 'percent' },
-      ]
+      ],
     },
     {
       label: 'Transacciones',
@@ -33,7 +34,7 @@ export class AdminPanelComponent {
         { label: 'Compras', path: '', icon: '' },
         { label: 'Ventas', path: '', icon: '' },
         { label: 'Reembolsos', path: '', icon: '' },
-      ]
+      ],
     },
   ];
 }

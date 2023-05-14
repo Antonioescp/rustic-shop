@@ -29,6 +29,8 @@ import { DiscountsComponent } from './admin/discounts/discounts/discounts.compon
 import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-edit.component';
 import { ProductsComponent } from './admin/products/products/products.component';
 import { ProductEditComponent } from './admin/products/product-edit/product-edit.component';
+import { BrandsComponent } from './admin/brands/brands/brands.component';
+import { BrandEditDialogComponent } from './admin/brands/brand-edit-dialog/brand-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { ProductEditComponent } from './admin/products/product-edit/product-edit
     DiscountEditComponent,
     ProductsComponent,
     ProductEditComponent,
+    BrandsComponent,
+    BrandEditDialogComponent,
   ],
   imports: [
     BrowserModule,
