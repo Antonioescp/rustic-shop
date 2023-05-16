@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, map } from 'rxjs';
-import { BrandsService } from 'src/app/brands.service';
+import { BrandsService } from 'src/app/services/brands.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import Brand from 'src/app/shared/models/Brand';
 import { BrandDto } from 'src/app/shared/models/dtos/brands/CreateBrandDto';

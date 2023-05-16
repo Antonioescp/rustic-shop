@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { AttributesService } from 'src/app/attributes.service';
+import { AttributesService } from 'src/app/services/attributes.service';
 import Attribute from 'src/app/shared/models/Attribute';
 
 @Component({
@@ -42,7 +42,7 @@ export class AttributesComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.attributesService
-      .getPaginatedAttributes({
+      .getPaginated({
         defaultSortColumn: this.defaultSortColumn,
         defaultSortOrder: this.defaultSortOrder,
         pageIndex: event.pageIndex,
@@ -68,7 +68,7 @@ export class AttributesComponent implements OnInit {
 
   deleteFeature(attribute: Attribute) {
     this.isLoadingAction = true;
-    this.attributesService.deleteAttribute(attribute.id).subscribe({
+    this.attributesService.deleteById(attribute.id).subscribe({
       next: (result) => {
         this.loadData();
       },

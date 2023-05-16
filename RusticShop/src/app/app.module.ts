@@ -17,9 +17,9 @@ import { RequestAccountUnlockComponent } from './auth/request-account-unlock/req
 import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './http-interceptors/AuthInterceptor';
-import { ProductsService } from './products.service';
+import { ProductsService } from './services/products.service';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { CategoryEditComponent } from './admin/categories/category-edit/category-edit.component';

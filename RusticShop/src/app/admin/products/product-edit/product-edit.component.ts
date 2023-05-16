@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipListbox } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductsService } from 'src/app/products.service';
+import { ProductsService } from 'src/app/services/products.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import { Product } from 'src/app/shared/models/Product';
 import { lastValueFrom } from 'rxjs';
 import Brand from 'src/app/shared/models/Brand';
-import { BrandsService } from '../../../brands.service';
+import { BrandsService } from '../../../services/brands.service';
 
 @Component({
   selector: 'app-product-edit',
@@ -28,7 +28,7 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private productsService: ProductsService,
-    private brandsService: BrandsService,
+    private brandsService: BrandsService
   ) {
     super();
   }
@@ -59,7 +59,7 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
     this.id = idParam ? +idParam : 0;
 
     if (this.id) {
-      this.productsService.getProduct(this.id).subscribe({
+      this.productsService.getById(this.id).subscribe({
         next: (result) => {
           this.product = { ...result };
           this.title = `Editar - ${this.product.name}`;
@@ -73,8 +73,8 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
 
     // Getting brands
     this.brandsService.getAll().subscribe({
-      next: brands => this.brands = brands,
-      error: err => console.error(err)
+      next: (brands) => (this.brands = brands),
+      error: (err) => console.error(err),
     });
   }
 
@@ -99,7 +99,7 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
     product.id = this.id!;
 
     const productUpdateResult = await lastValueFrom(
-      this.productsService.updateProduct(product)
+      this.productsService.update(product)
     );
 
     if (!productUpdateResult.ok) {
@@ -109,7 +109,7 @@ export class ProductEditComponent extends BaseFormComponent implements OnInit {
   }
 
   submitProductCreation(product: Product): void {
-    this.productsService.addProduct(product).subscribe({
+    this.productsService.create(product).subscribe({
       next: (result) => {
         console.log(`product added ${result}`);
       },

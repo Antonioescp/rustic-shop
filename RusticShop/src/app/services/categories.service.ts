@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import Category from './shared/models/Category';
+import Category from '../shared/models/Category';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MatSort } from '@angular/material/sort';
+import { CrudService } from '../shared/others/CrudService';
+import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
 
 export interface Pagination {
   pageIndex: number;
@@ -18,21 +20,23 @@ export interface Pagination {
 @Injectable({
   providedIn: 'root',
 })
-export class CategoriesService {
+export class CategoriesService implements CrudService<Category> {
   readonly url = `${environment.apiBaseUrl}${environment.categoryEndpoint}`;
 
   constructor(private http: HttpClient) {}
 
-  getCategory(id: number): Observable<Category> {
+  getById(id: number): Observable<Category> {
     const categoryUrl = `${this.url}${id}`;
     return this.http.get<Category>(categoryUrl);
   }
 
-  getCategories(): Observable<Category[]> {
+  getAll(): Observable<Category[]> {
     return this.http.get<Category[]>(this.url + 'all');
   }
 
-  getPaginatedCategories(pagination: Pagination): Observable<any> {
+  getPaginated(
+    pagination: Pagination
+  ): Observable<PaginatedResponse<Category>> {
     const url = `${environment.apiBaseUrl}${environment.categoryEndpoint}`;
     let params = new HttpParams()
       .set('pageIndex', pagination.pageIndex)
@@ -56,20 +60,18 @@ export class CategoriesService {
     return this.http.get<any>(url, { params });
   }
 
-  addCategory(category: Category): Observable<HttpResponse<Response>> {
-    return this.http.post<Response>(
-      this.url,
-      category,
-      { observe: 'response' }
-    );
+  create(category: Category): Observable<HttpResponse<any>> {
+    return this.http.post<Response>(this.url, category, {
+      observe: 'response',
+    });
   }
 
-  deleteCategory(id: number): Observable<HttpResponse<Response>> {
+  deleteById(id: number): Observable<HttpResponse<any>> {
     const deleteUrl = `${this.url}${id}`;
     return this.http.delete<Response>(deleteUrl, { observe: 'response' });
   }
 
-  updateCategory(category: Category): Observable<HttpResponse<any>> {
+  update(category: Category): Observable<HttpResponse<any>> {
     const updateUrl = `${this.url}${category.id}`;
     return this.http.put<any>(updateUrl, category);
   }

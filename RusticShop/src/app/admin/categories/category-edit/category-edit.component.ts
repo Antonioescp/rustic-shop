@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map, subscribeOn } from 'rxjs';
-import { CategoriesService } from 'src/app/categories.service';
+import { CategoriesService } from 'src/app/services/categories.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import Category from 'src/app/shared/models/Category';
 
@@ -46,7 +46,7 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
     this.id = idParam ? +idParam : 0;
 
     if (this.id) {
-      this.categoriesService.getCategory(this.id).subscribe({
+      this.categoriesService.getById(this.id).subscribe({
         next: (result) => {
           this.category = result;
           this.title = `Editar - ${this.category.name}`;
@@ -67,7 +67,7 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
     if (this.id) {
       // Modo de edicion
       category.id = this.id;
-      this.categoriesService.updateCategory(category).subscribe({
+      this.categoriesService.update(category).subscribe({
         next: (result) => {
           this.router.navigate(['/admin/panel/categorias']);
         },
@@ -75,7 +75,7 @@ export class CategoryEditComponent extends BaseFormComponent implements OnInit {
       });
     } else {
       // Modo de creacion
-      this.categoriesService.addCategory(category).subscribe({
+      this.categoriesService.create(category).subscribe({
         next: (result) => {
           this.router.navigate(['/admin/panel/categorias']);
         },

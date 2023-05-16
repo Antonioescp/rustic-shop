@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DiscountsService } from 'src/app/discounts.service';
+import { DiscountsService } from 'src/app/services/discounts.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import Discount from 'src/app/shared/models/Discount';
 
 @Component({
   selector: 'app-discount-edit',
   templateUrl: './discount-edit.component.html',
-  styleUrls: ['./discount-edit.component.scss']
+  styleUrls: ['./discount-edit.component.scss'],
 })
 export class DiscountEditComponent extends BaseFormComponent implements OnInit {
   title?: string;
@@ -25,12 +25,8 @@ export class DiscountEditComponent extends BaseFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl('', [
-        Validators.required
-      ]),
-      description: new FormControl('', [
-        Validators.required
-      ])
+      name: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
     });
 
     this.loadData();
@@ -41,20 +37,18 @@ export class DiscountEditComponent extends BaseFormComponent implements OnInit {
     this.id = idParam ? +idParam : 0;
 
     if (this.id) {
-      this.discountsService.getDiscount(this.id).subscribe({
-        next: result => {
+      this.discountsService.getById(this.id).subscribe({
+        next: (result) => {
           this.discount = result;
           this.title = `Editar - ${this.discount.name}`;
           this.form.patchValue(this.discount);
         },
-        error: error => console.error(error)
+        error: (error) => console.error(error),
       });
-    }
-    else {
+    } else {
       this.title = 'Nuevo descuento';
     }
   }
-
 
   onSubmit(): void {
     const discount = this.discount ? this.discount : <Discount>{};
@@ -64,19 +58,19 @@ export class DiscountEditComponent extends BaseFormComponent implements OnInit {
     if (this.id) {
       // Modo de edicion
       discount.id = this.id;
-      this.discountsService.updateDiscount(discount).subscribe({
-        next: result => {
+      this.discountsService.update(discount).subscribe({
+        next: (result) => {
           this.router.navigate(['/admin/panel/descuentos']);
         },
-        error: error => console.error(error)
+        error: (error) => console.error(error),
       });
     } else {
       // Modo de creacion
-      this.discountsService.addDiscount(discount).subscribe({
-        next: result => {
+      this.discountsService.create(discount).subscribe({
+        next: (result) => {
           this.router.navigate(['/admin/panel/descuentos']);
         },
-        error: error => console.error(error)
+        error: (error) => console.error(error),
       });
     }
   }

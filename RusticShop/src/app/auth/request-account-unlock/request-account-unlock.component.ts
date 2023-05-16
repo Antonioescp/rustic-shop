@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import RequestAccountUnlockRequest from './request-account-unlock-request';
 import { Router } from '@angular/router';

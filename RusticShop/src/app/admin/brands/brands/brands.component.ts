@@ -3,7 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { BrandsService } from 'src/app/brands.service';
+import { BrandsService } from 'src/app/services/brands.service';
 import Brand from 'src/app/shared/models/Brand';
 import {
   BrandEditDialogComponent,
@@ -55,7 +55,7 @@ export class BrandsComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.brandsService
-      .getPaginatedBrands({
+      .getPaginated({
         defaultSortColumn: this.defaultSortColumn,
         defaultSortOrder: this.defaultSortOrder,
         pageIndex: event.pageIndex,

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ProductsService } from 'src/app/products.service';
+import { ProductsService } from 'src/app/services/products.service';
 import { Product } from 'src/app/shared/models/Product';
 
 @Component({
@@ -49,7 +49,7 @@ export class ProductsComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.productsService
-      .getPaginatedProducts({
+      .getPaginated({
         defaultSortColumn: this.defaultSortColumn,
         defaultSortOrder: this.defaultSortOrder,
         pageIndex: event.pageIndex,
@@ -75,7 +75,7 @@ export class ProductsComponent implements OnInit {
 
   deleteProduct(product: Product) {
     this.isLoadingAction = true;
-    this.productsService.deleteProduct(product.id).subscribe({
+    this.productsService.deleteById(product.id).subscribe({
       next: (result) => {
         this.loadData();
       },

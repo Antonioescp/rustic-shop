@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 
 import { BaseFormComponent } from '../../shared/components/base-form.component';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from './login-request';
 import { LoginResponse } from './login-response';
 import { HttpStatusCode } from '@angular/common/http';

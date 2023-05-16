@@ -1,18 +1,22 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
-import Brand from './shared/models/Brand';
+import { environment } from '../../environments/environment';
+import Brand from '../shared/models/Brand';
 import { Pagination } from './categories.service';
-import { BrandDto } from './shared/models/dtos/brands/CreateBrandDto';
+import { BrandDto } from '../shared/models/dtos/brands/CreateBrandDto';
+import { CrudService } from '../shared/others/CrudService';
+import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
 
 @Injectable({
   providedIn: 'root',
 })
-export class BrandsService {
+export class BrandsService implements CrudService<Brand, BrandDto> {
   readonly brandsUrl = environment.apiBaseUrl + environment.brandsEndpoint;
 
-  getPaginatedBrands(pagination: Pagination): Observable<any> {
+  constructor(private http: HttpClient) {}
+
+  getPaginated(pagination: Pagination): Observable<PaginatedResponse<Brand>> {
     let params = new HttpParams()
       .set('pageIndex', pagination.pageIndex)
       .set('pageSize', pagination.pageSize)
@@ -35,8 +39,6 @@ export class BrandsService {
 
     return this.http.get<any>(this.brandsUrl, { params });
   }
-
-  constructor(private http: HttpClient) {}
 
   getById(id: number): Observable<Brand> {
     const url = `${this.brandsUrl}${id}`;

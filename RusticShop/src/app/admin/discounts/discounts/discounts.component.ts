@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { DiscountsService } from 'src/app/discounts.service';
+import { DiscountsService } from 'src/app/services/discounts.service';
 import Discount from 'src/app/shared/models/Discount';
 
 @Component({
   selector: 'app-discounts',
   templateUrl: './discounts.component.html',
-  styleUrls: ['./discounts.component.scss']
+  styleUrls: ['./discounts.component.scss'],
 })
 export class DiscountsComponent implements OnInit {
   discounts!: MatTableDataSource<Discount>;
@@ -26,9 +26,7 @@ export class DiscountsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(
-    private discountsService: DiscountsService
-  ) {}
+  constructor(private discountsService: DiscountsService) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -43,40 +41,41 @@ export class DiscountsComponent implements OnInit {
   }
 
   getData(event: PageEvent): void {
-    this.discountsService.getPaginatedDiscounts({
-      defaultSortColumn: this.defaultSortColumn,
-      defaultSortOrder: this.defaultSortOrder,
-      pageIndex: event.pageIndex,
-      pageSize: event.pageSize,
-      sort: this.sort,
-      defaultFilterColumn: this.defaultFilterColumn,
-      filterQuery: this.filterQuery
-    }).subscribe({
-      next: result => {
-        this.paginator.length = result.totalCount;
-        this.paginator.pageIndex = result.pageIndex;
-        this.paginator.pageSize = result.pageSize;
-        this.discounts = new MatTableDataSource(result.data);
-        this.isLoadingAction = false;
-      },
-      error: error => {
-        console.log(error);
-        this.isLoadingAction = false;
-      }
-    });
+    this.discountsService
+      .getPaginated({
+        defaultSortColumn: this.defaultSortColumn,
+        defaultSortOrder: this.defaultSortOrder,
+        pageIndex: event.pageIndex,
+        pageSize: event.pageSize,
+        sort: this.sort,
+        defaultFilterColumn: this.defaultFilterColumn,
+        filterQuery: this.filterQuery,
+      })
+      .subscribe({
+        next: (result) => {
+          this.paginator.length = result.totalCount;
+          this.paginator.pageIndex = result.pageIndex;
+          this.paginator.pageSize = result.pageSize;
+          this.discounts = new MatTableDataSource(result.data);
+          this.isLoadingAction = false;
+        },
+        error: (error) => {
+          console.log(error);
+          this.isLoadingAction = false;
+        },
+      });
   }
 
   deleteFeature(discount: Discount) {
     this.isLoadingAction = true;
-    this.discountsService.deleteDiscount(discount.id).subscribe({
-      next: result => {
+    this.discountsService.deleteById(discount.id).subscribe({
+      next: (result) => {
         this.loadData();
       },
-      error: error => {
+      error: (error) => {
         console.error(error);
         this.isLoadingAction = false;
-      }
+      },
     });
   }
-
 }

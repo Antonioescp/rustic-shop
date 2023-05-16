@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { CategoriesService } from 'src/app/categories.service';
+import { CategoriesService } from 'src/app/services/categories.service';
 import Category from 'src/app/shared/models/Category';
 
 @Component({
@@ -42,7 +42,7 @@ export class CategoriesComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.categoriesService
-      .getPaginatedCategories({
+      .getPaginated({
         defaultSortColumn: this.defaultSortColumn,
         defaultSortOrder: this.defaultSortOrder,
         pageIndex: event.pageIndex,
@@ -68,7 +68,7 @@ export class CategoriesComponent implements OnInit {
 
   deleteCategory(category: Category) {
     this.isLoadingAction = true;
-    this.categoriesService.deleteCategory(category.id).subscribe({
+    this.categoriesService.deleteById(category.id).subscribe({
       next: (result) => {
         this.loadData();
       },

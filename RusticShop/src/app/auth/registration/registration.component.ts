@@ -8,7 +8,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { BaseFormComponent } from '../../shared/components/base-form.component';
 import { RegistrationRequest } from './registration-request';
 import { CustomValidators } from 'src/app/shared/custom-validators';

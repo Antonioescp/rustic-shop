@@ -2,16 +2,15 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, map, tap } from 'rxjs';
 
-import { environment } from '../environments/environment';
-import { LoginRequest } from './auth/login/login-request';
-import { LoginResponse } from './auth/login/login-response';
-import { RegistrationRequest } from './auth/registration/registration-request';
-import { RegistrationResponse } from './auth/registration/registration-response';
-import PasswordResetRequest from './auth/password-reset-request/password-reset-request';
-import PasswordResetData from './auth/password-reset/password-reset-data';
-import RequestAccountUnlockRequest from './auth/request-account-unlock/request-account-unlock-request';
-import UnlockAccountRequest from './auth/unlock-account/UnlockAccountRequest';
-import { ValidationErrors } from '@angular/forms';
+import { environment } from '../../environments/environment';
+import { LoginRequest } from '../auth/login/login-request';
+import { LoginResponse } from '../auth/login/login-response';
+import { RegistrationRequest } from '../auth/registration/registration-request';
+import { RegistrationResponse } from '../auth/registration/registration-response';
+import PasswordResetRequest from '../auth/password-reset-request/password-reset-request';
+import PasswordResetData from '../auth/password-reset/password-reset-data';
+import RequestAccountUnlockRequest from '../auth/request-account-unlock/request-account-unlock-request';
+import UnlockAccountRequest from '../auth/unlock-account/UnlockAccountRequest';
 
 @Injectable({
   providedIn: 'root',

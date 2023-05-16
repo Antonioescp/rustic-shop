@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
-import { AttributesService } from 'src/app/attributes.service';
+import { AttributesService } from 'src/app/services/attributes.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import Attribute from 'src/app/shared/models/Attribute';
 
@@ -51,7 +51,7 @@ export class AttributeEditComponent
     this.id = idParam ? +idParam : 0;
 
     if (this.id) {
-      this.attributesService.getAttribute(this.id).subscribe({
+      this.attributesService.getById(this.id).subscribe({
         next: (result) => {
           this.attribute = result;
           this.title = `Editar - ${this.attribute.name}`;
@@ -71,7 +71,7 @@ export class AttributeEditComponent
     if (this.id) {
       // Modo de edicion
       attribute.id = this.id;
-      this.attributesService.updateAttribute(attribute).subscribe({
+      this.attributesService.update(attribute).subscribe({
         next: (result) => {
           this.router.navigate(['/admin/panel/caracteristicas']);
         },
@@ -79,7 +79,7 @@ export class AttributeEditComponent
       });
     } else {
       // Modo de creacion
-      this.attributesService.addAttribute(attribute.name).subscribe({
+      this.attributesService.create(attribute).subscribe({
         next: (result) => {
           this.router.navigate(['/admin/panel/caracteristicas']);
         },
