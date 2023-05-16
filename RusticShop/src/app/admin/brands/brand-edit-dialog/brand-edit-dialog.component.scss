@@ -2,6 +2,12 @@ form {
   width: 400px;
   height: fit-content;
 
+  .mat-mdc-dialog-actions {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+  }
+
   mat-form-field {
     width: 100%;
   }
