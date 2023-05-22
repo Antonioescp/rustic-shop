@@ -25,13 +25,12 @@ import { CategoriesComponent } from './admin/categories/categories/categories.co
 import { AttributesComponent } from './admin/attributes/attributes/attributes.component';
 import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
 import { ProductsComponent } from './admin/products/products/products.component';
-import { ProductEditComponent } from './admin/products/product-edit/product-edit.component';
 import { BrandsComponent } from './admin/brands/brands/brands.component';
 import { BrandEditDialogComponent } from './admin/brands/brand-edit-dialog/brand-edit-dialog.component';
 import { CategoryEditDialogComponent } from './admin/categories/category-edit-dialog/category-edit-dialog.component';
-import { BaseEditDialogComponent } from './shared/components/base-edit-dialog.component';
 import { AttributeEditDialogComponent } from './admin/attributes/attribute-edit-dialog/attribute-edit-dialog.component';
 import { DiscountEditDialogComponent } from './admin/discounts/discount-edit-dialog/discount-edit-dialog.component';
+import { ProductEditDialogComponent } from './admin/products/product-edit-dialog/product-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -50,12 +49,12 @@ import { DiscountEditDialogComponent } from './admin/discounts/discount-edit-dia
     AttributesComponent,
     DiscountsComponent,
     ProductsComponent,
-    ProductEditComponent,
     BrandsComponent,
     BrandEditDialogComponent,
     CategoryEditDialogComponent,
     AttributeEditDialogComponent,
     DiscountEditDialogComponent,
+    ProductEditDialogComponent,
   ],
   imports: [
     BrowserModule,

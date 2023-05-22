@@ -3,7 +3,8 @@
   <h2>Productos</h2>
 
   <button mat-flat-button color="primary"
-    *ngIf="products" [routerLink]="['../producto']">
+    *ngIf="products"
+    (click)="onCreateProduct()">
     <mat-icon>add</mat-icon>
     Agregar producto
   </button>
@@ -49,7 +50,7 @@
       <th mat-header-cell *matHeaderCellDef> Acciones </th>
       <td mat-cell *matCellDef="let product">
         <button mat-icon-button matTooltip="Editar producto" color="primary"
-          [routerLink]="['/admin/panel/producto/', product.id]"
+          (click)="onUpdateProduct(product.id)"
           [disabled]="isLoadingAction">
           <mat-icon>edit</mat-icon>
         </button>

@@ -46,7 +46,7 @@ export class BrandsService implements CrudService<Brand> {
   }
 
   getAll(): Observable<Brand[]> {
-    return this.http.get<Brand[]>(this.brandsUrl);
+    return this.http.get<Brand[]>(this.brandsUrl + 'all');
   }
 
   deleteById(id: number): Observable<HttpResponse<any>> {

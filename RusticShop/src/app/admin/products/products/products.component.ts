@@ -1,9 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ProductsService } from 'src/app/services/products.service';
 import { Product } from 'src/app/shared/models/Product';
+import { BaseEditDialogData, BaseEditDialogResult } from '../../../shared/components/base-edit-dialog.component';
+import { ProductEditDialogComponent } from '../product-edit-dialog/product-edit-dialog.component';
 
 @Component({
   selector: 'app-products',
@@ -33,7 +37,12 @@ export class ProductsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private productsService: ProductsService) {}
+  constructor(
+    private productsService: ProductsService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadData();
@@ -78,11 +87,52 @@ export class ProductsComponent implements OnInit {
     this.productsService.deleteById(product.id).subscribe({
       next: (result) => {
         this.loadData();
+        this.snackBar.open(`Producto "${product.name}" eliminado con éxito.`);
       },
       error: (error) => {
         console.error(error);
         this.isLoadingAction = false;
+        this.snackBar.open(`El producto "${product.name}" no se ha podido eliminar.`);
       },
     });
   }
+
+  onCreateProduct(): void {
+    const dialogRef = this.dialog.open<
+      ProductEditDialogComponent,
+      BaseEditDialogData,
+      BaseEditDialogResult<Product>
+      >(ProductEditDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success) {
+        this.snackBar.open(`Producto "${result.resource.name}" creado con éxito.`);
+        this.loadData();
+      } else if (result?.success == false) {
+        this.snackBar.open(`Producto "${result.resource.name}" no se ha podido crear.`);
+        this.loadData();
+      }
+    });
+  }
+
+  onUpdateProduct(id: number): void {
+    const dialogRef = this.dialog.open<
+      ProductEditDialogComponent,
+      BaseEditDialogData,
+      BaseEditDialogResult<Product>
+      >(ProductEditDialogComponent, {
+        data: { id },
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success) {
+        this.snackBar.open(`Producto "${result.resource.name}" actualizado con éxito.`);
+        this.loadData();
+      } else if (result?.success == false) {
+        this.snackBar.open(`Producto "${result.resource.name}" no se ha podido actualizado.`);
+        this.loadData();
+      }
+    });
+  }
+
 }

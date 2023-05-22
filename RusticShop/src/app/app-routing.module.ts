@@ -12,7 +12,6 @@ import { CategoriesComponent } from './admin/categories/categories/categories.co
 import { AttributesComponent } from './admin/attributes/attributes/attributes.component';
 import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
 import { ProductsComponent } from './admin/products/products/products.component';
-import { ProductEditComponent } from './admin/products/product-edit/product-edit.component';
 import { BrandsComponent } from './admin/brands/brands/brands.component';
 
 const routes: Routes = [
@@ -43,8 +42,6 @@ const routes: Routes = [
     component: AdminPanelComponent,
     children: [
       { path: 'productos', component: ProductsComponent },
-      { path: 'producto', component: ProductEditComponent },
-      { path: 'producto/:id', component: ProductEditComponent },
       { path: 'categorias', component: CategoriesComponent },
       { path: 'caracteristicas', component: AttributesComponent },
       { path: 'descuentos', component: DiscountsComponent },

@@ -42,7 +42,10 @@ export abstract class BaseEditDialogComponent<Model> extends BaseFormComponent i
         this.form.patchValue(resource!);
         this.updateTitle(resource);
       },
-      error: error => console.error(error),
+      error: error => {
+        console.error(error);
+        this.dialogRef.close();
+      },
       complete: () => (this.isBusy = false),
     });
   }
@@ -70,7 +73,10 @@ export abstract class BaseEditDialogComponent<Model> extends BaseFormComponent i
       }),
       error: error => {
         console.error(error);
-        this.dialogRef.close();
+        this.dialogRef.close({
+          success: false,
+          resource: data,
+        });
       },
       complete: () => this.isBusy = false,
     });
@@ -85,7 +91,10 @@ export abstract class BaseEditDialogComponent<Model> extends BaseFormComponent i
       }),
       error: error => {
         console.error(error);
-        this.dialogRef.close();
+        this.dialogRef.close({
+          success: false,
+          resource: data,
+        });
       },
       complete: () => this.isBusy = false,
     });
