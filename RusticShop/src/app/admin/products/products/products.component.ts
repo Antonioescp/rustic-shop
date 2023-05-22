@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ProductsService } from 'src/app/services/products.service';
 import { Product } from 'src/app/shared/models/Product';
 import { BaseEditDialogData, BaseEditDialogResult } from '../../../shared/components/base-edit-dialog.component';
+import { ConfirmDialogComponent, ConfirmDialogData, ConfirmDialogResult } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ProductEditDialogComponent } from '../product-edit-dialog/product-edit-dialog.component';
 
 @Component({
@@ -80,6 +81,29 @@ export class ProductsComponent implements OnInit {
           this.isLoadingAction = false;
         },
       });
+  }
+
+  onDelete(product: Product): void {
+    const dialogRef = this.dialog.open<
+      ConfirmDialogComponent,
+      ConfirmDialogData,
+      ConfirmDialogResult
+    >(ConfirmDialogComponent, {
+      data: {
+        title: `Eliminar product ${product.name}`,
+        message: `¿Está seguro de que desea elimnar ${product.name}? Todas sus variantes serán eliminadas.`,
+        cancelColor: 'primary',
+        confirmColor: 'warn',
+        cancelIcon: 'cancel',
+        confirmIcon: 'warning',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.confirmed) {
+        this.deleteProduct(product);
+      }
+    });
   }
 
   deleteProduct(product: Product) {

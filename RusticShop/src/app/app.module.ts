@@ -31,6 +31,7 @@ import { CategoryEditDialogComponent } from './admin/categories/category-edit-di
 import { AttributeEditDialogComponent } from './admin/attributes/attribute-edit-dialog/attribute-edit-dialog.component';
 import { DiscountEditDialogComponent } from './admin/discounts/discount-edit-dialog/discount-edit-dialog.component';
 import { ProductEditDialogComponent } from './admin/products/product-edit-dialog/product-edit-dialog.component';
+import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { ProductEditDialogComponent } from './admin/products/product-edit-dialog
     AttributeEditDialogComponent,
     DiscountEditDialogComponent,
     ProductEditDialogComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,

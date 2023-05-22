@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<img *ngIf="data.imageUrl" [src]="data.imageUrl"/>
+
+<div mat-dialog-content>
+  <p>{{ data.message }}</p>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button [color]="data.confirmColor ?? 'warn'" mat-dialog-close>
+    <mat-icon *ngIf="data.cancelIcon">{{ data.cancelIcon }}</mat-icon>
+    Cancelar
+  </button>
+  <button mat-button [color]="data.cancelColor ?? 'primary'" (click)="onConfirm()">
+    <mat-icon *ngIf="data.confirmIcon">{{ data.confirmIcon }}</mat-icon>
+    Confirmar
+  </button>
+</div>
