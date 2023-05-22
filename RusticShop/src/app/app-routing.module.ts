@@ -10,7 +10,6 @@ import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.com
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { AttributesComponent } from './admin/attributes/attributes/attributes.component';
-import { AttributeEditComponent } from './admin/attributes/attribute-edit/attribute-edit.component';
 import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
 import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-edit.component';
 import { ProductsComponent } from './admin/products/products/products.component';
@@ -49,8 +48,6 @@ const routes: Routes = [
       { path: 'producto/:id', component: ProductEditComponent },
       { path: 'categorias', component: CategoriesComponent },
       { path: 'caracteristicas', component: AttributesComponent },
-      { path: 'caracteristica', component: AttributeEditComponent },
-      { path: 'caracteristica/:id', component: AttributeEditComponent },
       { path: 'descuentos', component: DiscountsComponent },
       { path: 'descuento', component: DiscountEditComponent },
       { path: 'descuento/:id', component: DiscountEditComponent },

@@ -23,7 +23,6 @@ import { ProductsService } from './services/products.service';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { AttributesComponent } from './admin/attributes/attributes/attributes.component';
-import { AttributeEditComponent } from './admin/attributes/attribute-edit/attribute-edit.component';
 import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
 import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-edit.component';
 import { ProductsComponent } from './admin/products/products/products.component';
@@ -31,6 +30,8 @@ import { ProductEditComponent } from './admin/products/product-edit/product-edit
 import { BrandsComponent } from './admin/brands/brands/brands.component';
 import { BrandEditDialogComponent } from './admin/brands/brand-edit-dialog/brand-edit-dialog.component';
 import { CategoryEditDialogComponent } from './admin/categories/category-edit-dialog/category-edit-dialog.component';
+import { BaseEditDialogComponent } from './shared/components/base-edit-dialog.component';
+import { AttributeEditDialogComponent } from './admin/attributes/attribute-edit-dialog/attribute-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,6 @@ import { CategoryEditDialogComponent } from './admin/categories/category-edit-di
     ProductCardComponent,
     CategoriesComponent,
     AttributesComponent,
-    AttributeEditComponent,
     DiscountsComponent,
     DiscountEditComponent,
     ProductsComponent,
@@ -55,6 +55,7 @@ import { CategoryEditDialogComponent } from './admin/categories/category-edit-di
     BrandsComponent,
     BrandEditDialogComponent,
     CategoryEditDialogComponent,
+    AttributeEditDialogComponent,
   ],
   imports: [
     BrowserModule,

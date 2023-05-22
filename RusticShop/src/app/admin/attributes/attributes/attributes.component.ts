@@ -1,9 +1,13 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AttributesService } from 'src/app/services/attributes.service';
 import Attribute from 'src/app/shared/models/Attribute';
+import { BaseEditDialogData, BaseEditDialogResult } from '../../../shared/components/base-edit-dialog.component';
+import { AttributeEditDialogComponent } from '../attribute-edit-dialog/attribute-edit-dialog.component';
 
 @Component({
   selector: 'app-attributes',
@@ -26,7 +30,11 @@ export class AttributesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private attributesService: AttributesService) {}
+  constructor(
+    private attributesService: AttributesService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+  ) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -71,11 +79,47 @@ export class AttributesComponent implements OnInit {
     this.attributesService.deleteById(attribute.id).subscribe({
       next: (result) => {
         this.loadData();
+        this.snackBar.open(`Atributo "${attribute.name} eliminado con éxito."`);
       },
       error: (error) => {
         console.error(error);
-        this.isLoadingAction = false;
+        this.snackBar.open(`Atributo "${attribute.name} no se ha podido eliminar."`);
       },
+      complete: () => this.isLoadingAction = false,
+    });
+  }
+
+  onCreateAttribute(): void {
+    const dialogRef = this.dialog.open<
+      AttributeEditDialogComponent,
+      BaseEditDialogData,
+      BaseEditDialogResult<Attribute>
+      >(AttributeEditDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success) {
+        this.snackBar.open(`Atributo "${result.resource.name}" ha sido creado con éxito.`);
+      } else if (result?.success == false) {
+        this.snackBar.open(`Atributo "${result.resource.name}" no se ha podido crear.`);
+      }
+    });
+  }
+
+  onUpdateAttribute(id: number): void {
+    const dialogRef = this.dialog.open<
+      AttributeEditDialogComponent,
+      BaseEditDialogData,
+      BaseEditDialogResult<Attribute>
+      >(AttributeEditDialogComponent, {
+        data: { id },
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success) {
+        this.snackBar.open(`Atributo "${result.resource.name}" ha sido actualizado con éxito.`);
+      } else if (result?.success == false) {
+        this.snackBar.open(`Atributo "${result.resource.name}" no se ha podido actualizar.`);
+      }
     });
   }
 }

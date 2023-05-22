@@ -12,7 +12,7 @@ import AttributeCreateDto from '../shared/models/dtos/attributes/AttributeCreate
   providedIn: 'root',
 })
 export class AttributesService
-  implements CrudService<Attribute, AttributeCreateDto>
+  implements CrudService<Attribute>
 {
   readonly attributesUrl = `${environment.apiBaseUrl}${environment.attributesEndpoint}`;
 

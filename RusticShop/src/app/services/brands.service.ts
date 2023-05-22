@@ -11,7 +11,7 @@ import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
 @Injectable({
   providedIn: 'root',
 })
-export class BrandsService implements CrudService<Brand, BrandDto> {
+export class BrandsService implements CrudService<Brand> {
   readonly brandsUrl = environment.apiBaseUrl + environment.brandsEndpoint;
 
   constructor(private http: HttpClient) {}

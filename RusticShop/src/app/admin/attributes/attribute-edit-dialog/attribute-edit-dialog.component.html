@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content class="fields">
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input matInput type="text" formControlName="name" />
+      <mat-error
+        *ngFor="
+          let error of getErrors(form.get('name')!, 'Nombre', {
+            nameTaken: 'ya se encuentra en uso.'
+          })
+        "
+      >
+        {{ error }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <button
+      mat-dialog-close
+      mat-button
+      color="warn"
+      [disabled]="isBusy"
+      type="button"
+    >
+      <mat-icon>cancel</mat-icon> Cancelar
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="isBusy || form.invalid"
+      type="submit"
+    >
+      <mat-icon>save</mat-icon> Guardar
+    </button>
+  </div>
+
+</form>
