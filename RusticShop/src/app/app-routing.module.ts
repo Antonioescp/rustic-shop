@@ -11,7 +11,6 @@ import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { AttributesComponent } from './admin/attributes/attributes/attributes.component';
 import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
-import { DiscountEditComponent } from './admin/discounts/discount-edit/discount-edit.component';
 import { ProductsComponent } from './admin/products/products/products.component';
 import { ProductEditComponent } from './admin/products/product-edit/product-edit.component';
 import { BrandsComponent } from './admin/brands/brands/brands.component';
@@ -49,8 +48,6 @@ const routes: Routes = [
       { path: 'categorias', component: CategoriesComponent },
       { path: 'caracteristicas', component: AttributesComponent },
       { path: 'descuentos', component: DiscountsComponent },
-      { path: 'descuento', component: DiscountEditComponent },
-      { path: 'descuento/:id', component: DiscountEditComponent },
       { path: 'marcas', component: BrandsComponent },
     ],
   },

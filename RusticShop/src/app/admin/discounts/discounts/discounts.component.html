@@ -3,7 +3,7 @@
   <h2>Descuentos</h2>
 
   <button mat-flat-button color="primary"
-    *ngIf="discounts" [routerLink]="['../descuento']">
+    *ngIf="discounts" (click)="onCreateDiscount()">
     <mat-icon>add</mat-icon>
     Agregar descuento
   </button>
@@ -37,7 +37,7 @@
       <th mat-header-cell *matHeaderCellDef> Acciones </th>
       <td mat-cell *matCellDef="let discount">
         <button mat-icon-button matTooltip="Editar descuento" color="primary"
-          [routerLink]="['/admin/panel/descuento/', discount.id]"
+          (click)="onUpdateDiscount(discount.id)"
           [disabled]="isLoadingAction">
           <mat-icon>edit</mat-icon>
         </button>
