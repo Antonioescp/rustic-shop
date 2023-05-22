@@ -11,6 +11,7 @@ import {
   BrandEditDialogResult,
 } from '../brand-edit-dialog/brand-edit-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent, ConfirmDialogData, ConfirmDialogResult } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-brands',
@@ -80,6 +81,28 @@ export class BrandsComponent implements OnInit {
   }
 
   onDeleteBrand(brand: Brand) {
+    const dialogRef = this.dialog.open<
+      ConfirmDialogComponent,
+      ConfirmDialogData,
+      ConfirmDialogResult>(ConfirmDialogComponent, {
+        data: {
+          title: `Eliminar la marca ${brand.name}`,
+          message: `¿Estás seguro de que deseas eliminar la marca ${brand.name}? Todos los productos con esta serán eliminados.`,
+          cancelColor: 'primary',
+          confirmColor: 'warn',
+          cancelIcon: 'cancel',
+          confirmIcon: 'confirmIcon',
+        },
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.confirmed) {
+        this.deleteBrand(brand);
+      }
+    });
+  }
+
+  deleteBrand(brand: Brand): void {
     this.isLoadingAction = true;
     this.brandsService.deleteById(brand.id).subscribe({
       next: (_) => {

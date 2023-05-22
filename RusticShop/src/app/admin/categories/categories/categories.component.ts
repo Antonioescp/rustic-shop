@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CategoriesService } from 'src/app/services/categories.service';
 import Category from 'src/app/shared/models/Category';
+import { ConfirmDialogComponent, ConfirmDialogData, ConfirmDialogResult } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { CategoryEditDialogComponent, CategoryEditDialogData, CategoryEditDialogResult } from '../category-edit-dialog/category-edit-dialog.component';
 
 @Component({
@@ -71,6 +72,28 @@ export class CategoriesComponent implements OnInit {
           this.isLoadingAction = false;
         },
       });
+  }
+
+  onDeleteCategory(category: Category): void {
+    const dialogRef = this.dialog.open<
+      ConfirmDialogComponent,
+      ConfirmDialogData,
+      ConfirmDialogResult>(ConfirmDialogComponent, {
+        data: {
+          title: `Eliminar categoría ${category.name}`,
+          message: `¿Estás seguro de que deseas eliminar la categoría ${category.name}?`,
+          confirmColor: 'warn',
+          cancelColor: 'primary',
+          confirmIcon: 'warning',
+          cancelIcon: 'cancel',
+        },
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.confirmed) {
+        this.deleteCategory(category);
+      }
+    })
   }
 
   deleteCategory(category: Category) {

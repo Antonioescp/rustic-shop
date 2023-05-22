@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AttributesService } from 'src/app/services/attributes.service';
 import Attribute from 'src/app/shared/models/Attribute';
 import { BaseEditDialogData, BaseEditDialogResult } from '../../../shared/components/base-edit-dialog.component';
+import { ConfirmDialogComponent, ConfirmDialogData, ConfirmDialogResult } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AttributeEditDialogComponent } from '../attribute-edit-dialog/attribute-edit-dialog.component';
 
 @Component({
@@ -15,7 +16,7 @@ import { AttributeEditDialogComponent } from '../attribute-edit-dialog/attribute
   styleUrls: ['./attributes.component.scss'],
 })
 export class AttributesComponent implements OnInit {
-  features!: MatTableDataSource<Attribute>;
+  attributes!: MatTableDataSource<Attribute>;
   displayedColumns = ['id', 'name', 'actions'];
 
   defaultPageIndex: number = 0;
@@ -64,7 +65,7 @@ export class AttributesComponent implements OnInit {
           this.paginator.length = result.totalCount;
           this.paginator.pageIndex = result.pageIndex;
           this.paginator.pageSize = result.pageSize;
-          this.features = new MatTableDataSource(result.data);
+          this.attributes = new MatTableDataSource(result.data);
           this.isLoadingAction = false;
         },
         error: (error) => {
@@ -74,10 +75,32 @@ export class AttributesComponent implements OnInit {
       });
   }
 
-  deleteFeature(attribute: Attribute) {
+  onDeleteAttribute(attribute: Attribute): void {
+    const dialogRef = this.dialog.open<
+      ConfirmDialogComponent,
+      ConfirmDialogData,
+      ConfirmDialogResult>(ConfirmDialogComponent, {
+        data: {
+          title: `Eliminar el atributo ${attribute.name}`,
+          message: `¿Está seguro de que desea eliminar el atributo ${attribute.name}?`,
+          confirmColor: 'warn',
+          confirmIcon: 'warning',
+          cancelColor: 'primary',
+          cancelIcon: 'cancel',
+        },
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.confirmed) {
+        this.deleteAttribute(attribute);
+      }
+    });
+  }
+
+  deleteAttribute(attribute: Attribute) {
     this.isLoadingAction = true;
     this.attributesService.deleteById(attribute.id).subscribe({
-      next: (result) => {
+      next: _ => {
         this.loadData();
         this.snackBar.open(`Atributo "${attribute.name} eliminado con éxito."`);
       },

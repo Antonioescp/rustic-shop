@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DiscountsService } from 'src/app/services/discounts.service';
 import Discount from 'src/app/shared/models/Discount';
 import { BaseEditDialogData, BaseEditDialogResult } from '../../../shared/components/base-edit-dialog.component';
+import { ConfirmDialogComponent, ConfirmDialogData, ConfirmDialogResult } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DiscountEditDialogComponent } from '../discount-edit-dialog/discount-edit-dialog.component';
 
 @Component({
@@ -74,7 +75,29 @@ export class DiscountsComponent implements OnInit {
       });
   }
 
-  deleteFeature(discount: Discount) {
+  onDeleteDiscount(discount: Discount): void {
+    const dialogRef = this.dialog.open<
+      ConfirmDialogComponent,
+      ConfirmDialogData,
+      ConfirmDialogResult>(ConfirmDialogComponent, {
+        data: {
+          title: `Eliminar el descuento ${discount.name}`,
+          message: `¿Está seguro de que desea eliminar el descuento "${discount.name}"?`,
+          confirmColor: 'warn',
+          confirmIcon: 'warning',
+          cancelColor: 'primary',
+          cancelIcon: 'cancel',
+        }
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.confirmed) {
+        this.deleteDiscount(discount);
+      }
+    })
+  }
+
+  deleteDiscount(discount: Discount) {
     this.isLoadingAction = true;
     this.discountsService.deleteById(discount.id).subscribe({
       next: (result) => {
