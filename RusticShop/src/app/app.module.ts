@@ -22,7 +22,6 @@ import { AuthInterceptor } from './http-interceptors/AuthInterceptor';
 import { ProductsService } from './services/products.service';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
-import { CategoryEditComponent } from './admin/categories/category-edit/category-edit.component';
 import { AttributesComponent } from './admin/attributes/attributes/attributes.component';
 import { AttributeEditComponent } from './admin/attributes/attribute-edit/attribute-edit.component';
 import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
@@ -31,6 +30,7 @@ import { ProductsComponent } from './admin/products/products/products.component'
 import { ProductEditComponent } from './admin/products/product-edit/product-edit.component';
 import { BrandsComponent } from './admin/brands/brands/brands.component';
 import { BrandEditDialogComponent } from './admin/brands/brand-edit-dialog/brand-edit-dialog.component';
+import { CategoryEditDialogComponent } from './admin/categories/category-edit-dialog/category-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +46,6 @@ import { BrandEditDialogComponent } from './admin/brands/brand-edit-dialog/brand
     AdminPanelComponent,
     ProductCardComponent,
     CategoriesComponent,
-    CategoryEditComponent,
     AttributesComponent,
     AttributeEditComponent,
     DiscountsComponent,
@@ -55,6 +54,7 @@ import { BrandEditDialogComponent } from './admin/brands/brand-edit-dialog/brand
     ProductEditComponent,
     BrandsComponent,
     BrandEditDialogComponent,
+    CategoryEditDialogComponent,
   ],
   imports: [
     BrowserModule,

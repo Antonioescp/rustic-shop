@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CategoriesService } from 'src/app/services/categories.service';
 import Category from 'src/app/shared/models/Category';
+import { CategoryEditDialogComponent, CategoryEditDialogData, CategoryEditDialogResult } from '../category-edit-dialog/category-edit-dialog.component';
 
 @Component({
   selector: 'app-categories',
@@ -26,7 +29,11 @@ export class CategoriesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private categoriesService: CategoriesService) {}
+  constructor(
+    private categoriesService: CategoriesService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+  ) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -71,11 +78,49 @@ export class CategoriesComponent implements OnInit {
     this.categoriesService.deleteById(category.id).subscribe({
       next: (result) => {
         this.loadData();
+        this.snackBar.open(`Categoría "${category.name}" eliminada con éxito.`);
       },
       error: (error) => {
         console.error(error);
         this.isLoadingAction = false;
+        this.snackBar.open(`Categoría "${category.name}" no se pudo eliminar.`);
       },
     });
+  }
+
+  onCreateCategory(): void {
+    const dialogRef = this.dialog.open<
+      CategoryEditDialogComponent,
+      CategoryEditDialogData,
+      CategoryEditDialogResult
+      >(CategoryEditDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success) {
+        this.snackBar.open(`Categoría "${result.category.name}" creada con éxito.`);
+        this.loadData();
+      } else if (result?.success == false) {
+        this.snackBar.open(`No ha sido posible crear la categoría.`);
+      }
+    });
+  }
+
+  onEditCategory(id: number): void {
+    const dialogRef = this.dialog.open<
+      CategoryEditDialogComponent,
+      CategoryEditDialogData,
+      CategoryEditDialogResult
+      >(CategoryEditDialogComponent, {
+        data: { id },
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success) {
+        this.snackBar.open(`Categoría "${result.category.name}" actualizada con éxito.`);
+        this.loadData();
+      } else if (result?.success == false) {
+        this.snackBar.open(`No se ha podido actualizar la categoría`);
+      }
+    })
   }
 }
