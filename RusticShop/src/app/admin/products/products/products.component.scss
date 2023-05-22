@@ -3,6 +3,14 @@ table.mat-mdc-table {
   width: 100%;
   max-width: 100%;
   table-layout: fixed;
+
+  .mat-column-actions {
+      width: 250px;
+  }
+
+  .mat-column-isPublished, .mat-column-id {
+      width: 50px;
+  }
 }
 
 mat-paginator {
