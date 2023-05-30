@@ -6,8 +6,15 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AttributesService } from 'src/app/services/attributes.service';
 import Attribute from 'src/app/shared/models/Attribute';
-import { BaseEditDialogData, BaseEditDialogResult } from '../../../shared/components/base-edit-dialog.component';
-import { ConfirmDialogComponent, ConfirmDialogData, ConfirmDialogResult } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import {
+  BaseEditDialogData,
+  BaseEditDialogResult,
+} from '../../../shared/components/base-edit-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+  ConfirmDialogResult,
+} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AttributeEditDialogComponent } from '../attribute-edit-dialog/attribute-edit-dialog.component';
 
 @Component({
@@ -34,8 +41,8 @@ export class AttributesComponent implements OnInit {
   constructor(
     private attributesService: AttributesService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-  ) { }
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -79,18 +86,19 @@ export class AttributesComponent implements OnInit {
     const dialogRef = this.dialog.open<
       ConfirmDialogComponent,
       ConfirmDialogData,
-      ConfirmDialogResult>(ConfirmDialogComponent, {
-        data: {
-          title: `Eliminar el atributo ${attribute.name}`,
-          message: `¿Está seguro de que desea eliminar el atributo ${attribute.name}?`,
-          confirmColor: 'warn',
-          confirmIcon: 'warning',
-          cancelColor: 'primary',
-          cancelIcon: 'cancel',
-        },
-      });
+      ConfirmDialogResult
+    >(ConfirmDialogComponent, {
+      data: {
+        title: `Eliminar el atributo ${attribute.name}`,
+        message: `¿Está seguro de que desea eliminar el atributo ${attribute.name}?`,
+        confirmColor: 'warn',
+        confirmIcon: 'warning',
+        cancelColor: 'primary',
+        cancelIcon: 'cancel',
+      },
+    });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirmed) {
         this.deleteAttribute(attribute);
       }
@@ -100,15 +108,17 @@ export class AttributesComponent implements OnInit {
   deleteAttribute(attribute: Attribute) {
     this.isLoadingAction = true;
     this.attributesService.deleteById(attribute.id).subscribe({
-      next: _ => {
+      next: (_) => {
         this.loadData();
         this.snackBar.open(`Atributo "${attribute.name} eliminado con éxito."`);
       },
       error: (error) => {
         console.error(error);
-        this.snackBar.open(`Atributo "${attribute.name} no se ha podido eliminar."`);
+        this.snackBar.open(
+          `Atributo "${attribute.name} no se ha podido eliminar."`
+        );
       },
-      complete: () => this.isLoadingAction = false,
+      complete: () => (this.isLoadingAction = false),
     });
   }
 
@@ -117,13 +127,18 @@ export class AttributesComponent implements OnInit {
       AttributeEditDialogComponent,
       BaseEditDialogData,
       BaseEditDialogResult<Attribute>
-      >(AttributeEditDialogComponent);
+    >(AttributeEditDialogComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.success) {
-        this.snackBar.open(`Atributo "${result.resource.name}" ha sido creado con éxito.`);
+        this.loadData();
+        this.snackBar.open(
+          `Atributo "${result.resource.name}" ha sido creado con éxito.`
+        );
       } else if (result?.success == false) {
-        this.snackBar.open(`Atributo "${result.resource.name}" no se ha podido crear.`);
+        this.snackBar.open(
+          `Atributo "${result.resource.name}" no se ha podido crear.`
+        );
       }
     });
   }
@@ -133,15 +148,20 @@ export class AttributesComponent implements OnInit {
       AttributeEditDialogComponent,
       BaseEditDialogData,
       BaseEditDialogResult<Attribute>
-      >(AttributeEditDialogComponent, {
-        data: { id },
-      });
+    >(AttributeEditDialogComponent, {
+      data: { id },
+    });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.success) {
-        this.snackBar.open(`Atributo "${result.resource.name}" ha sido actualizado con éxito.`);
+        this.loadData();
+        this.snackBar.open(
+          `Atributo "${result.resource.name}" ha sido actualizado con éxito.`
+        );
       } else if (result?.success == false) {
-        this.snackBar.open(`Atributo "${result.resource.name}" no se ha podido actualizar.`);
+        this.snackBar.open(
+          `Atributo "${result.resource.name}" no se ha podido actualizar.`
+        );
       }
     });
   }

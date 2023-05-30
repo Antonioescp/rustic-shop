@@ -6,8 +6,16 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CategoriesService } from 'src/app/services/categories.service';
 import Category from 'src/app/shared/models/Category';
-import { ConfirmDialogComponent, ConfirmDialogData, ConfirmDialogResult } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { CategoryEditDialogComponent, CategoryEditDialogData, CategoryEditDialogResult } from '../category-edit-dialog/category-edit-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+  ConfirmDialogResult,
+} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import {
+  CategoryEditDialogComponent,
+  CategoryEditDialogData,
+  CategoryEditDialogResult,
+} from '../category-edit-dialog/category-edit-dialog.component';
 
 @Component({
   selector: 'app-categories',
@@ -33,8 +41,8 @@ export class CategoriesComponent implements OnInit {
   constructor(
     private categoriesService: CategoriesService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-  ) { }
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -78,22 +86,23 @@ export class CategoriesComponent implements OnInit {
     const dialogRef = this.dialog.open<
       ConfirmDialogComponent,
       ConfirmDialogData,
-      ConfirmDialogResult>(ConfirmDialogComponent, {
-        data: {
-          title: `Eliminar categoría ${category.name}`,
-          message: `¿Estás seguro de que deseas eliminar la categoría ${category.name}?`,
-          confirmColor: 'warn',
-          cancelColor: 'primary',
-          confirmIcon: 'warning',
-          cancelIcon: 'cancel',
-        },
-      });
+      ConfirmDialogResult
+    >(ConfirmDialogComponent, {
+      data: {
+        title: `Eliminar categoría ${category.name}`,
+        message: `¿Estás seguro de que deseas eliminar la categoría ${category.name}?`,
+        confirmColor: 'warn',
+        cancelColor: 'primary',
+        confirmIcon: 'warning',
+        cancelIcon: 'cancel',
+      },
+    });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirmed) {
         this.deleteCategory(category);
       }
-    })
+    });
   }
 
   deleteCategory(category: Category) {
@@ -116,12 +125,14 @@ export class CategoriesComponent implements OnInit {
       CategoryEditDialogComponent,
       CategoryEditDialogData,
       CategoryEditDialogResult
-      >(CategoryEditDialogComponent);
+    >(CategoryEditDialogComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.success) {
-        this.snackBar.open(`Categoría "${result.category.name}" creada con éxito.`);
         this.loadData();
+        this.snackBar.open(
+          `Categoría "${result.category.name}" creada con éxito.`
+        );
       } else if (result?.success == false) {
         this.snackBar.open(`No ha sido posible crear la categoría.`);
       }
@@ -133,17 +144,19 @@ export class CategoriesComponent implements OnInit {
       CategoryEditDialogComponent,
       CategoryEditDialogData,
       CategoryEditDialogResult
-      >(CategoryEditDialogComponent, {
-        data: { id },
-      });
+    >(CategoryEditDialogComponent, {
+      data: { id },
+    });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.success) {
-        this.snackBar.open(`Categoría "${result.category.name}" actualizada con éxito.`);
         this.loadData();
+        this.snackBar.open(
+          `Categoría "${result.category.name}" actualizada con éxito.`
+        );
       } else if (result?.success == false) {
         this.snackBar.open(`No se ha podido actualizar la categoría`);
       }
-    })
+    });
   }
 }

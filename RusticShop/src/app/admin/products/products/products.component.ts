@@ -6,9 +6,21 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ProductsService } from 'src/app/services/products.service';
 import { Product } from 'src/app/shared/models/Product';
-import { BaseEditDialogData, BaseEditDialogResult } from '../../../shared/components/base-edit-dialog.component';
-import { ConfirmDialogComponent, ConfirmDialogData, ConfirmDialogResult } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import {
+  BaseEditDialogData,
+  BaseEditDialogResult,
+} from '../../../shared/components/base-edit-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+  ConfirmDialogResult,
+} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ProductEditDialogComponent } from '../product-edit-dialog/product-edit-dialog.component';
+import {
+  ProductEditSchemaDialogComponent,
+  ProductEditSchemaDialogData,
+  ProductEditSchemaDialogResult,
+} from '../product-edit-schema-dialog/product-edit-schema-dialog.component';
 
 @Component({
   selector: 'app-products',
@@ -42,8 +54,7 @@ export class ProductsComponent implements OnInit {
     private productsService: ProductsService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -99,7 +110,7 @@ export class ProductsComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirmed) {
         this.deleteProduct(product);
       }
@@ -116,7 +127,9 @@ export class ProductsComponent implements OnInit {
       error: (error) => {
         console.error(error);
         this.isLoadingAction = false;
-        this.snackBar.open(`El producto "${product.name}" no se ha podido eliminar.`);
+        this.snackBar.open(
+          `El producto "${product.name}" no se ha podido eliminar.`
+        );
       },
     });
   }
@@ -126,14 +139,18 @@ export class ProductsComponent implements OnInit {
       ProductEditDialogComponent,
       BaseEditDialogData,
       BaseEditDialogResult<Product>
-      >(ProductEditDialogComponent);
+    >(ProductEditDialogComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.success) {
-        this.snackBar.open(`Producto "${result.resource.name}" creado con éxito.`);
+        this.snackBar.open(
+          `Producto "${result.resource.name}" creado con éxito.`
+        );
         this.loadData();
       } else if (result?.success == false) {
-        this.snackBar.open(`Producto "${result.resource.name}" no se ha podido crear.`);
+        this.snackBar.open(
+          `Producto "${result.resource.name}" no se ha podido crear.`
+        );
         this.loadData();
       }
     });
@@ -144,19 +161,38 @@ export class ProductsComponent implements OnInit {
       ProductEditDialogComponent,
       BaseEditDialogData,
       BaseEditDialogResult<Product>
-      >(ProductEditDialogComponent, {
-        data: { id },
-      });
+    >(ProductEditDialogComponent, {
+      data: { id },
+    });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result?.success) {
-        this.snackBar.open(`Producto "${result.resource.name}" actualizado con éxito.`);
+        this.snackBar.open(
+          `Producto "${result.resource.name}" actualizado con éxito.`
+        );
         this.loadData();
       } else if (result?.success == false) {
-        this.snackBar.open(`Producto "${result.resource.name}" no se ha podido actualizado.`);
+        this.snackBar.open(
+          `Producto "${result.resource.name}" no se ha podido actualizado.`
+        );
         this.loadData();
       }
     });
   }
 
+  onEditSchema(id: number): void {
+    const dialogRef = this.dialog.open<
+      ProductEditSchemaDialogComponent,
+      ProductEditSchemaDialogData,
+      ProductEditSchemaDialogResult
+    >(ProductEditSchemaDialogComponent, {
+      data: { id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.success) {
+        this.snackBar.open('Actualizado');
+      }
+    });
+  }
 }
