@@ -8,6 +8,7 @@ import { ProductEditDialogComponent } from '../product-edit-dialog/product-edit-
 import { Product } from 'src/app/shared/models/Product';
 import Category from 'src/app/shared/models/Category';
 import Attribute from 'src/app/shared/models/Attribute';
+import { lastValueFrom } from 'rxjs';
 
 export interface ProductEditSchemaDialogData {
   id: number;
@@ -27,8 +28,11 @@ export class ProductEditSchemaDialogComponent implements OnInit {
   attributes: Attribute[] = [];
   categories: Category[] = [];
 
-  @ViewChild('categoriesListBox') categoriesListBox!: MatChipListbox;
-  @ViewChild('attributesListBox') attributesListBox!: MatChipListbox;
+  currentAttributes: number[] = [];
+  currentCategories: number[] = [];
+
+  @ViewChild('attributesChips') attributesListBox!: MatChipListbox;
+  @ViewChild('categoriesChips') categoriesListBox!: MatChipListbox;
 
   pendingOperations = 0;
   get isBusy(): boolean {
@@ -39,7 +43,7 @@ export class ProductEditSchemaDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: ProductEditSchemaDialogData,
     private dialogRef: MatDialogRef<
       ProductEditDialogComponent,
-      ProductEditSchemaDialogData
+      ProductEditSchemaDialogResult
     >,
     private productsService: ProductsService,
     private attributesService: AttributesService,
@@ -56,46 +60,132 @@ export class ProductEditSchemaDialogComponent implements OnInit {
     }
   }
 
-  getProduct() {
+  async getProduct() {
     this.pendingOperations++;
-    this.productsService.getById(this.data.id).subscribe({
-      next: (result) => (this.product = result),
-      error: (error) => console.error(error),
-      complete: () => this.pendingOperations--,
-    });
+    try {
+      const result = await lastValueFrom(
+        this.productsService.getById(this.data.id)
+      );
+      this.product = result;
+    } catch (error) {
+      console.error(error);
+      this.dialogRef.close();
+    } finally {
+      this.pendingOperations--;
+    }
   }
 
-  getAttributes(): void {
+  async getAttributes() {
     this.pendingOperations++;
-    this.attributesService.getAll().subscribe({
-      next: (attributes) => {
-        this.attributes = [...attributes];
-        this.attributesListBox.value = attributes.map(
-          (attribute) => attribute.id
-        );
-      },
-      error: (error) => {
-        console.error(error);
-        this.dialogRef.close();
-      },
-      complete: () => this.pendingOperations--,
-    });
+    try {
+      const result = await lastValueFrom(this.attributesService.getAll());
+      this.attributes = [...result];
+
+      const attributes = await lastValueFrom(
+        this.productsService.getAttributes(this.data.id)
+      );
+      this.attributesListBox.value = attributes.map(
+        (attribute) => attribute.id
+      );
+      this.currentAttributes = [...this.attributesListBox.value];
+    } catch (error) {
+      console.error(error);
+      this.dialogRef.close();
+    } finally {
+      this.pendingOperations--;
+    }
   }
 
-  getCategories(): void {
+  async getCategories() {
     this.pendingOperations++;
-    this.categoriesService.getAll().subscribe({
-      next: (categories) => {
-        this.categories = [...categories];
-        this.categoriesListBox.value = categories.map(
-          (category) => category.id
+
+    try {
+      this.categories = await lastValueFrom(this.categoriesService.getAll());
+      const productCategories = await lastValueFrom(
+        this.productsService.getCategories(this.data.id)
+      );
+      this.categoriesListBox.value = productCategories.map((cat) => cat.id);
+      this.currentCategories = [...this.categoriesListBox.value];
+    } catch (error) {
+      console.error(error);
+      this.dialogRef.close();
+    } finally {
+      this.pendingOperations--;
+    }
+  }
+
+  private get categoriesToAdd(): number[] {
+    return this.categoriesListBox.value.filter(
+      (id: number) => !this.currentCategories.includes(id)
+    );
+  }
+
+  private get categoriesToRemove(): number[] {
+    return this.currentCategories.filter(
+      (id) => !this.categoriesListBox.value.includes(id)
+    );
+  }
+
+  private get attributesToAdd(): number[] {
+    return this.attributesListBox.value.filter(
+      (id: number) => !this.currentAttributes.includes(id)
+    );
+  }
+
+  private get attributesToRemove(): number[] {
+    return this.currentAttributes.filter(
+      (id) => !this.attributesListBox.value.includes(id)
+    );
+  }
+
+  async onSaveChanges() {
+    this.pendingOperations++;
+    const promises: Promise<object>[] = [];
+    try {
+      for (const categoryId of this.categoriesToAdd) {
+        promises.push(
+          lastValueFrom(
+            this.productsService.addCategory(this.data.id, categoryId)
+          )
         );
-      },
-      error: (error) => {
-        console.error(error);
-        this.dialogRef.close();
-      },
-      complete: () => this.pendingOperations--,
-    });
+      }
+
+      for (const categoryId of this.categoriesToRemove) {
+        promises.push(
+          lastValueFrom(
+            this.productsService.removeCategory(this.data.id, categoryId)
+          )
+        );
+      }
+
+      for (const attributeId of this.attributesToAdd) {
+        promises.push(
+          lastValueFrom(
+            this.productsService.addAttribute(this.data.id, attributeId)
+          )
+        );
+      }
+
+      for (const attributeId of this.attributesToRemove) {
+        promises.push(
+          lastValueFrom(
+            this.productsService.removeAttribute(this.data.id, attributeId)
+          )
+        );
+      }
+
+      await Promise.allSettled(promises);
+
+      this.dialogRef.close({
+        success: true,
+      });
+    } catch (error) {
+      console.error(error);
+      this.dialogRef.close({
+        success: false,
+      });
+    } finally {
+      this.pendingOperations--;
+    }
   }
 }

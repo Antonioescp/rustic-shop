@@ -3,24 +3,33 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BrandsService } from '../../../services/brands.service';
 import { ProductsService } from '../../../services/products.service';
-import { BaseEditDialogComponent, BaseEditDialogData, BaseEditDialogResult } from '../../../shared/components/base-edit-dialog.component';
+import {
+  BaseEditDialogComponent,
+  BaseEditDialogData,
+  BaseEditDialogResult,
+} from '../../../shared/components/base-edit-dialog.component';
 import Brand from '../../../shared/models/Brand';
 import { Product } from '../../../shared/models/Product';
 
 @Component({
   selector: 'app-product-edit-dialog',
   templateUrl: './product-edit-dialog.component.html',
-  styleUrls: ['./product-edit-dialog.component.scss']
+  styleUrls: ['./product-edit-dialog.component.scss'],
 })
-export class ProductEditDialogComponent extends BaseEditDialogComponent<Product> implements OnInit {
-
+export class ProductEditDialogComponent
+  extends BaseEditDialogComponent<Product>
+  implements OnInit
+{
   brands: Brand[] = [];
 
   constructor(
     productsService: ProductsService,
     @Inject(MAT_DIALOG_DATA) data: BaseEditDialogData,
-    dialogRef: MatDialogRef<ProductEditDialogComponent, BaseEditDialogResult<Product>>,
-    private brandsService: BrandsService,
+    dialogRef: MatDialogRef<
+      ProductEditDialogComponent,
+      BaseEditDialogResult<Product>
+    >,
+    private brandsService: BrandsService
   ) {
     super(data, dialogRef);
 
@@ -48,7 +57,7 @@ export class ProductEditDialogComponent extends BaseEditDialogComponent<Product>
         validators: [Validators.required],
         nonNullable: true,
       }),
-    })
+    });
   }
 
   override ngOnInit(): void {
@@ -59,10 +68,10 @@ export class ProductEditDialogComponent extends BaseEditDialogComponent<Product>
   getBrands(): void {
     this.isBusy = true;
     this.brandsService.getAll().subscribe({
-      next: result => {
+      next: (result) => {
         this.brands = [...result];
       },
-      error: error => {
+      error: (error) => {
         console.error(error);
         this.dialogRef.close();
       },
@@ -89,5 +98,4 @@ export class ProductEditDialogComponent extends BaseEditDialogComponent<Product>
   updateTitle(data: Product): void {
     this.title = 'Editar - ' + data.name;
   }
-
 }

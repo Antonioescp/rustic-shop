@@ -6,6 +6,8 @@ import { Product } from '../shared/models/Product';
 import { Pagination } from './categories.service';
 import { CrudService } from '../shared/others/CrudService';
 import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
+import Category from '../shared/models/Category';
+import Attribute from '../shared/models/Attribute';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +16,14 @@ export class ProductsService implements CrudService<Product> {
   readonly productsUrl = `${environment.apiBaseUrl}${environment.productsEndpoint}`;
 
   constructor(private http: HttpClient) {}
+
+  private getProductCategoriesUrl(id: number): string {
+    return `${this.productsUrl}${id}/categories/`;
+  }
+
+  private getProductAttributesUrl(id: number): string {
+    return `${this.productsUrl}${id}/attributes/`;
+  }
 
   getAll(): Observable<Product[]> {
     return this.http.get<Product[]>(this.productsUrl);
@@ -47,10 +57,48 @@ export class ProductsService implements CrudService<Product> {
     return this.http.get<Product>(url);
   }
 
+  getCategories(productId: number): Observable<Category[]> {
+    return this.http.get<Category[]>(this.getProductCategoriesUrl(productId));
+  }
+
+  addCategory(
+    productId: number,
+    categoryId: number
+  ): Observable<HttpResponse<any>> {
+    return this.http.post<any>(
+      this.getProductCategoriesUrl(productId) + categoryId,
+      null
+    );
+  }
+
+  removeCategory(
+    productId: number,
+    categoryId: number
+  ): Observable<HttpResponse<any>> {
+    return this.http.delete<any>(
+      this.getProductCategoriesUrl(productId) + categoryId
+    );
+  }
+
+  getAttributes(productId: number): Observable<Attribute[]> {
+    return this.http.get<Attribute[]>(this.getProductAttributesUrl(productId));
+  }
+
+  addAttribute(productId: number, attributeId: number): Observable<any> {
+    return this.http.post<any>(
+      this.getProductAttributesUrl(productId) + attributeId,
+      null
+    );
+  }
+
+  removeAttribute(productId: number, attributeId: number): Observable<any> {
+    return this.http.delete<any>(
+      this.getProductAttributesUrl(productId) + attributeId
+    );
+  }
+
   create(product: Omit<Product, 'id'>): Observable<HttpResponse<any>> {
-    return this.http.post<HttpResponse<any>>(this.productsUrl, product, {
-      observe: 'response',
-    });
+    return this.http.post<any>(this.productsUrl, product);
   }
 
   deleteById(id: number): Observable<HttpResponse<any>> {
@@ -60,6 +108,6 @@ export class ProductsService implements CrudService<Product> {
 
   update(product: Product): Observable<HttpResponse<any>> {
     const url = `${this.productsUrl}${product.id}`;
-    return this.http.put(url, product, { observe: 'response' });
+    return this.http.put<any>(url, product);
   }
 }

@@ -2,12 +2,12 @@
   <mat-spinner></mat-spinner>
 </div>
 
-<div *ngIf="!isBusy">
+<div [hidden]="isBusy">
   <h1 mat-dialog-title *ngIf="product">Esquema de {{ product.name }}</h1>
 
   <div mat-dialog-content>
     <h4>Categorías</h4>
-    <mat-chip-listbox #categoriesListBox multiple>
+    <mat-chip-listbox #categoriesChips multiple>
       <mat-chip-option
         *ngFor="let category of categories"
         [matTooltip]="category.description"
@@ -20,7 +20,7 @@
     <mat-divider vertical></mat-divider>
 
     <h4>Atributos</h4>
-    <mat-chip-listbox #attributesListBox multiple>
+    <mat-chip-listbox #attributesChips multiple>
       <mat-chip-option
         *ngFor="let attribute of attributes"
         [value]="attribute.id"
@@ -35,7 +35,7 @@
       <mat-icon>cancel</mat-icon>
       Cancelar
     </button>
-    <button mat-flat-button mat-dialog-close color="primary">
+    <button mat-flat-button color="primary" (click)="onSaveChanges()">
       <mat-icon>save</mat-icon>
       Guardar
     </button>

@@ -21,7 +21,7 @@ export class AdminPanelComponent {
     {
       label: 'Productos',
       children: [
-        { label: 'Ver Productos', path: 'productos', icon: 'inventory_2' },
+        { label: 'Productos Base', path: 'productos', icon: 'inventory_2' },
         { label: 'Marcas', path: 'marcas', icon: 'grade' },
         { label: 'Categorías', path: 'categorias', icon: 'category' },
         { label: 'Características', path: 'caracteristicas', icon: 'schema' },
