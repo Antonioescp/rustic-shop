@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
+using RusticShopAPI.Data.Models.DTOs.ProductDtos;
 
 namespace RusticShopAPI.Controllers
 {
@@ -11,10 +13,12 @@ namespace RusticShopAPI.Controllers
     public class ProductVariantsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ProductVariantsController(ApplicationDbContext context)
+        public ProductVariantsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/ProductVariants
@@ -45,6 +49,33 @@ namespace RusticShopAPI.Controllers
             sortOrder,
             filterColumn,
             filterQuery);
+        }
+
+        [HttpGet("details")]
+        public async Task<ActionResult<PaginatedResult<ProductVariantListItem>>> GetPaginatedProductVariantsListItems(
+            int pageIndex = 0,
+            int pageSize = 10,
+            string? sortColumn = null,
+            string? sortOrder = null,
+            string? filterColumn = null,
+            string? filterQuery = null) 
+        {
+          var source = _context.ProductVariants
+            .Include(pv => pv.Product)
+              .ThenInclude(p => p.Brand)
+            .AsNoTracking()
+            .AsSplitQuery();
+
+          var result = await PaginatedResult<ProductVariant>.CreateAsync(
+            source,
+            pageIndex,
+            pageSize,
+            sortColumn,
+            sortOrder,
+            filterColumn,
+            filterQuery);
+
+          return _mapper.Map<PaginatedResult<ProductVariantListItem>>(result);
         }
 
         // GET: api/ProductVariants/5
