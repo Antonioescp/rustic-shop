@@ -13,6 +13,7 @@ import { AttributesComponent } from './admin/attributes/attributes/attributes.co
 import { DiscountsComponent } from './admin/discounts/discounts/discounts.component';
 import { ProductsComponent } from './admin/products/products/products.component';
 import { BrandsComponent } from './admin/brands/brands/brands.component';
+import { ProductVariantsComponent } from './admin/product-variants/product-variants/product-variants.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,7 @@ const routes: Routes = [
       { path: 'caracteristicas', component: AttributesComponent },
       { path: 'descuentos', component: DiscountsComponent },
       { path: 'marcas', component: BrandsComponent },
+      { path: 'variantes', component: ProductVariantsComponent },
     ],
   },
   { path: '', component: HomeComponent, pathMatch: 'full' },

@@ -4,42 +4,50 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { DiscountsService } from 'src/app/services/discounts.service';
-import Discount from 'src/app/shared/models/Discount';
+import { ProductVariantsService } from 'src/app/services/product-variants.service';
 import {
   BaseEditDialogData,
   BaseEditDialogResult,
-} from '../../../shared/components/base-edit-dialog.component';
+} from 'src/app/shared/components/base-edit-dialog.component';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
   ConfirmDialogResult,
-} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { DiscountEditDialogComponent } from '../discount-edit-dialog/discount-edit-dialog.component';
+} from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { ProductVariant } from 'src/app/shared/models/ProductVariant';
+import { ProductVariantEditDialogComponent } from '../product-variant-edit-dialog/product-variant-edit-dialog.component';
 
 @Component({
-  selector: 'app-discounts',
-  templateUrl: './discounts.component.html',
-  styleUrls: ['./discounts.component.scss'],
+  selector: 'app-product-variants',
+  templateUrl: './product-variants.component.html',
+  styleUrls: ['./product-variants.component.scss'],
 })
-export class DiscountsComponent implements OnInit {
-  discounts!: MatTableDataSource<Discount>;
-  displayedColumns = ['id', 'name', 'description', 'actions'];
+export class ProductVariantsComponent implements OnInit {
+  variants!: MatTableDataSource<ProductVariant>;
+  displayedColumns = [
+    'id',
+    'productName',
+    'productBrandName',
+    'sku',
+    'unitPrice',
+    'isPublished',
+    'actions',
+  ];
 
-  defaultPageIndex: number = 0;
-  defaultPageSize: number = 10;
-  public defaultSortColumn: string = 'name';
+  defaultPageIndex = 0;
+  defaultPageSize = 10;
+  public defaultSortColumn = 'id';
   public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn: string = 'name';
+  defaultFilterColumn = 'sku';
   filterQuery?: string;
 
-  isLoadingAction: boolean = false;
+  isLoadingAction = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private discountsService: DiscountsService,
+    private productVariantsService: ProductVariantsService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
@@ -57,7 +65,7 @@ export class DiscountsComponent implements OnInit {
   }
 
   getData(event: PageEvent): void {
-    this.discountsService
+    this.productVariantsService
       .getPaginated({
         defaultSortColumn: this.defaultSortColumn,
         defaultSortOrder: this.defaultSortOrder,
@@ -72,7 +80,7 @@ export class DiscountsComponent implements OnInit {
           this.paginator.length = result.totalCount;
           this.paginator.pageIndex = result.pageIndex;
           this.paginator.pageSize = result.pageSize;
-          this.discounts = new MatTableDataSource(result.data);
+          this.variants = new MatTableDataSource(result.data);
           this.isLoadingAction = false;
         },
         error: error => {
@@ -82,15 +90,15 @@ export class DiscountsComponent implements OnInit {
       });
   }
 
-  onDeleteDiscount(discount: Discount): void {
+  onDeleteVariant(productVariant: ProductVariant): void {
     const dialogRef = this.dialog.open<
       ConfirmDialogComponent,
       ConfirmDialogData,
       ConfirmDialogResult
     >(ConfirmDialogComponent, {
       data: {
-        title: `Eliminar el descuento ${discount.name}`,
-        message: `¿Está seguro de que desea eliminar el descuento "${discount.name}"?`,
+        title: `Eliminar la variante ${productVariant.sku}`,
+        message: `¿Está seguro de que desea eliminar la variante ${productVariant.sku}?`,
         confirmColor: 'warn',
         confirmIcon: 'warning',
         cancelColor: 'primary',
@@ -100,56 +108,57 @@ export class DiscountsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.confirmed) {
-        this.deleteDiscount(discount);
+        this.deleteVariant(productVariant);
       }
     });
   }
 
-  deleteDiscount(discount: Discount) {
+  deleteVariant(productVariant: ProductVariant) {
     this.isLoadingAction = true;
-    this.discountsService.deleteById(discount.id).subscribe({
-      next: result => {
+    this.productVariantsService.deleteById(productVariant.id).subscribe({
+      next: () => {
         this.loadData();
-        this.snackBar.open(`Descuento "${discount.name}" eliminado con éxito.`);
+        this.snackBar.open(
+          `Variante "${productVariant.sku} eliminado con éxito."`
+        );
       },
       error: error => {
         console.error(error);
-        this.isLoadingAction = false;
         this.snackBar.open(
-          `Descuento "${discount.name}" no pudo ser eliminado.`
+          `Variante "${productVariant.sku} no se ha podido eliminar."`
         );
       },
       complete: () => (this.isLoadingAction = false),
     });
   }
 
-  onCreateDiscount(): void {
+  onCreateVariant(): void {
     const dialogRef = this.dialog.open<
-      DiscountEditDialogComponent,
+      ProductVariantEditDialogComponent,
       BaseEditDialogData,
-      BaseEditDialogResult<Discount>
-    >(DiscountEditDialogComponent);
+      BaseEditDialogResult<ProductVariant>
+    >(ProductVariantEditDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.loadData();
         this.snackBar.open(
-          `Descuento "${result.resource.name}" creado con éxito.`
+          `Variante "${result.resource.sku}" ha sido creado con éxito.`
         );
       } else if (result?.success == false) {
         this.snackBar.open(
-          `Descuento "${result.resource.name}" no pudo ser creado.`
+          `Variante "${result.resource.sku}" no se ha podido crear.`
         );
       }
     });
   }
 
-  onUpdateDiscount(id: number): void {
+  onUpdateVariant(id: number): void {
     const dialogRef = this.dialog.open<
-      DiscountEditDialogComponent,
+      ProductVariantEditDialogComponent,
       BaseEditDialogData,
-      BaseEditDialogResult<Discount>
-    >(DiscountEditDialogComponent, {
+      BaseEditDialogResult<ProductVariant>
+    >(ProductVariantEditDialogComponent, {
       data: { id },
     });
 
@@ -157,11 +166,11 @@ export class DiscountsComponent implements OnInit {
       if (result?.success) {
         this.loadData();
         this.snackBar.open(
-          `Descuento "${result.resource.name}" actualizado con éxito.`
+          `Variante "${result.resource.sku}" ha sido actualizado con éxito.`
         );
       } else if (result?.success == false) {
         this.snackBar.open(
-          `Descuento "${result.resource.name}" no pudo ser actualizado.`
+          `Variante "${result.resource.sku}" no se ha podido actualizar.`
         );
       }
     });

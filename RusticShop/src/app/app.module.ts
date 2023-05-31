@@ -33,6 +33,8 @@ import { DiscountEditDialogComponent } from './admin/discounts/discount-edit-dia
 import { ProductEditDialogComponent } from './admin/products/product-edit-dialog/product-edit-dialog.component';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { ProductEditSchemaDialogComponent } from './admin/products/product-edit-schema-dialog/product-edit-schema-dialog.component';
+import { ProductVariantsComponent } from './admin/product-variants/product-variants/product-variants.component';
+import { ProductVariantEditDialogComponent } from './admin/product-variants/product-variant-edit-dialog/product-variant-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { ProductEditSchemaDialogComponent } from './admin/products/product-edit-
     ProductEditDialogComponent,
     ConfirmDialogComponent,
     ProductEditSchemaDialogComponent,
+    ProductVariantsComponent,
+    ProductVariantEditDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -13,8 +13,10 @@ export interface BaseEditDialogResult<Model> {
 }
 
 @Component({ template: '' })
-export abstract class BaseEditDialogComponent<Model> extends BaseFormComponent implements OnInit {
-
+export abstract class BaseEditDialogComponent<Model>
+  extends BaseFormComponent
+  implements OnInit
+{
   service!: CrudService<Model>;
   title!: string;
   isBusy = false;
@@ -24,7 +26,7 @@ export abstract class BaseEditDialogComponent<Model> extends BaseFormComponent i
     protected dialogRef: MatDialogRef<
       BaseEditDialogComponent<Model>,
       BaseEditDialogResult<Model>
-      >
+    >
   ) {
     super();
   }
@@ -67,10 +69,11 @@ export abstract class BaseEditDialogComponent<Model> extends BaseFormComponent i
   createResource(data: Model): void {
     this.isBusy = true;
     this.service.create(data).subscribe({
-      next: _ => this.dialogRef.close({
-        success: true,
-        resource: data,
-      }),
+      next: () =>
+        this.dialogRef.close({
+          success: true,
+          resource: data,
+        }),
       error: error => {
         console.error(error);
         this.dialogRef.close({
@@ -78,17 +81,18 @@ export abstract class BaseEditDialogComponent<Model> extends BaseFormComponent i
           resource: data,
         });
       },
-      complete: () => this.isBusy = false,
+      complete: () => (this.isBusy = false),
     });
   }
 
   updateResource(data: Model): void {
     this.isBusy = true;
     this.service.update(data).subscribe({
-      next: _ => this.dialogRef.close({
-        success: true,
-        resource: data,
-      }),
+      next: () =>
+        this.dialogRef.close({
+          success: true,
+          resource: data,
+        }),
       error: error => {
         console.error(error);
         this.dialogRef.close({
@@ -96,7 +100,7 @@ export abstract class BaseEditDialogComponent<Model> extends BaseFormComponent i
           resource: data,
         });
       },
-      complete: () => this.isBusy = false,
+      complete: () => (this.isBusy = false),
     });
   }
 

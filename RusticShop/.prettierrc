@@ -1,0 +1,7 @@
+{
+  "editorconfig": true,
+  "arrowParens": "avoid",
+  "bracketSameLine": true,
+  "endOfLine": "auto",
+  "trailingComma": "es5"
+}

@@ -2,20 +2,26 @@ import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DiscountsService } from '../../../services/discounts.service';
-import { BaseEditDialogComponent, BaseEditDialogData, BaseEditDialogResult } from '../../../shared/components/base-edit-dialog.component';
+import {
+  BaseEditDialogComponent,
+  BaseEditDialogData,
+  BaseEditDialogResult,
+} from '../../../shared/components/base-edit-dialog.component';
 import Discount from '../../../shared/models/Discount';
 
 @Component({
   selector: 'app-discount-edit-dialog',
   templateUrl: './discount-edit-dialog.component.html',
-  styleUrls: ['./discount-edit-dialog.component.scss']
+  styleUrls: ['./discount-edit-dialog.component.scss'],
 })
 export class DiscountEditDialogComponent extends BaseEditDialogComponent<Discount> {
-
   constructor(
     discountsService: DiscountsService,
     @Inject(MAT_DIALOG_DATA) data: BaseEditDialogData,
-    dialogRef: MatDialogRef<DiscountEditDialogComponent, BaseEditDialogResult<Discount>>
+    dialogRef: MatDialogRef<
+      DiscountEditDialogComponent,
+      BaseEditDialogResult<Discount>
+    >
   ) {
     super(data, dialogRef);
 
@@ -24,16 +30,12 @@ export class DiscountEditDialogComponent extends BaseEditDialogComponent<Discoun
 
     this.form = new FormGroup({
       name: new FormControl('', {
-        validators: [
-          Validators.required,
-        ],
+        validators: [Validators.required],
         nonNullable: true,
       }),
       description: new FormControl('', {
-        validators: [
-          Validators.required,
-        ],
-        nonNullable: true
+        validators: [Validators.required],
+        nonNullable: true,
       }),
     });
   }
@@ -54,5 +56,4 @@ export class DiscountEditDialogComponent extends BaseEditDialogComponent<Discoun
   updateTitle(data: Discount): void {
     this.title = 'Editar - ' + data.name;
   }
-
 }

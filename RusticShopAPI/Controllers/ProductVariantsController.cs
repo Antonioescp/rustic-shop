@@ -62,7 +62,7 @@ namespace RusticShopAPI.Controllers
         {
           var source = _context.ProductVariants
             .Include(pv => pv.Product)
-              .ThenInclude(p => p.Brand)
+              .ThenInclude(p => p!.Brand)
             .AsNoTracking()
             .AsSplitQuery();
 

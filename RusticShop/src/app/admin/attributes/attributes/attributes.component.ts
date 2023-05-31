@@ -26,14 +26,14 @@ export class AttributesComponent implements OnInit {
   attributes!: MatTableDataSource<Attribute>;
   displayedColumns = ['id', 'name', 'actions'];
 
-  defaultPageIndex: number = 0;
-  defaultPageSize: number = 10;
-  public defaultSortColumn: string = 'name';
+  defaultPageIndex = 0;
+  defaultPageSize = 10;
+  public defaultSortColumn = 'name';
   public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn: string = 'name';
+  defaultFilterColumn = 'name';
   filterQuery?: string;
 
-  isLoadingAction: boolean = false;
+  isLoadingAction = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
