@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
 import { PasswordResetRequestComponent } from './auth/password-reset-request/password-reset-request.component';
@@ -14,6 +13,7 @@ import { DiscountsComponent } from './admin/discounts/discounts/discounts.compon
 import { ProductsComponent } from './admin/products/products/products.component';
 import { BrandsComponent } from './admin/brands/brands/brands.component';
 import { ProductVariantsComponent } from './admin/product-variants/product-variants/product-variants.component';
+import { MainComponent } from './main/main.component';
 
 const routes: Routes = [
   {
@@ -50,7 +50,11 @@ const routes: Routes = [
       { path: 'variantes', component: ProductVariantsComponent },
     ],
   },
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  {
+    path: '',
+    component: MainComponent,
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

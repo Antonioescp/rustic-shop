@@ -1,0 +1,15 @@
+<nav>
+  <mat-toolbar>
+    <span>Rustic Shop</span>
+    <span class="spacer"></span>
+    <button
+      mat-icon-button
+      matTooltip="Iniciar sesión"
+      [routerLink]="['/Users/auth/login']">
+      <mat-icon>person</mat-icon>
+    </button>
+  </mat-toolbar>
+</nav>
+<main>
+  <router-outlet></router-outlet>
+</main>

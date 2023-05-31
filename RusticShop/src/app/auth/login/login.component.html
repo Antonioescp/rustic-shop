@@ -1,40 +1,71 @@
-<div class="login">
-  <h1>Login</h1>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+<mat-card class="mat-elevation-z8">
+  <mat-card-content>
+    <button
+      matTooltip="Regresar"
+      class="back-button"
+      mat-icon-button
+      (click)="goBack()">
+      <mat-icon>arrow_back_ios</mat-icon>
+    </button>
 
-    <p>
-      <span class="error" *ngIf="loginResponse">
-        <strong>Error</strong>: {{ loginResponse.message }}
-      </span>
-      <span class="error" *ngIf="accountLocked">
-        <strong>Cuenta bloqueada: </strong>
-        <a [routerLink]="['/Users/auth/request-account-unlock']">Solicita un desbloqueo.</a>
-      </span>
-    </p>
+    <button
+      matTooltip="Ir a registro"
+      class="register-button"
+      mat-icon-button
+      [routerLink]="['/Users/auth/registration']">
+      <mat-icon>add</mat-icon>
+    </button>
 
-    <div class="field">
-      <label for="email">Email: </label>
-      <input type="email" name="email" formControlName="email" required placeholder="fulano@ejemplo.com" />
-      <div class="error" *ngFor="let error of getErrors(form.get('email')!, 'Email')">
-        {{ error }}
-      </div>
+    <h3>¡Hola de nuevo!</h3>
+    <h4>Es bueno tenerte de vuelta</h4>
+
+    <div class="error-message" *ngIf="loginResponse">
+      <span>{{ loginResponse.message }}</span>
+      <br />
+      <a
+        *ngIf="accountLocked"
+        [routerLink]="['/Users/auth/request-account-unlock']"
+        >Desbloquea tu cuenta</a
+      >
     </div>
 
-    <div class="field">
-      <label for="password">Contraseña: </label>
-      <input type="password" name="password" formControlName="password" required placeholder="***********" />
-      <div class="error" *ngFor="let error of getErrors(form.get('password')!, 'Contraseña')">
-        {{ error }}
-      </div>
-    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <mat-icon matIconPrefix>person</mat-icon>
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput type="email" required formControlName="email" />
+        <mat-error
+          *ngFor="
+            let error of getErrors(form.get('email')!, 'Correo electrónico')
+          ">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
 
-    <button type="submit" [disabled]="this.form.invalid">Ingresar</button>
+      <mat-form-field>
+        <mat-icon matIconPrefix>lock</mat-icon>
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" required formControlName="password" />
+        <mat-error
+          *ngFor="let error of getErrors(form.get('password')!, 'Contraseña')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
 
-  </form>
-  <p>
-    ¿No recuerdas tu contraseña?
-    <a [routerLink]="['/Users/auth/request-password-reset']">
-      Restablecela
-    </a>
-  </p>
-</div>
+      <button
+        [disabled]="form.invalid"
+        mat-flat-button
+        color="primary"
+        type="submit">
+        Iniciar Sesión
+      </button>
+    </form>
+
+    <span
+      >¿Olvidaste tu contraseña?
+      <a [routerLink]="['/Users/auth/request-password-reset']"
+        >Recuperar</a
+      ></span
+    >
+  </mat-card-content>
+</mat-card>

@@ -35,6 +35,7 @@ import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confi
 import { ProductEditSchemaDialogComponent } from './admin/products/product-edit-schema-dialog/product-edit-schema-dialog.component';
 import { ProductVariantsComponent } from './admin/product-variants/product-variants/product-variants.component';
 import { ProductVariantEditDialogComponent } from './admin/product-variants/product-variant-edit-dialog/product-variant-edit-dialog.component';
+import { MainComponent } from './main/main.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { ProductVariantEditDialogComponent } from './admin/product-variants/prod
     ProductEditSchemaDialogComponent,
     ProductVariantsComponent,
     ProductVariantEditDialogComponent,
+    MainComponent,
   ],
   imports: [
     BrowserModule,
