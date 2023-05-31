@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using RusticShopAPI.Data.Models.DTOs;
 
 namespace RusticShopAPI.Controllers
 {
@@ -22,7 +18,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/ProductVariants
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<ProductVariant>>> GetProductVariants()
         {
           if (_context.ProductVariants == null)
@@ -30,6 +26,25 @@ namespace RusticShopAPI.Controllers
               return NotFound();
           }
             return await _context.ProductVariants.ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PaginatedResult<ProductVariant>>> GetPaginatedProductVariants(
+            int pageIndex = 0,
+            int pageSize = 10,
+            string? sortColumn = null,
+            string? sortOrder = null,
+            string? filterColumn = null,
+            string? filterQuery = null) 
+        {
+          return await PaginatedResult<ProductVariant>.CreateAsync(
+            _context.ProductVariants,
+            pageIndex,
+            pageSize,
+            sortColumn,
+            sortOrder,
+            filterColumn,
+            filterQuery);
         }
 
         // GET: api/ProductVariants/5
