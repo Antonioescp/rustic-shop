@@ -9,6 +9,7 @@ import { Product } from 'src/app/shared/models/Product';
 import Category from 'src/app/shared/models/Category';
 import Attribute from 'src/app/shared/models/Attribute';
 import { lastValueFrom } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 export interface ProductEditSchemaDialogData {
   id: number;
@@ -31,12 +32,33 @@ export class ProductEditSchemaDialogComponent implements OnInit {
   currentAttributes: number[] = [];
   currentCategories: number[] = [];
 
-  @ViewChild('attributesChips') attributesListBox!: MatChipListbox;
-  @ViewChild('categoriesChips') categoriesListBox!: MatChipListbox;
+  @ViewChild('attributesChips') selectedAttributes!: MatChipListbox;
+  @ViewChild('categoriesChips') selectedCategories!: MatChipListbox;
+
+  attributeSearchControl!: FormControl<string>;
+  categorySearchControl!: FormControl<string>;
 
   pendingOperations = 0;
   get isBusy(): boolean {
     return this.pendingOperations > 0;
+  }
+
+  get filteredCategories() {
+    return this.categories.filter((category) => {
+      const reduced = (
+        category.name +
+        category.description +
+        category.id
+      ).toLowerCase();
+      return reduced.includes(this.categorySearchControl.value.toLowerCase());
+    });
+  }
+
+  get filteredAttributes() {
+    return this.attributes.filter((att) => {
+      const reduced = (att.name + att.id).toLowerCase();
+      return reduced.includes(this.attributeSearchControl.value.toLowerCase());
+    });
   }
 
   constructor(
@@ -48,7 +70,14 @@ export class ProductEditSchemaDialogComponent implements OnInit {
     private productsService: ProductsService,
     private attributesService: AttributesService,
     private categoriesService: CategoriesService
-  ) {}
+  ) {
+    this.categorySearchControl = new FormControl<string>('', {
+      nonNullable: true,
+    });
+    this.attributeSearchControl = new FormControl<string>('', {
+      nonNullable: true,
+    });
+  }
 
   ngOnInit(): void {
     if (this.data?.id) {
@@ -84,10 +113,10 @@ export class ProductEditSchemaDialogComponent implements OnInit {
       const attributes = await lastValueFrom(
         this.productsService.getAttributes(this.data.id)
       );
-      this.attributesListBox.value = attributes.map(
+      this.selectedAttributes.value = attributes.map(
         (attribute) => attribute.id
       );
-      this.currentAttributes = [...this.attributesListBox.value];
+      this.currentAttributes = [...this.selectedAttributes.value];
     } catch (error) {
       console.error(error);
       this.dialogRef.close();
@@ -104,8 +133,8 @@ export class ProductEditSchemaDialogComponent implements OnInit {
       const productCategories = await lastValueFrom(
         this.productsService.getCategories(this.data.id)
       );
-      this.categoriesListBox.value = productCategories.map((cat) => cat.id);
-      this.currentCategories = [...this.categoriesListBox.value];
+      this.selectedCategories.value = productCategories.map((cat) => cat.id);
+      this.currentCategories = [...this.selectedCategories.value];
     } catch (error) {
       console.error(error);
       this.dialogRef.close();
@@ -115,26 +144,26 @@ export class ProductEditSchemaDialogComponent implements OnInit {
   }
 
   private get categoriesToAdd(): number[] {
-    return this.categoriesListBox.value.filter(
+    return this.selectedCategories.value.filter(
       (id: number) => !this.currentCategories.includes(id)
     );
   }
 
   private get categoriesToRemove(): number[] {
     return this.currentCategories.filter(
-      (id) => !this.categoriesListBox.value.includes(id)
+      (id) => !this.selectedCategories.value.includes(id)
     );
   }
 
   private get attributesToAdd(): number[] {
-    return this.attributesListBox.value.filter(
+    return this.selectedAttributes.value.filter(
       (id: number) => !this.currentAttributes.includes(id)
     );
   }
 
   private get attributesToRemove(): number[] {
     return this.currentAttributes.filter(
-      (id) => !this.attributesListBox.value.includes(id)
+      (id) => !this.selectedAttributes.value.includes(id)
     );
   }
 

@@ -7,11 +7,23 @@
 
   <div mat-dialog-content>
     <h4>Categorías</h4>
+
+    <mat-form-field>
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-label> Búsqueda </mat-label>
+      <input matInput [formControl]="this.categorySearchControl" />
+    </mat-form-field>
+
     <mat-chip-listbox #categoriesChips multiple>
       <mat-chip-option
         *ngFor="let category of categories"
         [matTooltip]="category.description"
         [value]="category.id"
+        [ngStyle]="
+          this.filteredCategories.includes(category)
+            ? { display: 'inline-flex' }
+            : { display: 'none' }
+        "
       >
         {{ category.name }}
       </mat-chip-option>
@@ -20,10 +32,22 @@
     <mat-divider vertical></mat-divider>
 
     <h4>Atributos</h4>
+
+    <mat-form-field>
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-label> Búsqueda </mat-label>
+      <input matInput [formControl]="this.attributeSearchControl" />
+    </mat-form-field>
+
     <mat-chip-listbox #attributesChips multiple>
       <mat-chip-option
         *ngFor="let attribute of attributes"
         [value]="attribute.id"
+        [ngStyle]="
+          this.filteredAttributes.includes(attribute)
+            ? { display: 'inline-flex' }
+            : { display: 'none' }
+        "
       >
         {{ attribute.name }}
       </mat-chip-option>
