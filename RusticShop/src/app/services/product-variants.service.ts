@@ -53,10 +53,15 @@ export class ProductVariantsService implements CrudService<ProductVariant> {
   }
 
   update(data: Partial<ProductVariant>): Observable<HttpResponse<any>> {
-    return this.http.put<any>(this.baseUrl, data);
+    return this.http.put<any>(this.baseUrl + data.id, data);
   }
 
   deleteById(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(this.baseUrl + id);
+  }
+
+  isSkuAvailable(sku: string): Observable<boolean> {
+    const url = this.baseUrl + 'sku-availability';
+    return this.http.post<boolean>(url, { sku });
   }
 }

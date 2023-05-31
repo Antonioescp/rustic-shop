@@ -166,5 +166,10 @@ namespace RusticShopAPI.Controllers
         {
             return (_context.ProductVariants?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        [HttpPost("sku-availability")]
+        public ActionResult<bool> IsSkuAvailable(ProductVariantSkuOnlyDto data) {
+          return _context.ProductVariants.All(pv => pv.SKU != data.SKU);
+        }
     }
 }

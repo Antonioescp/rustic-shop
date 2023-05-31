@@ -6,19 +6,53 @@
   <h1 mat-dialog-title>{{ title }}</h1>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div mat-dialog-content class="fields">
-      <mat-form-field>
-        <mat-label>Nombre</mat-label>
-        <input matInput type="text" formControlName="name" />
+      <div class="row">
+        <mat-form-field class="big">
+          <mat-label>Producto</mat-label>
+          <mat-select formControlName="productId">
+            <mat-option *ngFor="let product of products" [value]="product.id">
+              {{ product.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngFor="let error of getErrors(form.get('productId')!, 'Producto')">
+            {{ error }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field floatLabel="always" class="small margin-left">
+          <mat-label>Precio Unitario</mat-label>
+          <input
+            matInput
+            type="number"
+            required
+            formControlName="unitPrice"
+            placeholder="0"
+            class="right-align" />
+          <span matTextPrefix>C$&nbsp;</span>
+          <mat-error
+            *ngFor="
+              let error of getErrors(form.get('sku')!, 'Precio Unitario')
+            ">
+            {{ error }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field class="margin-top">
+        <mat-label>SKU</mat-label>
+        <input matInput required formControlName="sku" />
         <mat-error
           *ngFor="
-            let error of getErrors(form.get('name')!, 'Nombre', {
-              nameTaken: 'ya se encuentra en uso.'
+            let error of getErrors(form.get('sku')!, 'SKU', {
+              nameTaken: 'se encuentra en uso.'
             })
-          "
-        >
+          ">
           {{ error }}
         </mat-error>
       </mat-form-field>
+
+      <mat-checkbox formControlName="isPublished"> Público </mat-checkbox>
     </div>
 
     <div mat-dialog-actions align="end">
@@ -27,16 +61,14 @@
         mat-button
         color="warn"
         [disabled]="isBusy"
-        type="button"
-      >
+        type="button">
         <mat-icon>cancel</mat-icon> Cancelar
       </button>
       <button
         mat-flat-button
         color="primary"
         [disabled]="isBusy || form.invalid"
-        type="submit"
-      >
+        type="submit">
         <mat-icon>save</mat-icon> Guardar
       </button>
     </div>

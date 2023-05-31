@@ -26,7 +26,7 @@ export class ProductsService implements CrudService<Product> {
   }
 
   getAll(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.productsUrl);
+    return this.http.get<Product[]>(this.productsUrl + 'all');
   }
 
   getPaginated(pagination: Pagination): Observable<PaginatedResponse<Product>> {

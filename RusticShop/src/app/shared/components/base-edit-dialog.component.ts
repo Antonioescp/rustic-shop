@@ -20,6 +20,7 @@ export abstract class BaseEditDialogComponent<Model>
   service!: CrudService<Model>;
   title!: string;
   isBusy = false;
+  resource?: Model;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: BaseEditDialogData,
@@ -41,6 +42,7 @@ export abstract class BaseEditDialogComponent<Model>
     this.isBusy = true;
     this.service.getById(id).subscribe({
       next: resource => {
+        this.resource = resource;
         this.form.patchValue(resource!);
         this.updateTitle(resource);
       },
