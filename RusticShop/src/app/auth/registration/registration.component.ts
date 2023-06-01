@@ -5,7 +5,6 @@ import {
   FormControl,
   FormGroup,
   ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -15,6 +14,7 @@ import { CustomValidators } from 'src/app/shared/custom-validators';
 import { RegistrationResponse } from './registration-response';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-registration',
@@ -23,8 +23,14 @@ import { Observable, map } from 'rxjs';
 })
 export class RegistrationComponent extends BaseFormComponent implements OnInit {
   registrationResponse?: RegistrationResponse;
+  hidePassword = true;
+  hideConfirmPassword = true;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private location: Location
+  ) {
     super();
   }
 
@@ -48,6 +54,7 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
         password: new FormControl('', [
           Validators.required,
           Validators.minLength(8),
+          this.validatePassword,
         ]),
         confirmPassword: new FormControl('', [Validators.required]),
       },
@@ -60,12 +67,11 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
   }
 
   onSubmit() {
-    var registrationRequest = <RegistrationRequest>{};
-
     if (this.form.invalid) {
-      console.error('invalid form');
       return;
     }
+
+    const registrationRequest = <RegistrationRequest>{};
 
     registrationRequest.username = this.form.controls['username'].value;
     registrationRequest.email = this.form.controls['email'].value;
@@ -74,13 +80,13 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
       this.form.controls['confirmPassword'].value;
 
     this.authService.register(registrationRequest).subscribe({
-      next: (res) => {
+      next: res => {
         this.registrationResponse = res;
         if (res.success) {
           this.router.navigate(['/Users/auth/login']);
         }
       },
-      error: (error) => {
+      error: error => {
         if (error.status === 400) {
           this.registrationResponse = error.error;
         }
@@ -92,7 +98,7 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       const request = this.authService.isUserNameAvailable(control.value);
       const piped = request.pipe(
-        map((available) => {
+        map(available => {
           return !available ? { usernameNotAvailable: true } : null;
         })
       );
@@ -105,12 +111,35 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       const request = this.authService.isEmailAvailable(control.value);
       const piped = request.pipe(
-        map((available) => {
+        map(available => {
           return !available ? { emailNotAvailable: true } : null;
         })
       );
 
       return piped;
     };
+  }
+
+  validatePassword(control: AbstractControl<string>): ValidationErrors | null {
+    // patterns
+    const lowercase = /[a-z]/;
+    const uppercase = /[A-Z]/;
+    const symbol = /[@$!%*?&]/;
+
+    const errors: ValidationErrors = {};
+
+    if (!lowercase.test(control.value)) {
+      errors['lowercase'] = true;
+    }
+
+    if (!uppercase.test(control.value)) {
+      errors['uppercase'] = true;
+    }
+
+    if (!symbol.test(control.value)) {
+      errors['symbol'] = true;
+    }
+
+    return errors;
   }
 }

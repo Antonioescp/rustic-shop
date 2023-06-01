@@ -32,10 +32,6 @@ export class LoginComponent extends BaseFormComponent {
     });
   }
 
-  goBack() {
-    this.location.back();
-  }
-
   onSubmit() {
     const loginRequest = <LoginRequest>{};
     loginRequest.email = this.form.controls['email'].value;

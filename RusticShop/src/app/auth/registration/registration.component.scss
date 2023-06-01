@@ -1,167 +1,67 @@
-/* Font Family */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@0,100;0,400;1,200&display=swap');
+:host {
+  background-color: black;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
 
-/* anchos de letras */
-$thin: 100;
-$light: 300;
-$regular: 400;
-$semibold: 500;
-$bold: 700;
-$ultra: 800;
+  align-items: center;
+  justify-content: center;
 
-/* base de las fuentes */
-$base-font-family: 'Poppins', sans-serif;
-$base-font-size: 14px;
-$base-font-weight: $regular;
-$base-line-height: 1.6em;
-
-/* colores */
-$black: #0b0C0D;
-$orange: #EA9F4C;
-$darkgray: #54514E;
-$lightgray: #7C7C7D;
-$gray: #7C747C;
-$white: #FFFF;
-
-/* Dimensiones del formulario */
-$max-width: 600px;
-$max-height: 400px;
-$gutters: 24px;
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    height: 100%;
-    font-weight: $regular;
-    font-family: $base-font-family;
-}
-
-h1 {
-    color: $orange;
-    font-family: $base-font-family;
-    font-style: normal;
-    font-weight: $bold;
-    font-size: 6vw;
-    line-height: 7vw;
-    text-transform: uppercase;
-    text-align: center;
-    padding: 20px;
-}
-
-.registration {
-    width: 100%;
-    max-width: 700px;
-    background: $darkgray;
-    color: $orange;
-    font-family: $base-font-family;
-    box-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
-    border-radius: 10px;
-    margin: 50px auto;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.registration form {
-    padding: 0 20px;
-    box-sizing: border-box;
-}
-
-.field {
+  mat-card-content {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-bottom: 2px solid $lightgray;
-    margin: 30px 0;
-    font-family: $base-font-family;
+    flex-flow: column;
+    align-items: center;
+
+    position: relative;
+
+    .back-button {
+      align-self: flex-start;
+      position: absolute;
+    }
+
+    .register-button {
+      align-self: flex-end;
+      position: absolute;
+    }
+
+    h4 {
+      font-weight: lighter;
+      margin-top: 10px;
+      width: 80%;
+    }
+
+    .error-message {
+      background-color: rgb(241, 89, 89);
+      padding: 25px;
+      margin-top: 10px;
+      border-radius: 10px;
+      color: white;
+      max-width: 100%;
+    }
+
+    form {
+
+      width: 100%;
+      height: 100%;
+
+      min-width: 400px;
+      min-height: 250px;
+
+      margin-top: 15px;
+
+      display: flex;
+      flex-flow: column nowrap;
+
+      justify-content: center;
+
+    }
+  }
 }
 
-.field label {
-    padding-bottom: 8px;
-    text-transform: uppercase;
-    font-weight: $bold;
-    transition: top 0.3s, font-size 0.3s;
+.margin-top {
+  margin-top: 20px;
 }
 
-.field input {
-    width: 100%;
-    height: 40px;
-    font-size: 16px;
-    border-radius: 5px;
-    background: $lightgray;
-    color: $white;
-    font-family: $base-font-family;
-    padding: 5px;
-    border: none;
-}
-
-::placeholder {
-    color: $orange;
-}
-
-button {
-    background-color: $orange;
-    width: 100%;
-    max-width: 400px;
-    height: 50px;
-    border-radius: 25px;
-    color: $white;
-    font-family: $base-font-family;
-    font-size: 1.2rem;
-    font-weight: $bold;
-    border: none;
-    margin: 20px auto;
-    display: block;
-    cursor: pointer;
-}
-
-button:disabled,
-button[disabled] {
-    background-color: $darkgray;
-    cursor: default;
-}
-
-/* Para dispositivos con una resolución de ancho menor o igual a 768px */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 5vw;
-        line-height: 6vw;
-    }
-    .registration {
-        max-width: 100%;
-        border-radius: 0;
-        margin: 30px 0;
-        padding: 10px;
-    }
-    .field {
-        margin: 20px 0;
-    }
-    button {
-        max-width: 100%;
-        border-radius: 10px;
-        font-size: 1rem;
-        height: 40px;
-    }
-}
-
-  /* Para dispositivos con una resolución de ancho menor o igual a 480px */
-@media (max-width: 480px) {
-    h1 {
-        font-size: 4.5vw;
-        line-height: 5.5vw;
-    }
-    .registration form {
-        padding: 0 10px;
-    }
-    .field input {
-        height: 35px;
-        font-size: 14px;
-    }
-    button {
-        font-size: 0.9rem;
-        height: 35px;
-    }
+.margin-bottom {
+  margin-bottom: 20px;
 }

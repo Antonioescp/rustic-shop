@@ -1,60 +1,112 @@
-<div class="registration">
-  <h1>Registro</h1>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
-    <div class="error" *ngIf="this.form.errors">
-      <p *ngFor="let error of getErrors(this.form, '', {
-        matchFields: 'Las contraseñas deben coincidir.'
-      })">
-        <strong>ERROR: </strong>{{ error }}
-      </p>
-    </div>
-
-    <div class="error" *ngIf="registrationResponse && registrationResponse.errors.length > 0">
-      <p *ngFor="let error of registrationResponse.errors">
-        {{ error }}
-      </p>
-    </div>
-
-    <div class="field">
-      <label for="username">Username: </label>
-      <input type="text" name="text" formControlName="username" placeholder="Fulanito de tal" required />
-      <div class="error"
-        *ngFor="let error of getErrors(form.get('username')!, 'Usuario', { minlength: 'debe tener al menos 8 caracteres', usernameNotAvailable: 'ya se encuentra en uso.'})">
-        {{ error }}
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="email">Email: </label>
-      <input type="email" name="email" formControlName="email" placeholder="fulanito@ejemplo.com" required #emailInput />
-      <div class="error" *ngFor="let error of getErrors(form.get('email')!, 'Email', { emailNotAvailable: 'ya se encuentra en uso.'})">
-        {{ error }}
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="password">Password: </label>
-      <input type="password" name="password" formControlName="password" required placeholder="************" />
-      <div class="error"
-        *ngFor="let error of getErrors(form.get('password')!, 'Contraseña', { matchField: 'debe coincidir.' })">
-        {{ error }}
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="password">Confirmar contraseña: </label>
-      <input type="password" name="confirm-password" formControlName="confirmPassword" required
-        placeholder="************" />
-      <div class="error"
-        *ngFor="let error of getErrors(form.get('confirmPassword')!, 'Confirmar contraseña', { matchField: 'debe coincidir.' })">
-        {{ error }}
-      </div>
-    </div>
-
-    <button type="submit" [disabled]="this.form.invalid">
-      Registrarse
+<mat-card>
+  <mat-card-content>
+    <button
+      matTooltip="Ir a inicio"
+      class="back-button"
+      mat-icon-button
+      [routerLink]="['/']">
+      <mat-icon>arrow_back_ios</mat-icon>
     </button>
 
-  </form>
-</div>
+    <button
+      matTooltip="Ir a inicio de sesión"
+      class="register-button"
+      mat-icon-button
+      [routerLink]="['/Users/auth/login']">
+      <mat-icon>login</mat-icon>
+    </button>
+
+    <h3>Bienvenido</h3>
+    <h4>Esperamos que disfrutes el uso de nuestros servicios.</h4>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Usuario</mat-label>
+        <mat-icon matIconPrefix>person</mat-icon>
+        <input matInput type="text" required formControlName="username" />
+        <mat-error
+          *ngFor="let error of getErrors(form.get('username')!, 'Usuario')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field subscriptSizing="dynamic" class="margin-top">
+        <mat-label>Correo electrónico</mat-label>
+        <mat-icon matIconPrefix>mail</mat-icon>
+        <input matInput type="email" required formControlName="email" />
+        <mat-error
+          *ngFor="
+            let error of getErrors(form.get('email')!, 'Correo electrónico')
+          ">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field subscriptSizing="dynamic" class="margin-top">
+        <mat-label>Contraseña</mat-label>
+        <mat-icon matIconPrefix>lock</mat-icon>
+        <button
+          mat-icon-button
+          matIconSuffix
+          (click)="hidePassword = !hidePassword">
+          <mat-icon>{{
+            hidePassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          required
+          formControlName="password" />
+        <mat-error
+          *ngFor="
+            let error of getErrors(form.get('password')!, 'Contraseña', {
+              minlength: 'debe contener al menos 8 caracteres',
+              lowercase: 'debe contener al menos una letra minuscula',
+              uppercase: 'debe contener al menos una letra mayúscula',
+              symbol: 'debe contener al menos un carácter especial como @$!%*?&'
+            })
+          ">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field
+        subscriptSizing="dynamic"
+        class="margin-top margin-bottom">
+        <mat-label>Confirmar Contraseña</mat-label>
+        <mat-icon matIconPrefix>lock</mat-icon>
+        <button
+          mat-icon-button
+          matIconSuffix
+          (click)="hideConfirmPassword = !hideConfirmPassword">
+          <mat-icon>{{
+            hideConfirmPassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
+        <input
+          matInput
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          required
+          formControlName="confirmPassword" />
+        <mat-error
+          *ngFor="
+            let error of getErrors(
+              form.get('confirmPassword')!,
+              'Confirmar contraseña'
+            )
+          ">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        color="primary"
+        [disabled]="form.invalid"
+        type="submit">
+        Registrarse
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

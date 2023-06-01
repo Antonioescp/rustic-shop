@@ -1,10 +1,10 @@
 <mat-card class="mat-elevation-z8">
   <mat-card-content>
     <button
-      matTooltip="Regresar"
+      matTooltip="Ir a inicio"
       class="back-button"
       mat-icon-button
-      (click)="goBack()">
+      [routerLink]="['/']">
       <mat-icon>arrow_back_ios</mat-icon>
     </button>
 
