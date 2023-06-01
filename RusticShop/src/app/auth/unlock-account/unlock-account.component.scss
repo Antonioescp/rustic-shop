@@ -1,0 +1,50 @@
+:host {
+  background-color: black;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  mat-card-content {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+
+    position: relative;
+
+    .back-button {
+      align-self: flex-start;
+      position: absolute;
+    }
+
+    .register-button {
+      align-self: flex-end;
+      position: absolute;
+    }
+
+    h4 {
+      font-weight: lighter;
+      margin-top: 10px;
+    }
+
+    .error-message {
+      background-color: rgb(241, 89, 89);
+      padding: 25px;
+      margin-top: 10px;
+      border-radius: 10px;
+      color: white;
+      max-width: 100%;
+    }
+  }
+}
+
+.last-field {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.margin-top {
+  margin-top: 20px;
+}
