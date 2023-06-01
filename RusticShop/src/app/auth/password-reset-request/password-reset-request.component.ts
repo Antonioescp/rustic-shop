@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
-import PasswordResetRequest from './password-reset-request';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-password-reset',
@@ -11,7 +11,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./password-reset-request.component.scss'],
 })
 export class PasswordResetRequestComponent extends BaseFormComponent {
-  constructor(private authService: AuthService, private router: Router) {
+  isBusy = false;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {
     super();
 
     this.form = new FormGroup({
@@ -27,15 +33,27 @@ export class PasswordResetRequestComponent extends BaseFormComponent {
       return;
     }
 
+    this.isBusy = true;
+
+    const email: string = this.form.controls['email'].value;
+
     this.authService
       .requestPasswordReset({
-        email: this.form.controls['email'].value,
+        email,
       })
       .subscribe({
-        next: (res) => {
+        next: () => {
+          this.isBusy = false;
+          this.snackBar.open(
+            `Restablecimiento de contraseña enviado a ${email}.`
+          );
           this.router.navigate(['/']);
         },
-        error: (error) => console.error(error),
+        error: error => {
+          console.error(error);
+          this.snackBar.open(`Ha ocurrido un error, intenta de nuevo.`);
+          this.isBusy = false;
+        },
       });
   }
 }
