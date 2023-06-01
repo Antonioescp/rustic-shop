@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import RequestAccountUnlockRequest from './request-account-unlock-request';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-request-account-unlock',
@@ -11,7 +12,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./request-account-unlock.component.scss'],
 })
 export class RequestAccountUnlockComponent extends BaseFormComponent {
-  constructor(private authService: AuthService, private router: Router) {
+  isBusy = false;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {
     super();
 
     this.form = new FormGroup({
@@ -27,17 +34,28 @@ export class RequestAccountUnlockComponent extends BaseFormComponent {
       return;
     }
 
+    this.isBusy = true;
+
     const data = <RequestAccountUnlockRequest>{
       email: this.form.controls['email'].value,
     };
 
     this.authService.requestAccountUnlock(data).subscribe({
-      next: (res) => {
+      next: res => {
+        this.isBusy = false;
         if (res.ok) {
-          this.router.navigate(['/']);
+          this.snackBar.open('Solicitud enviada, revisa tu correo electrónico');
+          this.router.navigate(['/Users/auth/login']);
         }
       },
-      error: (err) => console.error(err),
+      error: err => {
+        this.isBusy = false;
+        this.snackBar.open(
+          '¡Uh, Oh! Ocurrió un error, la solicitud no pudo ser generada, intenta de nuevo.'
+        );
+        this.router.navigate(['/Users/auth/request-account-unlock']);
+        console.error(err);
+      },
     });
   }
 }

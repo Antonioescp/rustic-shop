@@ -1,18 +1,38 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<mat-card>
+  <mat-card-content>
+    <button
+      matTooltip="Ir a inicio"
+      class="back-button"
+      mat-icon-button
+      [routerLink]="['/']">
+      <mat-icon>arrow_back_ios</mat-icon>
+    </button>
+    <h3>Desbloqueo de cuenta</h3>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <mat-label>Correo electrónico</mat-label>
+        <mat-icon matIconPrefix>mail</mat-icon>
+        <input
+          matInput
+          required
+          formControlName="email"
+          type="email"
+          placeholder="ejemplo@ejemplo.com" />
+        <mat-error
+          *ngFor="
+            let error of getErrors(form.get('email')!, 'Correo electrónico')
+          ">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
 
-  <div class="field">
-    <label for="email">Email:</label>
-    <input type="email" name="email" formControlName="email" required placeholder="fulanito@example.com">
-
-    <div class="errors">
-      <p *ngFor="let error of getErrors(form.get('email')!, 'Email')">
-        {{ error }}
-      </p>
-    </div>
-  </div>
-
-  <button type="submit" [disabled]="this.form.invalid">
-    Solicitar
-  </button>
-
-</form>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="this.form.invalid || isBusy">
+        Solicitar
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>
