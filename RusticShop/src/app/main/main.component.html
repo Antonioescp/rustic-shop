@@ -1,13 +1,28 @@
 <nav>
   <mat-toolbar>
-    <span>Rustic Shop</span>
+    <span><a [routerLink]="['/']">Rustic Shop</a></span>
     <span class="spacer"></span>
-    <button
-      mat-icon-button
-      matTooltip="Iniciar sesión"
-      [routerLink]="['/Users/auth/login']">
-      <mat-icon>person</mat-icon>
-    </button>
+    <ng-container *ngIf="auth.isAuthenticated">
+      <button
+        *ngIf="auth.isAdmin"
+        mat-icon-button
+        matTooltip="Panel de administración"
+        [routerLink]="['/admin/panel']">
+        <mat-icon>security</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Cerrar sesión" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="!auth.isAuthenticated">
+      <button
+        *ngIf="!auth.isAuthenticated"
+        mat-icon-button
+        matTooltip="Iniciar sesión"
+        [routerLink]="['/Users/auth/login']">
+        <mat-icon>login</mat-icon>
+      </button>
+    </ng-container>
   </mat-toolbar>
 </nav>
 <main>

@@ -1,7 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, map, tap } from 'rxjs';
-
+import { Observable, Subject, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoginRequest } from '../auth/login/login-request';
 import { LoginResponse } from '../auth/login/login-response';
@@ -11,31 +10,50 @@ import PasswordResetRequest from '../auth/password-reset-request/password-reset-
 import PasswordResetData from '../auth/password-reset/password-reset-data';
 import RequestAccountUnlockRequest from '../auth/request-account-unlock/request-account-unlock-request';
 import UnlockAccountRequest from '../auth/unlock-account/UnlockAccountRequest';
+import jwtDecode from 'jwt-decode';
+import { AuthenticationToken } from '../shared/models/dtos/auth/AuthenticationToken';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private tokenKey: string = 'token';
-
   private _authStatus = new Subject<boolean>();
+
+  constructor(protected http: HttpClient) {}
+
+  hasRole(role: string): boolean {
+    if (this.token) {
+      const decodedToken = jwtDecode<AuthenticationToken>(this.token);
+      if (Array.isArray(decodedToken.role)) {
+        return decodedToken.role.includes(role);
+      } else if (
+        typeof decodedToken.role === 'string' &&
+        decodedToken.role === role
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   public get authStatus(): Observable<boolean> {
     return this._authStatus.asObservable();
+  }
+
+  public get isAdmin(): boolean {
+    return this.hasRole('Administrator');
   }
 
   public set updatedAuthStatus(newValue: boolean) {
     this._authStatus.next(newValue);
   }
 
-  constructor(protected http: HttpClient) {}
-
   public get isAuthenticated(): boolean {
     return this.token !== null;
   }
 
   public get token(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem(environment.tokenKey);
   }
 
   init() {
@@ -47,9 +65,9 @@ export class AuthService {
   login(item: LoginRequest): Observable<LoginResponse> {
     const url = environment.baseUrl + 'api/Users/auth/login';
     return this.http.post<LoginResponse>(url, item).pipe(
-      tap((loginResponse) => {
+      tap(loginResponse => {
         if (loginResponse.success && loginResponse.token) {
-          localStorage.setItem(this.tokenKey, loginResponse.token);
+          localStorage.setItem(environment.tokenKey, loginResponse.token);
           this.updatedAuthStatus = true;
         }
       })
@@ -57,7 +75,7 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(environment.tokenKey);
     this.updatedAuthStatus = false;
   }
 

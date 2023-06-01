@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -7,8 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from './login-request';
 import { LoginResponse } from './login-response';
 import { HttpStatusCode } from '@angular/common/http';
-import { Location } from '@angular/common';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +22,7 @@ export class LoginComponent extends BaseFormComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private location: Location
+    private snackBar: MatSnackBar
   ) {
     super();
     this.form = new FormGroup({
@@ -41,6 +40,7 @@ export class LoginComponent extends BaseFormComponent {
       next: result => {
         this.loginResponse = result;
         if (result.success) {
+          this.snackBar.open('Sesión iniciada con éxito');
           this.router.navigate(['/']);
         }
       },

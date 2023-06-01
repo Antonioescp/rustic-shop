@@ -42,6 +42,7 @@ namespace RusticShopAPI.Services
             foreach (var role in await _userManager.GetRolesAsync(user))
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+                claims.Add(new Claim("role", role.ToString()));
             }
             return claims;
         }

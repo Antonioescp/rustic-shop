@@ -1,5 +1,7 @@
 export const environment = {
   production: false,
+  tokenKey: 'token',
+  host: 'https://localhost:4200/',
   baseUrl: '/',
   apiBaseUrl: '/api/',
   requestResetPasswordEndpoint: 'Users/auth/request-password-reset',
