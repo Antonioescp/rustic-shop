@@ -1,2 +1,6 @@
-<p *ngIf="!unlocked">Realizando desbloqueo...</p>
-<p *ngIf="unlocked">Cuenta desbloqueada.</p>
+<mat-card>
+  <mat-card-content>
+    <h2 *ngIf="!unlocked">Realizando desbloqueo...</h2>
+    <h2 *ngIf="unlocked">Cuenta desbloqueada. Redirigiendo...</h2>
+  </mat-card-content>
+</mat-card>

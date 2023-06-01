@@ -4,6 +4,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { BaseFormComponent } from 'src/app/shared/components/base-form.component';
 import PasswordResetData from './password-reset-data';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CustomValidators } from 'src/app/shared/custom-validators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-password-reset',
@@ -16,11 +18,15 @@ export class PasswordResetComponent
 {
   username!: string;
   token!: string;
+  hidePassword = true;
+  hideConfirmPassword = true;
+  isBusy = false;
 
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     super();
 
@@ -29,17 +35,17 @@ export class PasswordResetComponent
       password: new FormControl<string>('', [
         Validators.required,
         Validators.minLength(8),
-        // TODO(Add validator for type of characters required)
+        CustomValidators.validatePassword,
       ]),
       confirmPassword: new FormControl<string>('', [
         Validators.required,
-        // TODO(Add validator for matching fields)
+        CustomValidators.matchField('password'),
       ]),
     });
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((map) => {
+    this.route.queryParams.subscribe(map => {
       this.username = map['Username'];
       this.token = map['Token'];
     });
@@ -49,6 +55,8 @@ export class PasswordResetComponent
     if (this.form.invalid) {
       return;
     }
+
+    this.isBusy = true;
 
     const request = <PasswordResetData>{
       password: this.form.controls['password'].value,
@@ -60,12 +68,21 @@ export class PasswordResetComponent
     console.dir(request, { depth: null, colors: true });
 
     this.authService.resetPassword(request).subscribe({
-      next: (res) => {
+      next: res => {
+        this.isBusy = false;
         if (res.ok) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/Users/auth/login']);
+          this.snackBar.open('Contraseña restablecida con éxito.');
         }
       },
-      error: (err) => console.error(err),
+      error: err => {
+        this.isBusy = false;
+        this.snackBar.open(
+          'La contraseña no se ha podido restablecer, intenta de nuevo'
+        );
+        this.router.navigate(['Users/auth/request-password-reset']);
+        console.error(err);
+      },
     });
   }
 }
