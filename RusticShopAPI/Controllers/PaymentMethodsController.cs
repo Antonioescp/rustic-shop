@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -22,6 +23,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/PaymentMethods
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PaymentMethod>>> GetPaymentMethods()
         {
@@ -33,6 +35,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/PaymentMethods/5
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public async Task<ActionResult<PaymentMethod>> GetPaymentMethod(long id)
         {
@@ -52,6 +55,7 @@ namespace RusticShopAPI.Controllers
 
         // PUT: api/PaymentMethods/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPaymentMethod(long id, PaymentMethod paymentMethod)
         {
@@ -83,6 +87,7 @@ namespace RusticShopAPI.Controllers
 
         // POST: api/PaymentMethods
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<PaymentMethod>> PostPaymentMethod(PaymentMethod paymentMethod)
         {
@@ -97,6 +102,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // DELETE: api/PaymentMethods/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePaymentMethod(long id)
         {

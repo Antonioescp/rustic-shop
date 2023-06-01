@@ -5,6 +5,7 @@ using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
 using RusticShopAPI.Data.Models.DTOs.AttributeDtos;
 using AttributeModel = RusticShopAPI.Data.Models.Attribute;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -68,6 +69,7 @@ namespace RusticShopAPI.Controllers
         // PUT: api/Attributes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutAttribute(long id, AttributeModel attribute)
         {
             if (id != attribute.Id)
@@ -99,6 +101,7 @@ namespace RusticShopAPI.Controllers
         // POST: api/Attributes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<AttributeModel>> PostAttribute(AttributeModel attribute)
         {
           if (_context.Attributes == null)
@@ -113,6 +116,7 @@ namespace RusticShopAPI.Controllers
 
         // DELETE: api/Attributes/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteAttribute(long id)
         {
             if (_context.Attributes == null)
@@ -140,6 +144,7 @@ namespace RusticShopAPI.Controllers
         }
 
         [HttpPost("name-availability")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<bool> CheckNameAvailability(AttributeNameOnlyDto data)
         {
             return _context.Attributes.All(att => att.Name != data.Name);

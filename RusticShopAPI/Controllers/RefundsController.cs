@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -22,6 +23,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/Refunds
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Refund>>> GetRefunds()
         {
@@ -33,6 +35,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/Refunds/5
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Refund>> GetRefund(long id)
         {
@@ -52,6 +55,7 @@ namespace RusticShopAPI.Controllers
 
         // PUT: api/Refunds/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRefund(long id, Refund refund)
         {
@@ -83,6 +87,7 @@ namespace RusticShopAPI.Controllers
 
         // POST: api/Refunds
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<Refund>> PostRefund(Refund refund)
         {
@@ -97,6 +102,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // DELETE: api/Refunds/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRefund(long id)
         {

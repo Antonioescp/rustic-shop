@@ -9,6 +9,7 @@ using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
 using RusticShopAPI.Data.Models.DTOs.CategoryDtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -72,6 +73,7 @@ namespace RusticShopAPI.Controllers
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutCategory(long id, Category category)
         {
             if (id != category.Id)
@@ -103,6 +105,7 @@ namespace RusticShopAPI.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
           if (_context.Categories == null)
@@ -117,6 +120,7 @@ namespace RusticShopAPI.Controllers
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteCategory(long id)
         {
             if (_context.Categories == null)
@@ -163,6 +167,7 @@ namespace RusticShopAPI.Controllers
         #region Checks
 
         [HttpPost("name-availability")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<bool> CheckNameAvailability(CategoryNameOnlyDto data)
         {
             return _context.Categories.All(c => c.Name != data.Name);

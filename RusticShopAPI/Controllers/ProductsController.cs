@@ -6,6 +6,7 @@ using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
 using RusticShopAPI.Data.Models.DTOs.ProductDtos;
 using AttributeModel = RusticShopAPI.Data.Models.Attribute;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace RusticShopAPI.Controllers
             _context = context;
             _mapper = mapper;
         }
-
+        
         [HttpGet("details")]
         public async Task<ActionResult<PaginatedResult<ProductDetailDto>>> GetPaginatedDetailedProducts(
             int pageIndex = 0,
@@ -67,13 +68,15 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/Products
+        [Authorize(Roles = "Administrator")]
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var list = await _context.Products.ToListAsync();
             return Ok(list);
         }
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<Product>>> GetPaginatedProducts(
             int pageIndex = 0,
@@ -94,6 +97,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/Products/5
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(long id)
         {
@@ -113,6 +117,7 @@ namespace RusticShopAPI.Controllers
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(long id, Product product)
         {
@@ -144,6 +149,7 @@ namespace RusticShopAPI.Controllers
 
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
@@ -158,6 +164,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // DELETE: api/Products/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(long id)
         {
@@ -185,7 +192,8 @@ namespace RusticShopAPI.Controllers
         #region Nested Resources
 
         #region Attributes
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}/attributes")]
         public async Task<ActionResult<IEnumerable<AttributeModel>>> GetProductAttributes(long id)
         {
@@ -208,7 +216,8 @@ namespace RusticShopAPI.Controllers
 
             return productAttributes;
         }
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpPost("{id}/attributes/{attributeId}")]
         public async Task<IActionResult> AddProductAttribute(long id, long attributeId)
         {
@@ -246,7 +255,8 @@ namespace RusticShopAPI.Controllers
                 return StatusCode(500);
             }
         }
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}/attributes/{attributeId}")]
         public async Task<IActionResult> RemoveProductAttribute(long id, long attributeId)
         {
@@ -286,7 +296,8 @@ namespace RusticShopAPI.Controllers
         #endregion
 
         #region Categories
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}/categories")]
         public async Task<ActionResult<IEnumerable<Category>>> GetProductCategories(long id)
         {
@@ -309,7 +320,8 @@ namespace RusticShopAPI.Controllers
 
             return categories;
         }
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpPost("{id}/categories/{categoryId}")]
         public async Task<IActionResult> AddProductCategory(long id, long categoryId)
         {
@@ -346,7 +358,8 @@ namespace RusticShopAPI.Controllers
             }
 
         }
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}/categories/{categoryId}")]
         public async Task<IActionResult> RemoveProductCategory(long id, long categoryId)
         {
@@ -386,7 +399,8 @@ namespace RusticShopAPI.Controllers
         #endregion
 
         #region Images
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}/images")]
         public async Task<ActionResult<IEnumerable<ProductImage>>> GetProductImages(long id)
         {
@@ -406,7 +420,8 @@ namespace RusticShopAPI.Controllers
         #endregion
 
         #region Product Variants
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}/variants")]
         public async Task<ActionResult<IEnumerable<ProductVariant>>> GetProductVariants(long id)
         {
@@ -431,7 +446,8 @@ namespace RusticShopAPI.Controllers
         #endregion
 
         #region Brand
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}/brand")]
         public async Task<ActionResult<Brand>> GetProductBrand(long id)
         {

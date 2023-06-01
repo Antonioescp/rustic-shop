@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -22,6 +23,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/Orders
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
@@ -33,6 +35,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/Orders/5
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(long id)
         {
@@ -52,6 +55,7 @@ namespace RusticShopAPI.Controllers
 
         // PUT: api/Orders/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOrder(long id, Order order)
         {
@@ -83,6 +87,7 @@ namespace RusticShopAPI.Controllers
 
         // POST: api/Orders
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
@@ -97,6 +102,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // DELETE: api/Orders/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(long id)
         {

@@ -9,6 +9,7 @@ using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
 using RusticShopAPI.Data.Models.DTOs.BrandDtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -77,6 +78,7 @@ namespace RusticShopAPI.Controllers
         // PUT: api/Brands/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutBrand(long id, Brand brand)
         {
             if (id != brand.Id)
@@ -108,6 +110,7 @@ namespace RusticShopAPI.Controllers
         // POST: api/Brands
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Brand>> PostBrand(Brand brand)
         {
           if (_context.Brands == null)
@@ -122,6 +125,7 @@ namespace RusticShopAPI.Controllers
 
         // DELETE: api/Brands/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteBrand(long id)
         {
             if (_context.Brands == null)
@@ -150,6 +154,7 @@ namespace RusticShopAPI.Controllers
         }
 
         [HttpPost("name-availability")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<bool> CheckNameAvailability(BrandNameOnlyDto data)
         {
             return _context.Brands.All(b => b.Name != data.Name);

@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Services;
 using RusticShopAPI.Services.Mail;
-using System.Linq;
 using RusticShopAPI.Data.Models.Auth;
 using RusticShopAPI.Data.Models.DTOs;
 

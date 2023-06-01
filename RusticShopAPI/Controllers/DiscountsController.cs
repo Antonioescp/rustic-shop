@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -25,6 +26,7 @@ namespace RusticShopAPI.Controllers
         #region CRUD
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<PaginatedResult<Discount>>> GetDiscounts(
             int pageIndex = 0,
             int pageSize = 10,
@@ -45,6 +47,7 @@ namespace RusticShopAPI.Controllers
 
         // GET: api/Discounts
         [HttpGet("all")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<IEnumerable<Discount>>> GetAllDiscounts()
         {
           if (_context.Discounts == null)
@@ -56,6 +59,7 @@ namespace RusticShopAPI.Controllers
 
         // GET: api/Discounts/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Discount>> GetDiscount(long id)
         {
           if (_context.Discounts == null)
@@ -75,6 +79,7 @@ namespace RusticShopAPI.Controllers
         // PUT: api/Discounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutDiscount(long id, Discount discount)
         {
             if (id != discount.Id)
@@ -106,6 +111,7 @@ namespace RusticShopAPI.Controllers
         // POST: api/Discounts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Discount>> PostDiscount(Discount discount)
         {
           if (_context.Discounts == null)
@@ -120,6 +126,7 @@ namespace RusticShopAPI.Controllers
 
         // DELETE: api/Discounts/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteDiscount(long id)
         {
             if (_context.Discounts == null)

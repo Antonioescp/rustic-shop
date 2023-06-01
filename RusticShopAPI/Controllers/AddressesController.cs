@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -23,6 +24,7 @@ namespace RusticShopAPI.Controllers
 
         // GET: api/Addresses
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<IEnumerable<Address>>> GetAddresses()
         {
           if (_context.Addresses == null)
@@ -34,6 +36,7 @@ namespace RusticShopAPI.Controllers
 
         // GET: api/Addresses/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Address>> GetAddress(long id)
         {
           if (_context.Addresses == null)
@@ -53,6 +56,7 @@ namespace RusticShopAPI.Controllers
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutAddress(long id, Address address)
         {
             if (id != address.Id)
@@ -84,6 +88,7 @@ namespace RusticShopAPI.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Address>> PostAddress(Address address)
         {
           if (_context.Addresses == null)
@@ -98,6 +103,7 @@ namespace RusticShopAPI.Controllers
 
         // DELETE: api/Addresses/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteAddress(long id)
         {
             if (_context.Addresses == null)

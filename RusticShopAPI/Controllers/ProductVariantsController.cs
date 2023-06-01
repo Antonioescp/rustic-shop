@@ -5,6 +5,7 @@ using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
 using RusticShopAPI.Data.Models.DTOs.ProductDtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RusticShopAPI.Controllers
 {
@@ -50,7 +51,7 @@ namespace RusticShopAPI.Controllers
             filterColumn,
             filterQuery);
         }
-
+        
         [HttpGet("details")]
         public async Task<ActionResult<PaginatedResult<ProductVariantListItem>>> GetPaginatedProductVariantsListItems(
             int pageIndex = 0,
@@ -98,6 +99,7 @@ namespace RusticShopAPI.Controllers
 
         // PUT: api/ProductVariants/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductVariant(long id, ProductVariant productVariant)
         {
@@ -129,6 +131,7 @@ namespace RusticShopAPI.Controllers
 
         // POST: api/ProductVariants
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<ProductVariant>> PostProductVariant(ProductVariant productVariant)
         {
@@ -143,6 +146,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // DELETE: api/ProductVariants/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductVariant(long id)
         {
@@ -166,7 +170,8 @@ namespace RusticShopAPI.Controllers
         {
             return (_context.ProductVariants?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
+        
+        [Authorize(Roles = "Administrator")]
         [HttpPost("sku-availability")]
         public ActionResult<bool> IsSkuAvailable(ProductVariantSkuOnlyDto data) {
           return _context.ProductVariants.All(pv => pv.SKU != data.SKU);
