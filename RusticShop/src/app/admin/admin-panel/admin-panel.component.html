@@ -1,14 +1,8 @@
 <div class="main-container">
-  <mat-toolbar color="primary" role="heading">
-    <img src="assets/logo2.png" width="100px">
-    <h1>Panel de administración</h1>
-  </mat-toolbar>
   <mat-sidenav-container class="panel-container">
     <mat-sidenav position="start" opened="true" mode="side" class="sidenav">
-
       <mat-accordion displayMode="flat">
         <mat-nav-list>
-
           <ng-container *ngFor="let expandable of links">
             <mat-expansion-panel class="mat-elevation-z0">
               <mat-expansion-panel-header>
@@ -17,18 +11,17 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
-              <mat-list-item *ngFor="let child of expandable.children" [routerLink]="child.path">
+              <mat-list-item
+                *ngFor="let child of expandable.children"
+                [routerLink]="child.path">
                 <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
                 <span matListItemTitle>{{ child.label }}</span>
               </mat-list-item>
-
             </mat-expansion-panel>
             <mat-divider></mat-divider>
           </ng-container>
-
         </mat-nav-list>
       </mat-accordion>
-
     </mat-sidenav>
     <mat-sidenav-content class="panel-content">
       <router-outlet></router-outlet>

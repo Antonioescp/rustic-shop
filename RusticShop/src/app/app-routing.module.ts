@@ -14,6 +14,10 @@ import { ProductsComponent } from './admin/products/products/products.component'
 import { BrandsComponent } from './admin/brands/brands/brands.component';
 import { ProductVariantsComponent } from './admin/product-variants/product-variants/product-variants.component';
 import { MainComponent } from './main/main.component';
+import {
+  canActivateAdministration,
+  canActivateAuthRoutes,
+} from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -21,8 +25,12 @@ const routes: Routes = [
     children: [
       {
         path: 'auth',
+        canActivate: [canActivateAuthRoutes],
         children: [
-          { path: 'unlock-account', component: UnlockAccountComponent },
+          {
+            path: 'unlock-account',
+            component: UnlockAccountComponent,
+          },
           {
             path: 'request-account-unlock',
             component: RequestAccountUnlockComponent,
@@ -39,21 +47,32 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'admin/panel',
-    component: AdminPanelComponent,
+    path: 'admin',
+    canActivate: [canActivateAdministration],
+    component: MainComponent,
     children: [
-      { path: 'productos', component: ProductsComponent },
-      { path: 'categorias', component: CategoriesComponent },
-      { path: 'caracteristicas', component: AttributesComponent },
-      { path: 'descuentos', component: DiscountsComponent },
-      { path: 'marcas', component: BrandsComponent },
-      { path: 'variantes', component: ProductVariantsComponent },
+      {
+        path: 'panel',
+        component: AdminPanelComponent,
+        children: [
+          { path: 'productos', component: ProductsComponent },
+          { path: 'categorias', component: CategoriesComponent },
+          { path: 'caracteristicas', component: AttributesComponent },
+          { path: 'descuentos', component: DiscountsComponent },
+          { path: 'marcas', component: BrandsComponent },
+          { path: 'variantes', component: ProductVariantsComponent },
+        ],
+      },
     ],
   },
   {
-    path: '',
+    path: 'home',
     component: MainComponent,
+  },
+  {
+    path: '',
     pathMatch: 'full',
+    redirectTo: 'home',
   },
 ];
 

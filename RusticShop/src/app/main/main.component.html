@@ -1,5 +1,5 @@
 <nav>
-  <mat-toolbar>
+  <mat-toolbar color="primary">
     <span><a [routerLink]="['/']">Rustic Shop</a></span>
     <span class="spacer"></span>
     <ng-container *ngIf="auth.isAuthenticated">
@@ -16,7 +16,6 @@
     </ng-container>
     <ng-container *ngIf="!auth.isAuthenticated">
       <button
-        *ngIf="!auth.isAuthenticated"
         mat-icon-button
         matTooltip="Iniciar sesión"
         [routerLink]="['/Users/auth/login']">
