@@ -10,6 +10,7 @@ namespace RusticShopAPI.Services.AutoMapper
         public ProductMapperSettings()
         {
             CreateMap<Product, ProductDetailDto>();
+            CreateMap<Product, ProductWithBrandName>();
             CreateMap<Category, CategoryDetailDto>();
 
             CreateMap<ProductVariant, ProductVariantDetailDto>()
