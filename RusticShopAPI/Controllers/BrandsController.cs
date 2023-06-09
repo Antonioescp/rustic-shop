@@ -9,6 +9,7 @@ using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
 using RusticShopAPI.Data.Models.DTOs.BrandDtos;
+using AutoMapper;
 
 namespace RusticShopAPI.Controllers
 {
@@ -17,14 +18,31 @@ namespace RusticShopAPI.Controllers
     public class BrandsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public BrandsController(ApplicationDbContext context)
+        public BrandsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-
         #region CRUD
+
+        [HttpGet("with-products")]
+        public async Task<ActionResult<IEnumerable<BrandWithProducts>>> GetBrandWithProducts()
+        {
+          var result = await _context.Brands
+            .Include(b => b.Products)
+            .AsSplitQuery()
+            .AsNoTracking()
+            .ToListAsync();
+
+          if (result == null) {
+            return StatusCode(500);
+          }
+
+          return _mapper.Map<List<BrandWithProducts>>(result);
+        }
 
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<Brand>>> GetPaginatedBrands(
