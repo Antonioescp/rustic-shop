@@ -18,6 +18,8 @@ export class LoginComponent extends BaseFormComponent {
   title?: string;
   loginResponse?: LoginResponse;
   accountLocked = false;
+  isBusy = false;
+  hidePassword = true;
 
   constructor(
     private router: Router,
@@ -35,6 +37,8 @@ export class LoginComponent extends BaseFormComponent {
     const loginRequest = <LoginRequest>{};
     loginRequest.email = this.form.controls['email'].value;
     loginRequest.password = this.form.controls['password'].value;
+
+    this.isBusy = true;
 
     this.authService.login(loginRequest).subscribe({
       next: result => {
@@ -59,6 +63,9 @@ export class LoginComponent extends BaseFormComponent {
         if (error.status === HttpStatusCode.Unauthorized) {
           this.accountLocked = true;
         }
+      },
+      complete: () => {
+        this.isBusy = false;
       },
     });
   }

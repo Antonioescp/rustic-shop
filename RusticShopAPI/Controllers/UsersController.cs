@@ -73,13 +73,12 @@ namespace RusticShopAPI.Controllers
                 return BadRequest(response);
             }
 
-            var mailSent = await SendConfirmationEmail(user);
+            _ = SendConfirmationEmail(user);
 
             return Ok(new RegistrationResponse
             {
                 Success = true,
-                Message = $"Registrado con éxito{(mailSent ? ", correo de confirmación enviado" : "")}.",
-                EmailSent = mailSent
+                Message = $"Registrado con éxito",
             });
         }
 

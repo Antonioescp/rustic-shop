@@ -1,6 +1,7 @@
 <mat-card>
   <mat-card-content>
     <button
+      [disabled]="isBusy"
       matTooltip="Ir a inicio"
       class="back-button"
       mat-icon-button
@@ -9,6 +10,7 @@
     </button>
 
     <button
+      [disabled]="isBusy"
       matTooltip="Ir a inicio de sesión"
       class="register-button"
       mat-icon-button
@@ -25,7 +27,11 @@
         <mat-icon matIconPrefix>person</mat-icon>
         <input matInput type="text" required formControlName="username" />
         <mat-error
-          *ngFor="let error of getErrors(form.get('username')!, 'Usuario')">
+          *ngFor="
+            let error of getErrors(form.get('username')!, 'Usuario', {
+              usernameNotAvailable: 'ya se encuentra en uso.'
+            })
+          ">
           {{ error }}
         </mat-error>
       </mat-form-field>
@@ -36,7 +42,9 @@
         <input matInput type="email" required formControlName="email" />
         <mat-error
           *ngFor="
-            let error of getErrors(form.get('email')!, 'Correo electrónico')
+            let error of getErrors(form.get('email')!, 'Correo electrónico', {
+              emailNotAvailable: 'ya se encuentra en uso.'
+            })
           ">
           {{ error }}
         </mat-error>
@@ -93,7 +101,10 @@
           *ngFor="
             let error of getErrors(
               form.get('confirmPassword')!,
-              'Confirmar contraseña'
+              'Confirmar contraseña',
+              {
+                matchField: 'debe coincidir con Contraseña.'
+              }
             )
           ">
           {{ error }}
@@ -103,7 +114,7 @@
       <button
         mat-flat-button
         color="primary"
-        [disabled]="form.invalid"
+        [disabled]="form.invalid || isBusy"
         type="submit">
         Registrarse
       </button>

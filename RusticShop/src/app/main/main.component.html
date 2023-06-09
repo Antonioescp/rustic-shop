@@ -17,6 +17,12 @@
     <ng-container *ngIf="!auth.isAuthenticated">
       <button
         mat-icon-button
+        matTooltip="Registrarse"
+        [routerLink]="['/Users/auth/registration']">
+        <mat-icon>person_add</mat-icon>
+      </button>
+      <button
+        mat-icon-button
         matTooltip="Iniciar sesión"
         [routerLink]="['/Users/auth/login']">
         <mat-icon>login</mat-icon>

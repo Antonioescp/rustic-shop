@@ -14,7 +14,7 @@ import { CustomValidators } from 'src/app/shared/custom-validators';
 import { RegistrationResponse } from './registration-response';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
-import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-registration',
@@ -25,11 +25,12 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
   registrationResponse?: RegistrationResponse;
   hidePassword = true;
   hideConfirmPassword = true;
+  isBusy = false;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private location: Location
+    private snackBar: MatSnackBar
   ) {
     super();
   }
@@ -39,31 +40,27 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form = new FormGroup(
-      {
-        username: new FormControl(
-          '',
-          [Validators.required, Validators.minLength(8)],
-          this.isUserAvailable()
-        ),
-        email: new FormControl(
-          '',
-          [Validators.required, Validators.email],
-          this.isEmailAvailable()
-        ),
-        password: new FormControl('', [
-          Validators.required,
-          Validators.minLength(8),
-          CustomValidators.validatePassword,
-        ]),
-        confirmPassword: new FormControl('', [Validators.required]),
-      },
-      {
-        validators: [
-          CustomValidators.matchFields('password', 'confirmPassword'),
-        ],
-      }
-    );
+    this.form = new FormGroup({
+      username: new FormControl(
+        '',
+        [Validators.required, Validators.minLength(8)],
+        this.isUserAvailable()
+      ),
+      email: new FormControl(
+        '',
+        [Validators.required, Validators.email],
+        this.isEmailAvailable()
+      ),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        CustomValidators.validatePassword,
+      ]),
+      confirmPassword: new FormControl('', [
+        Validators.required,
+        CustomValidators.matchField('password'),
+      ]),
+    });
   }
 
   onSubmit() {
@@ -79,17 +76,26 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
     registrationRequest.confirmPassword =
       this.form.controls['confirmPassword'].value;
 
+    this.isBusy = true;
+
     this.authService.register(registrationRequest).subscribe({
       next: res => {
         this.registrationResponse = res;
         if (res.success) {
-          this.router.navigate(['/Users/auth/login']);
+          this.snackBar.open(
+            'Cuenta creada con éxito, revisa tu correo electrónico.'
+          );
+          this.router.navigate(['/']);
         }
       },
       error: error => {
+        this.snackBar.open('Ha ocurrido un error.');
         if (error.status === 400) {
           this.registrationResponse = error.error;
         }
+      },
+      complete: () => {
+        this.isBusy = false;
       },
     });
   }
