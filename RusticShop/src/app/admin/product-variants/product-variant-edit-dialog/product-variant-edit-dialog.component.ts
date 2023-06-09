@@ -9,15 +9,15 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, map } from 'rxjs';
+import { BrandsService } from 'src/app/services/brands.service';
 import { ProductVariantsService } from 'src/app/services/product-variants.service';
-import { ProductsService } from 'src/app/services/products.service';
 import {
   BaseEditDialogComponent,
   BaseEditDialogData,
   BaseEditDialogResult,
 } from 'src/app/shared/components/base-edit-dialog.component';
-import { Product } from 'src/app/shared/models/Product';
 import { ProductVariant } from 'src/app/shared/models/ProductVariant';
+import { BrandWithProducts } from 'src/app/shared/models/dtos/brands/BrandWithProducts';
 
 @Component({
   selector: 'app-product-variant-edit-dialog',
@@ -28,11 +28,11 @@ export class ProductVariantEditDialogComponent
   extends BaseEditDialogComponent<ProductVariant>
   implements OnInit
 {
-  products: Product[] = [];
+  brands: BrandWithProducts[] = [];
 
   constructor(
     private productVariantsService: ProductVariantsService,
-    private productsService: ProductsService,
+    private brandsService: BrandsService,
     @Inject(MAT_DIALOG_DATA) data: BaseEditDialogData,
     dialogRef: MatDialogRef<
       ProductVariantEditDialogComponent,
@@ -70,9 +70,9 @@ export class ProductVariantEditDialogComponent
 
   getProducts() {
     this.isBusy = true;
-    this.productsService.getAll().subscribe({
+    this.brandsService.getAllWithProducts().subscribe({
       next: result => {
-        this.products = [...result];
+        this.brands = [...result];
         this.isBusy = false;
       },
       error: error => {

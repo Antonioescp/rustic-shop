@@ -8,6 +8,7 @@ import { CrudService } from '../shared/others/CrudService';
 import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
 import Category from '../shared/models/Category';
 import Attribute from '../shared/models/Attribute';
+import { ProductWithBrandName } from '../shared/models/dtos/products/ProductWithBrandName';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,12 @@ export class ProductsService implements CrudService<Product> {
 
   private getProductAttributesUrl(id: number): string {
     return `${this.productsUrl}${id}/attributes/`;
+  }
+
+  getAllWithBrandName(): Observable<ProductWithBrandName[]> {
+    return this.http.get<ProductWithBrandName[]>(
+      this.productsUrl + 'with-brand-name'
+    );
   }
 
   getAll(): Observable<Product[]> {

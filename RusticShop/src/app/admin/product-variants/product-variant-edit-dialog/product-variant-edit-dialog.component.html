@@ -10,9 +10,13 @@
         <mat-form-field class="big">
           <mat-label>Producto</mat-label>
           <mat-select formControlName="productId">
-            <mat-option *ngFor="let product of products" [value]="product.id">
-              {{ product.name }}
-            </mat-option>
+            <mat-optgroup *ngFor="let brand of brands" [label]="brand.name">
+              <mat-option
+                *ngFor="let product of brand.products"
+                [value]="product.id">
+                {{ product.name + " (" + brand.name + ")" }}
+              </mat-option>
+            </mat-optgroup>
           </mat-select>
           <mat-error
             *ngFor="let error of getErrors(form.get('productId')!, 'Producto')">
