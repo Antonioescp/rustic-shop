@@ -79,7 +79,8 @@ builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddAutoMapper(
     typeof(MapperSettings),
     typeof(ProductMapperSettings),
-    typeof(ProductVariantMapperSettings));
+    typeof(ProductVariantMapperSettings),
+    typeof(BrandMapperSettings));
 
 var app = builder.Build();
 

@@ -7,6 +7,7 @@ import { Pagination } from './categories.service';
 import { BrandDto } from '../shared/models/dtos/brands/CreateBrandDto';
 import { CrudService } from '../shared/others/CrudService';
 import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
+import { BrandWithProducts } from '../shared/models/dtos/brands/BrandWithProducts';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,10 @@ export class BrandsService implements CrudService<Brand> {
   readonly brandsUrl = environment.apiBaseUrl + environment.brandsEndpoint;
 
   constructor(private http: HttpClient) {}
+
+  getAllWithProducts(): Observable<BrandWithProducts[]> {
+    return this.http.get<BrandWithProducts[]>(this.brandsUrl + 'with-products');
+  }
 
   getPaginated(pagination: Pagination): Observable<PaginatedResponse<Brand>> {
     let params = new HttpParams()

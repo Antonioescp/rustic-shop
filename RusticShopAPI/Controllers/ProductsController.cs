@@ -67,6 +67,21 @@ namespace RusticShopAPI.Controllers
             return _mapper.Map<PaginatedResult<ProductDetailDto>>(paginated);
         }
 
+        [HttpGet("with-brand-name")]
+        public async Task<ActionResult<IEnumerable<ProductWithBrandName>>> GetProductsWithBrandName() {
+          var result = await _context.Products
+            .Include(p => p.Brand)
+            .AsSplitQuery()
+            .AsNoTracking()
+            .ToListAsync();
+
+          if (result == null) {
+            return StatusCode(500);
+          }
+
+          return _mapper.Map<List<ProductWithBrandName>>(result);
+        }
+
         // GET: api/Products
         [Authorize(Roles = "Administrator")]
         [HttpGet("all")]

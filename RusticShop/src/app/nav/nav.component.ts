@@ -10,12 +10,12 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class NavComponent implements OnInit, OnDestroy {
   private destroySubject = new Subject();
-  isLoggedIn: boolean = false;
+  isLoggedIn = false;
 
   constructor(private authService: AuthService, private router: Router) {
     this.authService.authStatus
       .pipe(takeUntil(this.destroySubject))
-      .subscribe((result) => {
+      .subscribe(result => {
         this.isLoggedIn = result;
       });
   }
