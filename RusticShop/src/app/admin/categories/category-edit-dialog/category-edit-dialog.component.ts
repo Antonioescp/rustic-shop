@@ -1,5 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { map, Observable } from 'rxjs';
 import { CategoriesService } from '../../../services/categories.service';
@@ -18,28 +25,29 @@ export interface CategoryEditDialogResult {
 @Component({
   selector: 'app-category-edit-dialog',
   templateUrl: './category-edit-dialog.component.html',
-  styleUrls: ['./category-edit-dialog.component.scss']
+  styleUrls: ['./category-edit-dialog.component.scss'],
 })
-export class CategoryEditDialogComponent extends BaseFormComponent implements OnInit {
-
+export class CategoryEditDialogComponent
+  extends BaseFormComponent
+  implements OnInit
+{
   title = 'Nueva categoría';
   isBusy = false;
 
   constructor(
     private categoriesService: CategoriesService,
     @Inject(MAT_DIALOG_DATA) private dialogData: CategoryEditDialogData,
-    private dialogRef: MatDialogRef<CategoryEditDialogComponent, CategoryEditDialogResult>,
+    private dialogRef: MatDialogRef<
+      CategoryEditDialogComponent,
+      CategoryEditDialogResult
+    >
   ) {
     super();
 
     this.form = new FormGroup({
       name: new FormControl('', {
-        validators: [
-          Validators.required,
-        ],
-        asyncValidators: [
-          this.checkNameAvailability(),
-        ],
+        validators: [Validators.required],
+        asyncValidators: [this.checkNameAvailability()],
         nonNullable: true,
       }),
       description: new FormControl('', {
@@ -87,7 +95,7 @@ export class CategoryEditDialogComponent extends BaseFormComponent implements On
   createCategory(data: Category): void {
     this.isBusy = true;
     this.categoriesService.create(data).subscribe({
-      next: _ => this.dialogRef.close({ success: true, category: data }),
+      next: () => this.dialogRef.close({ success: true, category: data }),
       error: error => console.error(error),
       complete: () => (this.isBusy = false),
     });
@@ -95,8 +103,8 @@ export class CategoryEditDialogComponent extends BaseFormComponent implements On
 
   updateCategory(data: Category): void {
     this.isBusy = true;
-    this.categoriesService.update(data).subscribe({
-      next: _ => this.dialogRef.close({ success: true, category: data }),
+    this.categoriesService.update(data, data.id).subscribe({
+      next: () => this.dialogRef.close({ success: true, category: data }),
       error: error => console.error(error),
       complete: () => (this.isBusy = false),
     });
@@ -104,9 +112,11 @@ export class CategoryEditDialogComponent extends BaseFormComponent implements On
 
   checkNameAvailability(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return this.categoriesService.checkNameUniqueness(control.value).pipe(map(nameTaken => {
-        return nameTaken ? null : { nameTaken };
-      }));
-    }
+      return this.categoriesService.checkNameUniqueness(control.value).pipe(
+        map(nameTaken => {
+          return nameTaken ? null : { nameTaken };
+        })
+      );
+    };
   }
 }
