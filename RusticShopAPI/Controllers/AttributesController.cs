@@ -21,14 +21,14 @@ namespace RusticShopAPI.Controllers
 
         #region CRUD
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<AttributeModel>>> GetAllAttributes()
         {
             return await _context.Attributes.ToListAsync();
         }
 
         // GET: api/Attributes
-        [HttpGet]
+        [HttpGet("paginated")]
         public async Task<ActionResult<PaginatedResult<AttributeModel>>> GetAttributes(
             int pageIndex = 0,
             int pageSize = 10,
