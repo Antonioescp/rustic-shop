@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.Settings;
+using RusticShopAPI.Data.Models.Views;
 
 namespace RusticShopAPI.Data
 {
@@ -69,5 +70,6 @@ namespace RusticShopAPI.Data
         public DbSet<RefundDetail> RefundDetails => Set<RefundDetail>();
         public DbSet<ProductAttribute> ProductAttributes => Set<ProductAttribute>();
         public DbSet<CategoryProduct> CategoryProducts => Set<CategoryProduct>();
+        public DbSet<ProductSales> ProductSales => Set<ProductSales>(); 
     }
 }
