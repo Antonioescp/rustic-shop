@@ -44,7 +44,7 @@ namespace RusticShopAPI.Controllers
           return _mapper.Map<List<BrandWithProducts>>(result);
         }
 
-        [HttpGet]
+        [HttpGet("paginated")]
         public async Task<ActionResult<PaginatedResult<Brand>>> GetPaginatedBrands(
             int pageIndex = 0,
             int pageSize = 10,
@@ -64,7 +64,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/Brands
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
         {
           if (_context.Brands == null)

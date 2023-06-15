@@ -69,12 +69,12 @@ export class BrandEditDialogComponent
   getBrand(id: number): void {
     this.isBusy = true;
     this.brandsService.getById(id).subscribe({
-      next: (result) => {
+      next: result => {
         this.brand = result;
         this.title = `Editar - ${this.brand.name}`;
         this.form.patchValue(this.brand);
       },
-      error: (error) => console.error(error),
+      error: error => console.error(error),
       complete: () => (this.isBusy = false),
     });
   }
@@ -96,21 +96,21 @@ export class BrandEditDialogComponent
   createBrand(brandDto: BrandDto): void {
     this.isBusy = true;
     this.brandsService.create(brandDto).subscribe({
-      next: (_) => {
+      next: () => {
         this.dialogRef.close({ success: true, brand: brandDto });
       },
-      error: (error) => console.error(error),
+      error: error => console.error(error),
       complete: () => (this.isBusy = false),
     });
   }
 
   updateBrand(brand: Brand): void {
     this.isBusy = true;
-    this.brandsService.update(brand).subscribe({
-      next: (_) => {
+    this.brandsService.update(brand, brand.id).subscribe({
+      next: () => {
         this.dialogRef.close({ success: true, brand: { name: brand.name } });
       },
-      error: (error) => console.error(error),
+      error: error => console.error(error),
       complete: () => (this.isBusy = false),
     });
   }
@@ -118,7 +118,7 @@ export class BrandEditDialogComponent
   checkNameAvailability(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       return this.brandsService.isNameAvailable(control.value).pipe(
-        map((isAvailable) => {
+        map(isAvailable => {
           return isAvailable ? null : { nameTaken: true };
         })
       );
