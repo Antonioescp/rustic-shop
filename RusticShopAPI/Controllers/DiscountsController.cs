@@ -24,7 +24,7 @@ namespace RusticShopAPI.Controllers
 
         #region CRUD
 
-        [HttpGet]
+        [HttpGet("paginated")]
         public async Task<ActionResult<PaginatedResult<Discount>>> GetDiscounts(
             int pageIndex = 0,
             int pageSize = 10,
@@ -44,7 +44,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/Discounts
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Discount>>> GetAllDiscounts()
         {
           if (_context.Discounts == null)
