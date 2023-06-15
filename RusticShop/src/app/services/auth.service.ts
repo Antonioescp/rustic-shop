@@ -25,10 +25,12 @@ export class AuthService {
     if (this.token) {
       const decodedToken = jwtDecode<AuthenticationToken>(this.token);
       if (Array.isArray(decodedToken.role)) {
-        return decodedToken.role.includes(role);
+        return decodedToken.role
+          .map(role => role.toLowerCase())
+          .includes(role.toLowerCase());
       } else if (
         typeof decodedToken.role === 'string' &&
-        decodedToken.role === role
+        decodedToken.role.toLowerCase() === role.toLowerCase()
       ) {
         return true;
       }
@@ -42,6 +44,10 @@ export class AuthService {
 
   public get isAdmin(): boolean {
     return this.hasRole('Administrator');
+  }
+
+  public get isProgrammer(): boolean {
+    return this.hasRole('Programmer');
   }
 
   public set updatedAuthStatus(newValue: boolean) {
@@ -69,6 +75,9 @@ export class AuthService {
         if (loginResponse.success && loginResponse.token) {
           localStorage.setItem(environment.tokenKey, loginResponse.token);
           this.updatedAuthStatus = true;
+          if (this.token) {
+            console.log(jwtDecode(this.token));
+          }
         }
       })
     );

@@ -99,7 +99,7 @@ namespace RusticShopAPI.Controllers
 
         // PUT: api/ProductVariants/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,Programmer")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductVariant(long id, ProductVariant productVariant)
         {
@@ -131,7 +131,7 @@ namespace RusticShopAPI.Controllers
 
         // POST: api/ProductVariants
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,Programmer")]
         [HttpPost]
         public async Task<ActionResult<ProductVariant>> PostProductVariant(ProductVariant productVariant)
         {
@@ -146,7 +146,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // DELETE: api/ProductVariants/5
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,Programmer")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductVariant(long id)
         {
@@ -171,7 +171,7 @@ namespace RusticShopAPI.Controllers
             return (_context.ProductVariants?.Any(e => e.Id == id)).GetValueOrDefault();
         }
         
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,Programmer")]
         [HttpPost("sku-availability")]
         public ActionResult<bool> IsSkuAvailable(ProductVariantSkuOnlyDto data) {
           return _context.ProductVariants.All(pv => pv.SKU != data.SKU);

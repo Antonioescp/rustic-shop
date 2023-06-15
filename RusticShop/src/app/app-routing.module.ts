@@ -15,8 +15,10 @@ import { BrandsComponent } from './admin/brands/brands/brands.component';
 import { ProductVariantsComponent } from './admin/product-variants/product-variants/product-variants.component';
 import { MainComponent } from './main/main.component';
 import {
-  canActivateAdministration,
   canActivateAuthRoutes,
+  canActivateAdminRoutes,
+  canActivateProgrammerRoutes,
+  canActivateEmployeeRoutes,
 } from './guards/auth.guard';
 
 const routes: Routes = [
@@ -48,18 +50,38 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    canActivate: [canActivateAdministration],
     component: MainComponent,
     children: [
       {
         path: 'panel',
+        canActivate: [canActivateEmployeeRoutes],
         component: AdminPanelComponent,
         children: [
-          { path: 'productos', component: ProductsComponent },
-          { path: 'categorias', component: CategoriesComponent },
-          { path: 'caracteristicas', component: AttributesComponent },
-          { path: 'descuentos', component: DiscountsComponent },
-          { path: 'marcas', component: BrandsComponent },
+          {
+            path: 'productos',
+            canActivate: [canActivateAdminRoutes],
+            component: ProductsComponent,
+          },
+          {
+            path: 'categorias',
+            canActivate: [canActivateAdminRoutes],
+            component: CategoriesComponent,
+          },
+          {
+            path: 'caracteristicas',
+            canActivate: [canActivateAdminRoutes],
+            component: AttributesComponent,
+          },
+          {
+            path: 'descuentos',
+            canActivate: [canActivateAdminRoutes],
+            component: DiscountsComponent,
+          },
+          {
+            path: 'marcas',
+            canActivate: [canActivateAdminRoutes],
+            component: BrandsComponent,
+          },
           { path: 'variantes', component: ProductVariantsComponent },
         ],
       },

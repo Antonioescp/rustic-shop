@@ -4,7 +4,7 @@
     <span class="spacer"></span>
     <ng-container *ngIf="auth.isAuthenticated">
       <button
-        *ngIf="auth.isAdmin"
+        *ngIf="auth.isAdmin || auth.isProgrammer"
         mat-icon-button
         matTooltip="Panel de administración"
         [routerLink]="['/admin/panel']">
