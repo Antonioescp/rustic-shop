@@ -11,7 +11,12 @@ import {
   BrandEditDialogResult,
 } from '../brand-edit-dialog/brand-edit-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmDialogComponent, ConfirmDialogData, ConfirmDialogResult } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+  ConfirmDialogResult,
+} from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { Pagination } from 'src/app/services/categories.service';
 
 @Component({
   selector: 'app-brands',
@@ -22,14 +27,14 @@ export class BrandsComponent implements OnInit {
   brands!: MatTableDataSource<Brand>;
   displayedColumns = ['id', 'name', 'actions'];
 
-  defaultPageIndex: number = 0;
-  defaultPageSize: number = 10;
-  public defaultSortColumn: string = 'name';
+  defaultPageIndex = 0;
+  defaultPageSize = 10;
+  public defaultSortColumn = 'name';
   public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn: string = 'name';
+  defaultFilterColumn = 'name';
   filterQuery?: string;
 
-  isLoadingAction: boolean = false;
+  isLoadingAction = false;
 
   readonly brandEditDialogConfig: MatDialogConfig<BrandEditDialogData> = {};
 
@@ -56,24 +61,26 @@ export class BrandsComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.brandsService
-      .getPaginated({
-        defaultSortColumn: this.defaultSortColumn,
-        defaultSortOrder: this.defaultSortOrder,
-        pageIndex: event.pageIndex,
-        pageSize: event.pageSize,
-        sort: this.sort,
-        defaultFilterColumn: this.defaultFilterColumn,
-        filterQuery: this.filterQuery,
-      })
+      .getPaginated(
+        new Pagination({
+          defaultSortColumn: this.defaultSortColumn,
+          defaultSortOrder: this.defaultSortOrder,
+          pageIndex: event.pageIndex,
+          pageSize: event.pageSize,
+          sort: this.sort,
+          defaultFilterColumn: this.defaultFilterColumn,
+          filterQuery: this.filterQuery,
+        })
+      )
       .subscribe({
-        next: (result) => {
+        next: result => {
           this.paginator.length = result.totalCount;
           this.paginator.pageIndex = result.pageIndex;
           this.paginator.pageSize = result.pageSize;
           this.brands = new MatTableDataSource(result.data);
           this.isLoadingAction = false;
         },
-        error: (error) => {
+        error: error => {
           console.log(error);
           this.isLoadingAction = false;
         },
@@ -84,16 +91,17 @@ export class BrandsComponent implements OnInit {
     const dialogRef = this.dialog.open<
       ConfirmDialogComponent,
       ConfirmDialogData,
-      ConfirmDialogResult>(ConfirmDialogComponent, {
-        data: {
-          title: `Eliminar la marca ${brand.name}`,
-          message: `¿Estás seguro de que deseas eliminar la marca ${brand.name}? Todos los productos con esta serán eliminados.`,
-          cancelColor: 'primary',
-          confirmColor: 'warn',
-          cancelIcon: 'cancel',
-          confirmIcon: 'confirmIcon',
-        },
-      });
+      ConfirmDialogResult
+    >(ConfirmDialogComponent, {
+      data: {
+        title: `Eliminar la marca ${brand.name}`,
+        message: `¿Estás seguro de que deseas eliminar la marca ${brand.name}? Todos los productos con esta serán eliminados.`,
+        cancelColor: 'primary',
+        confirmColor: 'warn',
+        cancelIcon: 'cancel',
+        confirmIcon: 'confirmIcon',
+      },
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.confirmed) {
@@ -105,11 +113,11 @@ export class BrandsComponent implements OnInit {
   deleteBrand(brand: Brand): void {
     this.isLoadingAction = true;
     this.brandsService.deleteById(brand.id).subscribe({
-      next: (_) => {
+      next: () => {
         this.loadData();
         this.snackBar.open(`Marca "${brand.name}" eliminada con éxito.`);
       },
-      error: (error) => {
+      error: error => {
         console.error(error);
         this.isLoadingAction = false;
         this.snackBar.open(`La marca "${brand.name}" no se pudo eliminar.`);
@@ -125,7 +133,7 @@ export class BrandsComponent implements OnInit {
     >(BrandEditDialogComponent, this.brandEditDialogConfig);
 
     dialogRef.afterClosed().subscribe({
-      next: (result) => {
+      next: result => {
         if (result?.success) {
           this.loadData();
           this.snackBar.open(`Marca "${result.brand.name}" creada con éxito`);
@@ -135,7 +143,7 @@ export class BrandsComponent implements OnInit {
           );
         }
       },
-      error: (error) => console.error(error),
+      error: error => console.error(error),
     });
   }
 
@@ -152,19 +160,19 @@ export class BrandsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe({
-      next: (result) => {
+      next: result => {
         if (result?.success) {
           this.loadData();
           this.snackBar.open(
             `Marca "${result.brand.name}" actualizada con éxito.`
           );
-        } else if (result?.success) {
+        } else if (result?.success === false) {
           this.snackBar.open(
             `La marca "${result.brand.name}" no pudo ser actualizada.`
           );
         }
       },
-      error: (error) => console.error(error),
+      error: error => console.error(error),
     });
   }
 }

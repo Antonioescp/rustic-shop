@@ -21,6 +21,7 @@ import {
   ProductEditSchemaDialogData,
   ProductEditSchemaDialogResult,
 } from '../product-edit-schema-dialog/product-edit-schema-dialog.component';
+import { Pagination } from 'src/app/services/categories.service';
 
 @Component({
   selector: 'app-products',
@@ -38,14 +39,14 @@ export class ProductsComponent implements OnInit {
     'actions',
   ];
 
-  defaultPageIndex: number = 0;
-  defaultPageSize: number = 10;
-  public defaultSortColumn: string = 'name';
+  defaultPageIndex = 0;
+  defaultPageSize = 10;
+  public defaultSortColumn = 'name';
   public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn: string = 'name';
+  defaultFilterColumn = 'name';
   filterQuery?: string;
 
-  isLoadingAction: boolean = false;
+  isLoadingAction = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -70,24 +71,26 @@ export class ProductsComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.productsService
-      .getPaginated({
-        defaultSortColumn: this.defaultSortColumn,
-        defaultSortOrder: this.defaultSortOrder,
-        pageIndex: event.pageIndex,
-        pageSize: event.pageSize,
-        sort: this.sort,
-        defaultFilterColumn: this.defaultFilterColumn,
-        filterQuery: this.filterQuery,
-      })
+      .getPaginated(
+        new Pagination({
+          defaultSortColumn: this.defaultSortColumn,
+          defaultSortOrder: this.defaultSortOrder,
+          pageIndex: event.pageIndex,
+          pageSize: event.pageSize,
+          sort: this.sort,
+          defaultFilterColumn: this.defaultFilterColumn,
+          filterQuery: this.filterQuery,
+        })
+      )
       .subscribe({
-        next: (result) => {
+        next: result => {
           this.paginator.length = result.totalCount;
           this.paginator.pageIndex = result.pageIndex;
           this.paginator.pageSize = result.pageSize;
           this.products = new MatTableDataSource(result.data);
           this.isLoadingAction = false;
         },
-        error: (error) => {
+        error: error => {
           console.log(error);
           this.isLoadingAction = false;
         },
@@ -110,7 +113,7 @@ export class ProductsComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.confirmed) {
         this.deleteProduct(product);
       }
@@ -120,11 +123,11 @@ export class ProductsComponent implements OnInit {
   deleteProduct(product: Product) {
     this.isLoadingAction = true;
     this.productsService.deleteById(product.id).subscribe({
-      next: (result) => {
+      next: () => {
         this.loadData();
         this.snackBar.open(`Producto "${product.name}" eliminado con éxito.`);
       },
-      error: (error) => {
+      error: error => {
         console.error(error);
         this.isLoadingAction = false;
         this.snackBar.open(
@@ -141,7 +144,7 @@ export class ProductsComponent implements OnInit {
       BaseEditDialogResult<Product>
     >(ProductEditDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.snackBar.open(
           `Producto "${result.resource.name}" creado con éxito.`
@@ -165,7 +168,7 @@ export class ProductsComponent implements OnInit {
       data: { id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.snackBar.open(
           `Producto "${result.resource.name}" actualizado con éxito.`
@@ -189,7 +192,7 @@ export class ProductsComponent implements OnInit {
       data: { id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.snackBar.open('Actualizado');
       }

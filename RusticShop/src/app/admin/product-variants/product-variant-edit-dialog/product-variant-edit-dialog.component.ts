@@ -98,6 +98,10 @@ export class ProductVariantEditDialogComponent
     return productVariant;
   }
 
+  override getId(model: ProductVariant): number {
+    return model.id;
+  }
+
   updateTitle(data: ProductVariant): void {
     this.title = 'Editar - ' + data.sku;
   }

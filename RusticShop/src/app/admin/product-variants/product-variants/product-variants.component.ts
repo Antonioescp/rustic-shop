@@ -16,6 +16,8 @@ import {
 } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import { ProductVariant } from 'src/app/shared/models/ProductVariant';
 import { ProductVariantEditDialogComponent } from '../product-variant-edit-dialog/product-variant-edit-dialog.component';
+import { ProductVariantListItem } from 'src/app/shared/models/dtos/product-variants/ProductVariantListItem';
+import { Pagination } from 'src/app/services/categories.service';
 
 @Component({
   selector: 'app-product-variants',
@@ -23,7 +25,7 @@ import { ProductVariantEditDialogComponent } from '../product-variant-edit-dialo
   styleUrls: ['./product-variants.component.scss'],
 })
 export class ProductVariantsComponent implements OnInit {
-  variants!: MatTableDataSource<ProductVariant>;
+  variants!: MatTableDataSource<ProductVariantListItem>;
   displayedColumns = [
     'id',
     'productName',
@@ -66,15 +68,17 @@ export class ProductVariantsComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.productVariantsService
-      .getPaginated({
-        defaultSortColumn: this.defaultSortColumn,
-        defaultSortOrder: this.defaultSortOrder,
-        pageIndex: event.pageIndex,
-        pageSize: event.pageSize,
-        sort: this.sort,
-        defaultFilterColumn: this.defaultFilterColumn,
-        filterQuery: this.filterQuery,
-      })
+      .getPaginatedListItem(
+        new Pagination({
+          defaultSortColumn: this.defaultSortColumn,
+          defaultSortOrder: this.defaultSortOrder,
+          pageIndex: event.pageIndex,
+          pageSize: event.pageSize,
+          sort: this.sort,
+          defaultFilterColumn: this.defaultFilterColumn,
+          filterQuery: this.filterQuery,
+        })
+      )
       .subscribe({
         next: result => {
           this.paginator.length = result.totalCount;

@@ -68,10 +68,10 @@ export class ProductEditDialogComponent
   getBrands(): void {
     this.isBusy = true;
     this.brandsService.getAll().subscribe({
-      next: (result) => {
+      next: result => {
         this.brands = [...result];
       },
-      error: (error) => {
+      error: error => {
         console.error(error);
         this.dialogRef.close();
       },
@@ -97,5 +97,9 @@ export class ProductEditDialogComponent
 
   updateTitle(data: Product): void {
     this.title = 'Editar - ' + data.name;
+  }
+
+  override getId(model: Product): number {
+    return model.id;
   }
 }

@@ -16,6 +16,7 @@ import {
   ConfirmDialogResult,
 } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DiscountEditDialogComponent } from '../discount-edit-dialog/discount-edit-dialog.component';
+import { Pagination } from 'src/app/services/categories.service';
 
 @Component({
   selector: 'app-discounts',
@@ -26,14 +27,14 @@ export class DiscountsComponent implements OnInit {
   discounts!: MatTableDataSource<Discount>;
   displayedColumns = ['id', 'name', 'description', 'actions'];
 
-  defaultPageIndex: number = 0;
-  defaultPageSize: number = 10;
-  public defaultSortColumn: string = 'name';
+  defaultPageIndex = 0;
+  defaultPageSize = 10;
+  public defaultSortColumn = 'name';
   public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn: string = 'name';
+  defaultFilterColumn = 'name';
   filterQuery?: string;
 
-  isLoadingAction: boolean = false;
+  isLoadingAction = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -58,15 +59,17 @@ export class DiscountsComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.discountsService
-      .getPaginated({
-        defaultSortColumn: this.defaultSortColumn,
-        defaultSortOrder: this.defaultSortOrder,
-        pageIndex: event.pageIndex,
-        pageSize: event.pageSize,
-        sort: this.sort,
-        defaultFilterColumn: this.defaultFilterColumn,
-        filterQuery: this.filterQuery,
-      })
+      .getPaginated(
+        new Pagination({
+          defaultSortColumn: this.defaultSortColumn,
+          defaultSortOrder: this.defaultSortOrder,
+          pageIndex: event.pageIndex,
+          pageSize: event.pageSize,
+          sort: this.sort,
+          defaultFilterColumn: this.defaultFilterColumn,
+          filterQuery: this.filterQuery,
+        })
+      )
       .subscribe({
         next: result => {
           this.paginator.length = result.totalCount;

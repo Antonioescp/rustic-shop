@@ -23,7 +23,7 @@ namespace RusticShopAPI.Controllers
         }
 
         // GET: api/ProductVariants
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductVariant>>> GetProductVariants()
         {
           if (_context.ProductVariants == null)
@@ -33,7 +33,7 @@ namespace RusticShopAPI.Controllers
             return await _context.ProductVariants.ToListAsync();
         }
 
-        [HttpGet]
+        [HttpGet("paginated")]
         public async Task<ActionResult<PaginatedResult<ProductVariant>>> GetPaginatedProductVariants(
             int pageIndex = 0,
             int pageSize = 10,

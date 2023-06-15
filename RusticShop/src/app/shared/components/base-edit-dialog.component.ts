@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CrudService } from '../others/CrudService';
+import { CrudService } from '../services/CrudService';
 import { BaseFormComponent } from './base-form.component';
 
-export interface BaseEditDialogData {
-  id?: number;
+export interface BaseEditDialogData<IdType = number> {
+  id?: IdType;
 }
 
 export interface BaseEditDialogResult<Model> {
@@ -13,17 +13,17 @@ export interface BaseEditDialogResult<Model> {
 }
 
 @Component({ template: '' })
-export abstract class BaseEditDialogComponent<Model>
+export abstract class BaseEditDialogComponent<Model, IdType = number>
   extends BaseFormComponent
   implements OnInit
 {
-  service!: CrudService<Model>;
+  service!: CrudService<Model, IdType>;
   title!: string;
   isBusy = false;
   resource?: Model;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) protected data: BaseEditDialogData,
+    @Inject(MAT_DIALOG_DATA) protected data: BaseEditDialogData<IdType>,
     protected dialogRef: MatDialogRef<
       BaseEditDialogComponent<Model>,
       BaseEditDialogResult<Model>
@@ -38,7 +38,7 @@ export abstract class BaseEditDialogComponent<Model>
     }
   }
 
-  getResource(id: number): void {
+  getResource(id: IdType): void {
     this.isBusy = true;
     this.service.getById(id).subscribe({
       next: resource => {
@@ -89,7 +89,7 @@ export abstract class BaseEditDialogComponent<Model>
 
   updateResource(data: Model): void {
     this.isBusy = true;
-    this.service.update(data).subscribe({
+    this.service.update(data, this.getId(data)).subscribe({
       next: () =>
         this.dialogRef.close({
           success: true,
@@ -107,5 +107,6 @@ export abstract class BaseEditDialogComponent<Model>
   }
 
   abstract getFormData(): Model;
+  abstract getId(model: Model): IdType;
   abstract updateTitle(data: Model): void;
 }

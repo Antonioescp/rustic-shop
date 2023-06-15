@@ -84,7 +84,7 @@ namespace RusticShopAPI.Controllers
 
         // GET: api/Products
         [Authorize(Roles = "Administrator")]
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var list = await _context.Products.ToListAsync();
@@ -92,7 +92,7 @@ namespace RusticShopAPI.Controllers
         }
         
         [Authorize(Roles = "Administrator")]
-        [HttpGet]
+        [HttpGet("paginated")]
         public async Task<ActionResult<PaginatedResult<Product>>> GetPaginatedProducts(
             int pageIndex = 0,
             int pageSize = 10,

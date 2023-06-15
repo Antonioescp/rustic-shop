@@ -4,7 +4,10 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { CategoriesService } from 'src/app/services/categories.service';
+import {
+  CategoriesService,
+  Pagination,
+} from 'src/app/services/categories.service';
 import Category from 'src/app/shared/models/Category';
 import {
   ConfirmDialogComponent,
@@ -26,14 +29,14 @@ export class CategoriesComponent implements OnInit {
   categories!: MatTableDataSource<Category>;
   displayedColumns = ['id', 'name', 'description', 'actions'];
 
-  defaultPageIndex: number = 0;
-  defaultPageSize: number = 10;
-  public defaultSortColumn: string = 'name';
+  defaultPageIndex = 0;
+  defaultPageSize = 10;
+  public defaultSortColumn = 'name';
   public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn: string = 'name';
+  defaultFilterColumn = 'name';
   filterQuery?: string;
 
-  isLoadingAction: boolean = false;
+  isLoadingAction = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -58,24 +61,26 @@ export class CategoriesComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.categoriesService
-      .getPaginated({
-        defaultSortColumn: this.defaultSortColumn,
-        defaultSortOrder: this.defaultSortOrder,
-        pageIndex: event.pageIndex,
-        pageSize: event.pageSize,
-        sort: this.sort,
-        defaultFilterColumn: this.defaultFilterColumn,
-        filterQuery: this.filterQuery,
-      })
+      .getPaginated(
+        new Pagination({
+          defaultSortColumn: this.defaultSortColumn,
+          defaultSortOrder: this.defaultSortOrder,
+          pageIndex: event.pageIndex,
+          pageSize: event.pageSize,
+          sort: this.sort,
+          defaultFilterColumn: this.defaultFilterColumn,
+          filterQuery: this.filterQuery,
+        })
+      )
       .subscribe({
-        next: (result) => {
+        next: result => {
           this.paginator.length = result.totalCount;
           this.paginator.pageIndex = result.pageIndex;
           this.paginator.pageSize = result.pageSize;
           this.categories = new MatTableDataSource(result.data);
           this.isLoadingAction = false;
         },
-        error: (error) => {
+        error: error => {
           console.log(error);
           this.isLoadingAction = false;
         },
@@ -98,7 +103,7 @@ export class CategoriesComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.confirmed) {
         this.deleteCategory(category);
       }
@@ -108,11 +113,11 @@ export class CategoriesComponent implements OnInit {
   deleteCategory(category: Category) {
     this.isLoadingAction = true;
     this.categoriesService.deleteById(category.id).subscribe({
-      next: (result) => {
+      next: () => {
         this.loadData();
         this.snackBar.open(`Categoría "${category.name}" eliminada con éxito.`);
       },
-      error: (error) => {
+      error: error => {
         console.error(error);
         this.isLoadingAction = false;
         this.snackBar.open(`Categoría "${category.name}" no se pudo eliminar.`);
@@ -127,7 +132,7 @@ export class CategoriesComponent implements OnInit {
       CategoryEditDialogResult
     >(CategoryEditDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.loadData();
         this.snackBar.open(
@@ -148,7 +153,7 @@ export class CategoriesComponent implements OnInit {
       data: { id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.loadData();
         this.snackBar.open(
