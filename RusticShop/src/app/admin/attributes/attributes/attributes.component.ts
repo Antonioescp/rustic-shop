@@ -16,6 +16,7 @@ import {
   ConfirmDialogResult,
 } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AttributeEditDialogComponent } from '../attribute-edit-dialog/attribute-edit-dialog.component';
+import { Pagination } from 'src/app/services/categories.service';
 
 @Component({
   selector: 'app-attributes',
@@ -58,24 +59,26 @@ export class AttributesComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.attributesService
-      .getPaginated({
-        defaultSortColumn: this.defaultSortColumn,
-        defaultSortOrder: this.defaultSortOrder,
-        pageIndex: event.pageIndex,
-        pageSize: event.pageSize,
-        sort: this.sort,
-        defaultFilterColumn: this.defaultFilterColumn,
-        filterQuery: this.filterQuery,
-      })
+      .getPaginated(
+        new Pagination({
+          defaultSortColumn: this.defaultSortColumn,
+          defaultSortOrder: this.defaultSortOrder,
+          pageIndex: event.pageIndex,
+          pageSize: event.pageSize,
+          sort: this.sort,
+          defaultFilterColumn: this.defaultFilterColumn,
+          filterQuery: this.filterQuery,
+        })
+      )
       .subscribe({
-        next: (result) => {
+        next: result => {
           this.paginator.length = result.totalCount;
           this.paginator.pageIndex = result.pageIndex;
           this.paginator.pageSize = result.pageSize;
           this.attributes = new MatTableDataSource(result.data);
           this.isLoadingAction = false;
         },
-        error: (error) => {
+        error: error => {
           console.log(error);
           this.isLoadingAction = false;
         },
@@ -98,7 +101,7 @@ export class AttributesComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.confirmed) {
         this.deleteAttribute(attribute);
       }
@@ -108,11 +111,11 @@ export class AttributesComponent implements OnInit {
   deleteAttribute(attribute: Attribute) {
     this.isLoadingAction = true;
     this.attributesService.deleteById(attribute.id).subscribe({
-      next: (_) => {
+      next: () => {
         this.loadData();
         this.snackBar.open(`Atributo "${attribute.name} eliminado con éxito."`);
       },
-      error: (error) => {
+      error: error => {
         console.error(error);
         this.snackBar.open(
           `Atributo "${attribute.name} no se ha podido eliminar."`
@@ -129,7 +132,7 @@ export class AttributesComponent implements OnInit {
       BaseEditDialogResult<Attribute>
     >(AttributeEditDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.loadData();
         this.snackBar.open(
@@ -152,7 +155,7 @@ export class AttributesComponent implements OnInit {
       data: { id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.loadData();
         this.snackBar.open(

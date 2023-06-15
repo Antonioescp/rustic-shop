@@ -21,6 +21,7 @@ import {
   ProductEditSchemaDialogData,
   ProductEditSchemaDialogResult,
 } from '../product-edit-schema-dialog/product-edit-schema-dialog.component';
+import { Pagination } from 'src/app/services/categories.service';
 
 @Component({
   selector: 'app-products',
@@ -38,14 +39,14 @@ export class ProductsComponent implements OnInit {
     'actions',
   ];
 
-  defaultPageIndex: number = 0;
-  defaultPageSize: number = 10;
-  public defaultSortColumn: string = 'name';
+  defaultPageIndex = 0;
+  defaultPageSize = 10;
+  public defaultSortColumn = 'name';
   public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn: string = 'name';
+  defaultFilterColumn = 'name';
   filterQuery?: string;
 
-  isLoadingAction: boolean = false;
+  isLoadingAction = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -70,15 +71,17 @@ export class ProductsComponent implements OnInit {
 
   getData(event: PageEvent): void {
     this.productsService
-      .getPaginated({
-        defaultSortColumn: this.defaultSortColumn,
-        defaultSortOrder: this.defaultSortOrder,
-        pageIndex: event.pageIndex,
-        pageSize: event.pageSize,
-        sort: this.sort,
-        defaultFilterColumn: this.defaultFilterColumn,
-        filterQuery: this.filterQuery,
-      })
+      .getPaginated(
+        new Pagination({
+          defaultSortColumn: this.defaultSortColumn,
+          defaultSortOrder: this.defaultSortOrder,
+          pageIndex: event.pageIndex,
+          pageSize: event.pageSize,
+          sort: this.sort,
+          defaultFilterColumn: this.defaultFilterColumn,
+          filterQuery: this.filterQuery,
+        })
+      )
       .subscribe({
         next: result => {
           this.paginator.length = result.totalCount;
@@ -120,7 +123,7 @@ export class ProductsComponent implements OnInit {
   deleteProduct(product: Product) {
     this.isLoadingAction = true;
     this.productsService.deleteById(product.id).subscribe({
-      next: result => {
+      next: () => {
         this.loadData();
         this.snackBar.open(`Producto "${product.name}" eliminado con éxito.`);
       },

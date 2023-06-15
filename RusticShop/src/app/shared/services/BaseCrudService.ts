@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { CrudService } from './CrudService';
 import { Pagination } from 'src/app/services/categories.service';
 import { PaginatedResponse } from '../models/dtos/PaginatedResponse';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 export abstract class BaseCrudService<
   Model,
@@ -18,26 +18,7 @@ export abstract class BaseCrudService<
   }
 
   getPaginated(pagination: Pagination): Observable<PaginatedResponse<Model>> {
-    let params = new HttpParams()
-      .set('pageIndex', pagination.pageIndex)
-      .set('pageSize', pagination.pageSize)
-      .set(
-        'sortColumn',
-        pagination.sort ? pagination.sort.active : pagination.defaultSortColumn
-      )
-      .set(
-        'sortOrder',
-        pagination.sort
-          ? pagination.sort.direction
-          : pagination.defaultSortOrder
-      );
-
-    if (pagination.filterQuery) {
-      params = params
-        .set('filterColumn', pagination.defaultFilterColumn)
-        .set('filterQuery', pagination.filterQuery);
-    }
-
+    const params = pagination.toHttpParams();
     return this.http.get<any>(this.resourceUrl + 'paginated', { params });
   }
 
