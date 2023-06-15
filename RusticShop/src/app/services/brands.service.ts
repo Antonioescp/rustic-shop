@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 import Brand from '../shared/models/Brand';
 import { Pagination } from './categories.service';
 import { BrandDto } from '../shared/models/dtos/brands/CreateBrandDto';
-import { CrudService } from '../shared/others/CrudService';
+import { CrudService } from '../shared/services/CrudService';
 import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
 import { BrandWithProducts } from '../shared/models/dtos/brands/BrandWithProducts';
 

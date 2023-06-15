@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MatSort } from '@angular/material/sort';
-import { CrudService } from '../shared/others/CrudService';
+import { CrudService } from '../shared/services/CrudService';
 import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
 
 export interface Pagination {

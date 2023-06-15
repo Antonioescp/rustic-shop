@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CrudService } from '../shared/others/CrudService';
+import { CrudService } from '../shared/services/CrudService';
 import { ProductVariant } from '../shared/models/ProductVariant';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';

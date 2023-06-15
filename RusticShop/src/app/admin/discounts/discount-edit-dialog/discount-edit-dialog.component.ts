@@ -53,6 +53,10 @@ export class DiscountEditDialogComponent extends BaseEditDialogComponent<Discoun
     return data;
   }
 
+  override getId(model: Discount): number {
+    return model.id;
+  }
+
   updateTitle(data: Discount): void {
     this.title = 'Editar - ' + data.name;
   }

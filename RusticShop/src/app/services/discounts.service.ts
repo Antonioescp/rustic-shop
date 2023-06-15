@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import Discount from '../shared/models/Discount';
-import { CrudService } from '../shared/others/CrudService';
+import { CrudService } from '../shared/services/CrudService';
 import { Pagination } from './categories.service';
 import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
 

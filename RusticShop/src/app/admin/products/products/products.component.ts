@@ -80,14 +80,14 @@ export class ProductsComponent implements OnInit {
         filterQuery: this.filterQuery,
       })
       .subscribe({
-        next: (result) => {
+        next: result => {
           this.paginator.length = result.totalCount;
           this.paginator.pageIndex = result.pageIndex;
           this.paginator.pageSize = result.pageSize;
           this.products = new MatTableDataSource(result.data);
           this.isLoadingAction = false;
         },
-        error: (error) => {
+        error: error => {
           console.log(error);
           this.isLoadingAction = false;
         },
@@ -110,7 +110,7 @@ export class ProductsComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.confirmed) {
         this.deleteProduct(product);
       }
@@ -120,11 +120,11 @@ export class ProductsComponent implements OnInit {
   deleteProduct(product: Product) {
     this.isLoadingAction = true;
     this.productsService.deleteById(product.id).subscribe({
-      next: (result) => {
+      next: result => {
         this.loadData();
         this.snackBar.open(`Producto "${product.name}" eliminado con éxito.`);
       },
-      error: (error) => {
+      error: error => {
         console.error(error);
         this.isLoadingAction = false;
         this.snackBar.open(
@@ -141,7 +141,7 @@ export class ProductsComponent implements OnInit {
       BaseEditDialogResult<Product>
     >(ProductEditDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.snackBar.open(
           `Producto "${result.resource.name}" creado con éxito.`
@@ -165,7 +165,7 @@ export class ProductsComponent implements OnInit {
       data: { id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.snackBar.open(
           `Producto "${result.resource.name}" actualizado con éxito.`
@@ -189,7 +189,7 @@ export class ProductsComponent implements OnInit {
       data: { id },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.snackBar.open('Actualizado');
       }

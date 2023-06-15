@@ -4,16 +4,14 @@ import Attribute from '../shared/models/Attribute';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { Pagination } from './categories.service';
-import { CrudService } from '../shared/others/CrudService';
+import { CrudService } from '../shared/services/CrudService';
 import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
 import AttributeCreateDto from '../shared/models/dtos/attributes/AttributeCreateDto';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AttributesService
-  implements CrudService<Attribute>
-{
+export class AttributesService implements CrudService<Attribute> {
   readonly attributesUrl = `${environment.apiBaseUrl}${environment.attributesEndpoint}`;
 
   constructor(private http: HttpClient) {}
