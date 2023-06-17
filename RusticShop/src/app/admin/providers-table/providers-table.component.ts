@@ -1,10 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProviderService } from 'src/app/services/provider.service';
 import {
-  CrudComponent,
+  TableComponent,
   TableColumnDef,
+  TableActionDef,
+  RowActionsDef,
 } from 'src/app/shared/components/table/table.component';
 import { Provider } from 'src/app/shared/models/Provider';
 import { ProviderEditDialogComponent } from './provider-edit-dialog/provider-edit-dialog.component';
@@ -17,14 +19,15 @@ import {
   ConfirmDialogData,
   ConfirmDialogResult,
 } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-providers-table',
   templateUrl: './providers-table.component.html',
   styleUrls: ['./providers-table.component.scss'],
 })
-export class ProvidersTableComponent {
-  @ViewChild(CrudComponent) crud!: CrudComponent<Provider>;
+export class ProvidersTableComponent implements AfterViewInit {
+  @ViewChild(TableComponent) crud!: TableComponent<Provider>;
 
   columns: TableColumnDef<Provider>[] = [
     {
@@ -53,6 +56,32 @@ export class ProvidersTableComponent {
     },
   ];
 
+  tableActions: TableActionDef[] = [
+    {
+      label: 'Agregar proveedor',
+      icon: 'add',
+      color: 'primary',
+      execute: () => this.createResource(),
+    },
+  ];
+
+  rowActions: RowActionsDef<Provider>[] = [
+    {
+      tooltip: 'Editar',
+      icon: 'edit',
+      execute: provider => this.editResource(provider),
+      color: 'primary',
+      disabled: false,
+    },
+    {
+      tooltip: 'Eliminar',
+      icon: 'delete_forever',
+      execute: provider => this.deleteResource(provider),
+      color: 'warn',
+      disabled: false,
+    },
+  ];
+
   displayedColumns = [...this.columns.map(column => column.def), 'actions'];
 
   constructor(
@@ -60,6 +89,18 @@ export class ProvidersTableComponent {
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
+
+  ngAfterViewInit(): void {
+    this.fetchData({ pageIndex: 0, pageSize: 10, length: 0 });
+  }
+
+  fetchData(pageEvent: PageEvent): void {
+    this.providerService
+      .getPaginated(this.crud.getPagination(pageEvent))
+      .subscribe(data => {
+        this.crud.updateWithResults(data);
+      });
+  }
 
   createResource(): void {
     const dialogRef = this.dialog.open<

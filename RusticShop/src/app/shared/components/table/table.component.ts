@@ -1,7 +1,6 @@
 import {
   Component,
   Input,
-  OnInit,
   ViewChild,
   Output,
   EventEmitter,
@@ -9,8 +8,8 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { CrudService } from '../../services/CrudService';
 import { Pagination } from 'src/app/services/categories.service';
+import { PaginatedResponse } from '../../models/dtos/PaginatedResponse';
 
 export interface TableColumnDef<Model> {
   def: string;
@@ -24,24 +23,28 @@ export interface RowActionsDef<Model> {
   tooltip: string;
   color: string;
   execute: (row: Model) => void;
+  disabled?: boolean;
+}
+
+export interface TableActionDef {
+  label: string;
+  execute: () => void;
+  color: string;
+  icon?: string;
+  disabled?: boolean;
 }
 
 @Component({
-  selector: 'app-crud',
+  selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class CrudComponent<Model> implements OnInit {
+export class TableComponent<Model> {
   @Input() columns: TableColumnDef<Model>[] = [];
   @Input() displayedColumns: string[] = [];
 
-  @Input() actions: RowActionsDef<Model>[] = [];
-
-  @Input() service!: CrudService<Model>;
-
-  // crud settings
-  @Input() resourceDeletable = true;
-  @Input() resourceEditable = true;
+  @Input() rowActions: RowActionsDef<Model>[] = [];
+  @Input() tableActions: TableActionDef[] = [];
 
   // paginator settings
   @Input() pageSizeOptions = [5, 10, 20];
@@ -55,61 +58,45 @@ export class CrudComponent<Model> implements OnInit {
   @Input() filterColumn = '';
   @Input() filterQuery?: string;
 
-  @Input() createButtonLabel = 'Agregar recurso';
-
   @Input() title?: string;
 
-  @Input() disableActions = false;
   @Input() isLoading = false;
-  isFetchingData = false;
 
-  @Output() createResource = new EventEmitter<void>();
-  @Output() deleteResource = new EventEmitter<Model>();
-  @Output() editResource = new EventEmitter<Model>();
+  @Output() fetchData = new EventEmitter<PageEvent>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   dataSource = new MatTableDataSource<Model>([]);
 
-  ngOnInit(): void {
-    this.loadData();
-  }
-
   public loadData(query?: string): void {
     const pageEvent = new PageEvent();
-    pageEvent.pageIndex = this.pageIndex;
-    pageEvent.pageSize = this.pageSize;
+    pageEvent.pageIndex = query ? this.pageIndex : this.paginator.pageIndex;
+    pageEvent.pageSize = query ? this.pageSize : this.paginator.pageSize;
     this.filterQuery = query;
     this.getData(pageEvent);
   }
 
   getData(pageEvent: PageEvent) {
-    this.isFetchingData = true;
-    this.service
-      .getPaginated(
-        new Pagination({
-          defaultSortColumn: this.sortColumn,
-          defaultSortOrder: this.sortOrder,
-          pageIndex: pageEvent.pageIndex,
-          pageSize: pageEvent.pageSize,
-          sort: this.sort,
-          defaultFilterColumn: this.filterColumn,
-          filterQuery: this.filterQuery,
-        })
-      )
-      .subscribe({
-        next: result => {
-          this.paginator.length = result.totalCount;
-          this.paginator.pageIndex = result.pageIndex;
-          this.paginator.pageSize = result.pageSize;
-          this.dataSource.data = result.data;
-          this.isFetchingData = false;
-        },
-        error: error => {
-          console.log(error);
-          this.isFetchingData = false;
-        },
-      });
+    this.fetchData.emit(pageEvent);
+  }
+
+  public getPagination(pageEvent: PageEvent): Pagination {
+    return new Pagination({
+      defaultSortColumn: this.sortColumn,
+      defaultSortOrder: this.sortOrder,
+      pageIndex: pageEvent.pageIndex,
+      pageSize: pageEvent.pageSize,
+      sort: this.sort,
+      defaultFilterColumn: this.filterColumn,
+      filterQuery: this.filterQuery,
+    });
+  }
+
+  public updateWithResults(result: PaginatedResponse<Model>) {
+    this.paginator.length = result.totalCount;
+    this.paginator.pageIndex = result.pageIndex;
+    this.paginator.pageSize = result.pageSize;
+    this.dataSource.data = result.data;
   }
 }

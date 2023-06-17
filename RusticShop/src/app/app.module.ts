@@ -34,11 +34,12 @@ import { ProductEditSchemaDialogComponent } from './admin/products/product-edit-
 import { ProductVariantsComponent } from './admin/product-variants/product-variants/product-variants.component';
 import { ProductVariantEditDialogComponent } from './admin/product-variants/product-variant-edit-dialog/product-variant-edit-dialog.component';
 import { MainComponent } from './main/main.component';
-import { CrudComponent } from './shared/components/table/table.component';
+import { TableComponent } from './shared/components/table/table.component';
 import { PurchasesComponent } from './admin/purchases/purchases.component';
 import { ProvidersTableComponent } from './admin/providers-table/providers-table.component';
 import { ProviderEditDialogComponent } from './admin/providers-table/provider-edit-dialog/provider-edit-dialog.component';
 import { PurchaseEditDialogComponent } from './admin/purchases/purchase-edit-dialog/purchase-edit-dialog.component';
+import { SalesTableComponent } from './admin/sales-table/sales-table.component';
 
 @NgModule({
   declarations: [
@@ -68,11 +69,12 @@ import { PurchaseEditDialogComponent } from './admin/purchases/purchase-edit-dia
     ProductVariantsComponent,
     ProductVariantEditDialogComponent,
     MainComponent,
-    CrudComponent,
+    TableComponent,
     PurchasesComponent,
     ProvidersTableComponent,
     ProviderEditDialogComponent,
     PurchaseEditDialogComponent,
+    SalesTableComponent,
   ],
   imports: [
     BrowserModule,

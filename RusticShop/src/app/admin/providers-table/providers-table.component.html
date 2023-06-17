@@ -1,11 +1,9 @@
-<app-crud
+<app-table
   [title]="'Proveedores'"
-  [createButtonLabel]="'Agregar proveedor'"
   [columns]="columns"
+  [tableActions]="tableActions"
+  [rowActions]="rowActions"
   [displayedColumns]="displayedColumns"
-  [service]="providerService"
   [pageSize]="5"
   [filterColumn]="'name'"
-  (createResource)="createResource()"
-  (editResource)="editResource($event)"
-  (deleteResource)="deleteResource($event)"></app-crud>
+  (fetchData)="fetchData($event)"></app-table>

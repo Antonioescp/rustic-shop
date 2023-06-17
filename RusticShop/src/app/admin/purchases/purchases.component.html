@@ -1,9 +1,9 @@
-<app-crud
+<app-table
   [columns]="columns"
   title="Compras"
-  [service]="purchaseService"
+  [isLoading]="isFetching"
   [displayedColumns]="displayedColumns"
-  (createResource)="createResource()"
-  (deleteResource)="deleteResource($event)"
-  (editResource)="editResource($event)"
-  createButtonLabel="Agregar Compra"></app-crud>
+  [rowActions]="rowActions"
+  [tableActions]="tableActions"
+  createButtonLabel="Agregar Compra"
+  (fetchData)="fetchData($event)"></app-table>

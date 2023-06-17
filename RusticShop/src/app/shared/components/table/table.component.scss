@@ -23,10 +23,6 @@ mat-form-field {
 
 .app-table-container {
   margin: 25px;
-
-  button {
-    margin-top: 15px;
-  }
 }
 
 .app-table-loading-view {
@@ -38,4 +34,11 @@ mat-form-field {
   background-color: rgba($color: #000000, $alpha: 0.50);
   position: absolute;
   z-index: 1000;
+}
+
+.app-table-table-actions-container {
+  margin-top: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
 }

@@ -1,10 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PurchaseService } from 'src/app/services/purchase.service';
 import {
-  CrudComponent,
+  TableComponent,
   TableColumnDef,
+  RowActionsDef,
+  TableActionDef,
 } from 'src/app/shared/components/table/table.component';
 import { Purchase } from 'src/app/shared/models/Purchase';
 import { PurchaseEditDialogComponent } from './purchase-edit-dialog/purchase-edit-dialog.component';
@@ -17,14 +19,17 @@ import {
   ConfirmDialogData,
   ConfirmDialogResult,
 } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-purchases',
   templateUrl: './purchases.component.html',
   styleUrls: ['./purchases.component.scss'],
 })
-export class PurchasesComponent {
-  @ViewChild(CrudComponent) crud!: CrudComponent<Purchase>;
+export class PurchasesComponent implements AfterViewInit {
+  @ViewChild(TableComponent) crud!: TableComponent<Purchase>;
+
+  isFetching = false;
 
   columns: TableColumnDef<Purchase>[] = [
     {
@@ -42,6 +47,30 @@ export class PurchasesComponent {
     },
   ];
 
+  tableActions: TableActionDef[] = [
+    {
+      label: 'Agregar compra',
+      icon: 'add',
+      color: 'primary',
+      execute: () => this.createResource(),
+    },
+  ];
+
+  rowActions: RowActionsDef<Purchase>[] = [
+    {
+      icon: 'edit',
+      tooltip: 'Editar',
+      execute: purchase => this.editResource(purchase),
+      color: 'primary',
+    },
+    {
+      color: 'warn',
+      icon: 'delete_forever',
+      tooltip: 'Eliminar',
+      execute: purchase => this.deleteResource(purchase),
+    },
+  ];
+
   displayedColumns = [...this.columns.map(c => c.def), 'actions'];
 
   constructor(
@@ -49,6 +78,26 @@ export class PurchasesComponent {
     public dialog: MatDialog,
     public snackBar: MatSnackBar
   ) {}
+
+  ngAfterViewInit(): void {
+    this.crud.loadData();
+  }
+
+  fetchData(pageEvent: PageEvent): void {
+    this.isFetching = true;
+    this.purchaseService
+      .getPaginated(this.crud.getPagination(pageEvent))
+      .subscribe({
+        next: result => {
+          this.isFetching = false;
+          this.crud.updateWithResults(result);
+        },
+        error: error => {
+          console.error(error);
+          this.isFetching = false;
+        },
+      });
+  }
 
   createResource(): void {
     const dialogRef = this.dialog.open<

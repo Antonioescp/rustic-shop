@@ -18,4 +18,5 @@ export const environment = {
   variantsEndpoint: 'ProductVariants/',
   purchasesEndpoint: 'Purchases/',
   providersEndpoint: 'Providers/',
+  ordersEndpoint: 'Orders/',
 };

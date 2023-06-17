@@ -80,7 +80,8 @@ builder.Services.AddAutoMapper(
     typeof(MapperSettings),
     typeof(ProductMapperSettings),
     typeof(ProductVariantMapperSettings),
-    typeof(BrandMapperSettings));
+    typeof(BrandMapperSettings),
+    typeof(OrderMapperSettings));
 
 var app = builder.Build();
 
