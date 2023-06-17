@@ -29,8 +29,6 @@ import { PageEvent } from '@angular/material/paginator';
 export class PurchasesComponent implements AfterViewInit {
   @ViewChild(TableComponent) crud!: TableComponent<Purchase>;
 
-  isFetching = false;
-
   columns: TableColumnDef<Purchase>[] = [
     {
       def: 'id',
@@ -84,17 +82,14 @@ export class PurchasesComponent implements AfterViewInit {
   }
 
   fetchData(pageEvent: PageEvent): void {
-    this.isFetching = true;
     this.purchaseService
       .getPaginated(this.crud.getPagination(pageEvent))
       .subscribe({
         next: result => {
-          this.isFetching = false;
           this.crud.updateWithResults(result);
         },
         error: error => {
           console.error(error);
-          this.isFetching = false;
         },
       });
   }

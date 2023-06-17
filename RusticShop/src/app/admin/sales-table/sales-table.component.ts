@@ -5,7 +5,6 @@ import {
   TableColumnDef,
   RowActionsDef,
   TableComponent,
-  TableActionDef,
 } from 'src/app/shared/components/table/table.component';
 import { Order } from 'src/app/shared/models/Order';
 import { OrderDetailsDto } from 'src/app/shared/models/dtos/orders/OrderDetailsDto';

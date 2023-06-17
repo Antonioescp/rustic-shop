@@ -60,7 +60,7 @@ export class TableComponent<Model> {
 
   @Input() title?: string;
 
-  @Input() isLoading = false;
+  isFetchingData = false;
 
   @Output() fetchData = new EventEmitter<PageEvent>();
 
@@ -78,6 +78,7 @@ export class TableComponent<Model> {
   }
 
   getData(pageEvent: PageEvent) {
+    this.isFetchingData = true;
     this.fetchData.emit(pageEvent);
   }
 
@@ -98,5 +99,6 @@ export class TableComponent<Model> {
     this.paginator.pageIndex = result.pageIndex;
     this.paginator.pageSize = result.pageSize;
     this.dataSource.data = result.data;
+    this.isFetchingData = false;
   }
 }
