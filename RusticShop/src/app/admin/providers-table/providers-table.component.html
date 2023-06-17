@@ -5,4 +5,7 @@
   [displayedColumns]="displayedColumns"
   [service]="providerService"
   [pageSize]="5"
-  [filterColumn]="'name'"></app-crud>
+  [filterColumn]="'name'"
+  (createResource)="createResource()"
+  (editResource)="editResource($event)"
+  (deleteResource)="deleteResource($event)"></app-crud>

@@ -39,6 +39,7 @@ import { MainComponent } from './main/main.component';
 import { CrudComponent } from './shared/components/table/table.component';
 import { PurchasesComponent } from './admin/purchases/purchases.component';
 import { ProvidersTableComponent } from './admin/providers-table/providers-table.component';
+import { ProviderEditDialogComponent } from './admin/providers-table/provider-edit-dialog/provider-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { ProvidersTableComponent } from './admin/providers-table/providers-table
     CrudComponent,
     PurchasesComponent,
     ProvidersTableComponent,
+    ProviderEditDialogComponent,
   ],
   imports: [
     BrowserModule,

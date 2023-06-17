@@ -1,0 +1,54 @@
+<div mat-dialog-content *ngIf="isBusy">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div [hidden]="isBusy">
+  <h1 mat-dialog-title>{{ title }}</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content class="fields">
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input matInput required formControlName="name" />
+        <mat-error *ngFor="let error of getErrors(form.get('name')!, 'Nombre')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="phoneNumber" />
+        <mat-error
+          *ngFor="let error of getErrors(form.get('phoneNumber')!, 'Teléfono')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput formControlName="email" />
+        <mat-error
+          *ngFor="
+            let error of getErrors(form.get('email')!, 'Correo electrónico')
+          ">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+
+      <div mat-dialog-actions align="end">
+        <button
+          mat-dialog-close
+          mat-button
+          color="warn"
+          [disabled]="isBusy"
+          type="button">
+          <mat-icon>cancel</mat-icon> Cancelar
+        </button>
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="isBusy || form.invalid"
+          type="submit">
+          <mat-icon>save</mat-icon> Guardar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

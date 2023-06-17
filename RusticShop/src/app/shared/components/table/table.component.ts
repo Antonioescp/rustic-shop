@@ -76,7 +76,7 @@ export class CrudComponent<Model> implements OnInit {
     this.loadData();
   }
 
-  loadData(query?: string): void {
+  public loadData(query?: string): void {
     const pageEvent = new PageEvent();
     pageEvent.pageIndex = this.pageIndex;
     pageEvent.pageSize = this.pageSize;
