@@ -21,10 +21,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
+import { MatNativeDateModule } from '@angular/material/core';
 
 const materialModules = [
   MatSidenavModule,
@@ -49,6 +51,8 @@ const materialModules = [
   MatExpansionModule,
   MatDialogModule,
   MatSnackBarModule,
+  MatNativeDateModule,
+  MatDatepickerModule,
 ];
 
 @NgModule({

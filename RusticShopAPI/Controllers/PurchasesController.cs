@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using RusticShopAPI.Data.Models.DTOs;
 
 namespace RusticShopAPI.Controllers
 {
@@ -21,14 +22,33 @@ namespace RusticShopAPI.Controllers
             _context = context;
         }
 
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PaginatedResult<Purchase>>> GetPaginated(
+            int pageIndex = 0,
+            int pageSize = 10,
+            string? sortColumn = null,
+            string? sortOrder = null,
+            string? filterColumn = null,
+            string? filterQuery = null)
+        {
+            return await PaginatedResult<Purchase>.CreateAsync(
+                _context.Purchases.AsQueryable(),
+                pageIndex,
+                pageSize,
+                sortColumn,
+                sortOrder,
+                filterColumn,
+                filterQuery);
+        }
+
         // GET: api/Purchases
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Purchase>>> GetPurchases()
         {
-          if (_context.Purchases == null)
-          {
-              return NotFound();
-          }
+            if (_context.Purchases == null)
+            {
+                return NotFound();
+            }
             return await _context.Purchases.ToListAsync();
         }
 
@@ -36,10 +56,10 @@ namespace RusticShopAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Purchase>> GetPurchase(long id)
         {
-          if (_context.Purchases == null)
-          {
-              return NotFound();
-          }
+            if (_context.Purchases == null)
+            {
+                return NotFound();
+            }
             var purchase = await _context.Purchases.FindAsync(id);
 
             if (purchase == null)
@@ -86,10 +106,10 @@ namespace RusticShopAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Purchase>> PostPurchase(Purchase purchase)
         {
-          if (_context.Purchases == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Purchases'  is null.");
-          }
+            if (_context.Purchases == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Purchases'  is null.");
+            }
             _context.Purchases.Add(purchase);
             await _context.SaveChangesAsync();
 

@@ -17,9 +17,7 @@ import { RequestAccountUnlockComponent } from './auth/request-account-unlock/req
 import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 
-import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './http-interceptors/AuthInterceptor';
-import { ProductsService } from './services/products.service';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { AttributesComponent } from './admin/attributes/attributes/attributes.component';
@@ -40,6 +38,7 @@ import { CrudComponent } from './shared/components/table/table.component';
 import { PurchasesComponent } from './admin/purchases/purchases.component';
 import { ProvidersTableComponent } from './admin/providers-table/providers-table.component';
 import { ProviderEditDialogComponent } from './admin/providers-table/provider-edit-dialog/provider-edit-dialog.component';
+import { PurchaseEditDialogComponent } from './admin/purchases/purchase-edit-dialog/purchase-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +72,7 @@ import { ProviderEditDialogComponent } from './admin/providers-table/provider-ed
     PurchasesComponent,
     ProvidersTableComponent,
     ProviderEditDialogComponent,
+    PurchaseEditDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,8 +88,6 @@ import { ProviderEditDialogComponent } from './admin/providers-table/provider-ed
       useClass: AuthInterceptor,
       multi: true,
     },
-    { provide: AuthService },
-    { provide: ProductsService },
   ],
   bootstrap: [AppComponent],
 })

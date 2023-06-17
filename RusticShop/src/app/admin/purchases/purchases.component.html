@@ -1,0 +1,9 @@
+<app-crud
+  [columns]="columns"
+  title="Compras"
+  [service]="purchaseService"
+  [displayedColumns]="displayedColumns"
+  (createResource)="createResource()"
+  (deleteResource)="deleteResource($event)"
+  (editResource)="editResource($event)"
+  createButtonLabel="Agregar Compra"></app-crud>

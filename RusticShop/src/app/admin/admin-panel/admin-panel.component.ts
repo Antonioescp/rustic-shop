@@ -32,7 +32,7 @@ export class AdminPanelComponent {
     {
       label: 'Transacciones',
       children: [
-        { label: 'Compras', path: 'compras', icon: '' },
+        { label: 'Compras', path: 'compras', icon: 'shopping_cart' },
         { label: 'Ventas', path: '', icon: '' },
         { label: 'Reembolsos', path: '', icon: '' },
         { label: 'Proveedores', path: 'proveedores', icon: 'local_shipping' },
