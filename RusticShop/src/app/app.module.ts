@@ -36,6 +36,9 @@ import { ProductEditSchemaDialogComponent } from './admin/products/product-edit-
 import { ProductVariantsComponent } from './admin/product-variants/product-variants/product-variants.component';
 import { ProductVariantEditDialogComponent } from './admin/product-variants/product-variant-edit-dialog/product-variant-edit-dialog.component';
 import { MainComponent } from './main/main.component';
+import { CrudComponent } from './shared/components/table/table.component';
+import { PurchasesComponent } from './admin/purchases/purchases.component';
+import { ProvidersTableComponent } from './admin/providers-table/providers-table.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +68,9 @@ import { MainComponent } from './main/main.component';
     ProductVariantsComponent,
     ProductVariantEditDialogComponent,
     MainComponent,
+    CrudComponent,
+    PurchasesComponent,
+    ProvidersTableComponent,
   ],
   imports: [
     BrowserModule,

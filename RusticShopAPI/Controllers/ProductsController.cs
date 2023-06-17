@@ -67,18 +67,20 @@ namespace RusticShopAPI.Controllers
         }
 
         [HttpGet("with-brand-name")]
-        public async Task<ActionResult<IEnumerable<ProductWithBrandName>>> GetProductsWithBrandName() {
-          var result = await _context.Products
-            .Include(p => p.Brand)
-            .AsSplitQuery()
-            .AsNoTracking()
-            .ToListAsync();
+        public async Task<ActionResult<IEnumerable<ProductWithBrandName>>> GetProductsWithBrandName()
+        {
+            var result = await _context.Products
+              .Include(p => p.Brand)
+              .AsSplitQuery()
+              .AsNoTracking()
+              .ToListAsync();
 
-          if (result == null) {
-            return StatusCode(500);
-          }
+            if (result == null)
+            {
+                return StatusCode(500);
+            }
 
-          return _mapper.Map<List<ProductWithBrandName>>(result);
+            return _mapper.Map<List<ProductWithBrandName>>(result);
         }
 
         // GET: api/Products

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
+using RusticShopAPI.Data.Models.DTOs;
 
 namespace RusticShopAPI.Controllers
 {
@@ -21,14 +17,33 @@ namespace RusticShopAPI.Controllers
             _context = context;
         }
 
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PaginatedResult<Provider>>> GetPaginated(
+            int pageIndex = 0,
+            int pageSize = 10,
+            string? sortColumn = null,
+            string? sortOrder = null,
+            string? filterColumn = null,
+            string? filterQuery = null)
+        {
+            return await PaginatedResult<Provider>.CreateAsync(
+              _context.Providers,
+              pageIndex,
+              pageSize,
+              sortColumn,
+              sortOrder,
+              filterColumn,
+              filterQuery);
+        }
+
         // GET: api/Providers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Provider>>> GetProviders()
         {
-          if (_context.Providers == null)
-          {
-              return NotFound();
-          }
+            if (_context.Providers == null)
+            {
+                return NotFound();
+            }
             return await _context.Providers.ToListAsync();
         }
 
@@ -36,10 +51,10 @@ namespace RusticShopAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Provider>> GetProvider(long id)
         {
-          if (_context.Providers == null)
-          {
-              return NotFound();
-          }
+            if (_context.Providers == null)
+            {
+                return NotFound();
+            }
             var provider = await _context.Providers.FindAsync(id);
 
             if (provider == null)
@@ -86,10 +101,10 @@ namespace RusticShopAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Provider>> PostProvider(Provider provider)
         {
-          if (_context.Providers == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Providers'  is null.");
-          }
+            if (_context.Providers == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Providers'  is null.");
+            }
             _context.Providers.Add(provider);
             await _context.SaveChangesAsync();
 

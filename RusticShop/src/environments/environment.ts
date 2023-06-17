@@ -16,4 +16,6 @@ export const environment = {
   usersEndpoint: 'Users/',
   brandsEndpoint: 'Brands/',
   variantsEndpoint: 'ProductVariants/',
+  purchasesEndpoint: 'Purchases/',
+  providersEndpoint: 'Providers/',
 };
