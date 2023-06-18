@@ -1,9 +1,6 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { AttributesService } from 'src/app/services/attributes.service';
 import Attribute from 'src/app/shared/models/Attribute';
 import {
@@ -16,28 +13,62 @@ import {
   ConfirmDialogResult,
 } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AttributeEditDialogComponent } from '../attribute-edit-dialog/attribute-edit-dialog.component';
-import { Pagination } from 'src/app/services/categories.service';
+import { PageEvent } from '@angular/material/paginator';
+import {
+  RowActionsDef,
+  TableActionDef,
+  TableColumnDef,
+  TableComponent,
+} from 'src/app/shared/components/table/table.component';
 
 @Component({
   selector: 'app-attributes',
   templateUrl: './attributes.component.html',
   styleUrls: ['./attributes.component.scss'],
 })
-export class AttributesComponent implements OnInit {
-  attributes!: MatTableDataSource<Attribute>;
-  displayedColumns = ['id', 'name', 'actions'];
+export class AttributesComponent implements AfterViewInit {
+  @ViewChild(TableComponent) table!: TableComponent<Attribute>;
 
-  defaultPageIndex = 0;
-  defaultPageSize = 10;
-  public defaultSortColumn = 'name';
-  public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn = 'name';
-  filterQuery?: string;
+  columns: TableColumnDef<Attribute>[] = [
+    {
+      def: 'id',
+      header: 'ID',
+      valueGetter: attribute => attribute.id.toString(),
+      sortable: true,
+    },
+    {
+      def: 'name',
+      header: 'Nombre',
+      valueGetter: attribute => attribute.name,
+      sortable: true,
+    },
+  ];
 
-  isLoadingAction = false;
+  displayedColumns = [...this.columns.map(c => c.def), 'actions'];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  tableActions: TableActionDef[] = [
+    {
+      label: 'Agregar atributo',
+      icon: 'add',
+      execute: () => this.onCreateAttribute(),
+      color: 'primary',
+    },
+  ];
+
+  rowActions: RowActionsDef<Attribute>[] = [
+    {
+      icon: 'edit',
+      execute: attribute => this.onUpdateAttribute(attribute.id),
+      tooltip: 'Editar',
+      color: 'primary',
+    },
+    {
+      icon: 'delete_forever',
+      execute: attribute => this.onDeleteAttribute(attribute),
+      tooltip: 'Eliminar',
+      color: 'warn',
+    },
+  ];
 
   constructor(
     private attributesService: AttributesService,
@@ -45,42 +76,19 @@ export class AttributesComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {
-    this.loadData();
+  ngAfterViewInit(): void {
+    this.table.loadData();
   }
 
-  loadData(query?: string) {
-    const pageEvent = new PageEvent();
-    pageEvent.pageIndex = this.defaultPageIndex;
-    pageEvent.pageSize = this.defaultPageSize;
-    this.filterQuery = query;
-    this.getData(pageEvent);
-  }
-
-  getData(event: PageEvent): void {
+  fetchData(pageEvent: PageEvent) {
     this.attributesService
-      .getPaginated(
-        new Pagination({
-          defaultSortColumn: this.defaultSortColumn,
-          defaultSortOrder: this.defaultSortOrder,
-          pageIndex: event.pageIndex,
-          pageSize: event.pageSize,
-          sort: this.sort,
-          defaultFilterColumn: this.defaultFilterColumn,
-          filterQuery: this.filterQuery,
-        })
-      )
+      .getPaginated(this.table.getPagination(pageEvent))
       .subscribe({
-        next: result => {
-          this.paginator.length = result.totalCount;
-          this.paginator.pageIndex = result.pageIndex;
-          this.paginator.pageSize = result.pageSize;
-          this.attributes = new MatTableDataSource(result.data);
-          this.isLoadingAction = false;
+        next: response => {
+          this.table.updateWithResults(response);
         },
         error: error => {
-          console.log(error);
-          this.isLoadingAction = false;
+          console.error(error);
         },
       });
   }
@@ -109,10 +117,9 @@ export class AttributesComponent implements OnInit {
   }
 
   deleteAttribute(attribute: Attribute) {
-    this.isLoadingAction = true;
     this.attributesService.deleteById(attribute.id).subscribe({
       next: () => {
-        this.loadData();
+        this.table.loadData();
         this.snackBar.open(`Atributo "${attribute.name} eliminado con éxito."`);
       },
       error: error => {
@@ -121,7 +128,6 @@ export class AttributesComponent implements OnInit {
           `Atributo "${attribute.name} no se ha podido eliminar."`
         );
       },
-      complete: () => (this.isLoadingAction = false),
     });
   }
 
@@ -134,7 +140,7 @@ export class AttributesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
-        this.loadData();
+        this.table.loadData();
         this.snackBar.open(
           `Atributo "${result.resource.name}" ha sido creado con éxito.`
         );
@@ -157,7 +163,7 @@ export class AttributesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
-        this.loadData();
+        this.table.loadData();
         this.snackBar.open(
           `Atributo "${result.resource.name}" ha sido actualizado con éxito.`
         );
