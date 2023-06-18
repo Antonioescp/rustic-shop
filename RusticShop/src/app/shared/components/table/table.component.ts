@@ -49,7 +49,7 @@ export class TableComponent<Model> {
   // paginator settings
   @Input() pageSizeOptions = [5, 10, 20];
   @Input() pageIndex = 0;
-  @Input() pageSize = 10;
+  @Input() pageSize = 5;
   @Input() showFirstLastButtons = true;
 
   // sorting settings
