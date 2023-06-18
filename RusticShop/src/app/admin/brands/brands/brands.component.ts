@@ -1,8 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { BrandsService } from 'src/app/services/brands.service';
 import Brand from 'src/app/shared/models/Brand';
 import {
@@ -16,30 +13,62 @@ import {
   ConfirmDialogData,
   ConfirmDialogResult,
 } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { Pagination } from 'src/app/services/categories.service';
+import {
+  RowActionsDef,
+  TableActionDef,
+  TableColumnDef,
+  TableComponent,
+} from 'src/app/shared/components/table/table.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-brands',
   templateUrl: './brands.component.html',
   styleUrls: ['./brands.component.scss'],
 })
-export class BrandsComponent implements OnInit {
-  brands!: MatTableDataSource<Brand>;
-  displayedColumns = ['id', 'name', 'actions'];
+export class BrandsComponent implements AfterViewInit {
+  @ViewChild(TableComponent) table!: TableComponent<Brand>;
 
-  defaultPageIndex = 0;
-  defaultPageSize = 10;
-  public defaultSortColumn = 'name';
-  public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn = 'name';
-  filterQuery?: string;
+  columns: TableColumnDef<Brand>[] = [
+    {
+      def: 'id',
+      header: 'ID',
+      valueGetter: brand => brand.id.toString(),
+      sortable: true,
+    },
+    {
+      def: 'name',
+      header: 'Nombre',
+      valueGetter: brand => brand.name,
+      sortable: true,
+    },
+  ];
 
-  isLoadingAction = false;
+  displayedColumns = [...this.columns.map(column => column.def), 'actions'];
 
-  readonly brandEditDialogConfig: MatDialogConfig<BrandEditDialogData> = {};
+  tableActions: TableActionDef[] = [
+    {
+      label: 'Agregar marca',
+      icon: 'add',
+      execute: () => this.onCreateBrand(),
+      color: 'primary',
+    },
+  ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  rowActions: RowActionsDef<Brand>[] = [
+    {
+      tooltip: 'Editar',
+      icon: 'edit',
+      execute: brand => this.onEditBrand(brand.id),
+      color: 'primary',
+    },
+    {
+      tooltip: 'Eliminar',
+      icon: 'delete_forever',
+      execute: brand => this.onDeleteBrand(brand),
+      color: 'warn',
+    },
+  ];
 
   constructor(
     private brandsService: BrandsService,
@@ -47,43 +76,18 @@ export class BrandsComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {
-    this.loadData();
+  ngAfterViewInit(): void {
+    this.table.loadData();
   }
 
-  loadData(query?: string) {
-    const pageEvent = new PageEvent();
-    pageEvent.pageIndex = this.defaultPageIndex;
-    pageEvent.pageSize = this.defaultPageSize;
-    this.filterQuery = query;
-    this.getData(pageEvent);
-  }
-
-  getData(event: PageEvent): void {
+  fetchData(pageEvent: PageEvent) {
     this.brandsService
-      .getPaginated(
-        new Pagination({
-          defaultSortColumn: this.defaultSortColumn,
-          defaultSortOrder: this.defaultSortOrder,
-          pageIndex: event.pageIndex,
-          pageSize: event.pageSize,
-          sort: this.sort,
-          defaultFilterColumn: this.defaultFilterColumn,
-          filterQuery: this.filterQuery,
-        })
-      )
+      .getPaginated(this.table.getPagination(pageEvent))
       .subscribe({
-        next: result => {
-          this.paginator.length = result.totalCount;
-          this.paginator.pageIndex = result.pageIndex;
-          this.paginator.pageSize = result.pageSize;
-          this.brands = new MatTableDataSource(result.data);
-          this.isLoadingAction = false;
+        next: paginatedBrands => {
+          this.table.updateWithResults(paginatedBrands);
         },
-        error: error => {
-          console.log(error);
-          this.isLoadingAction = false;
-        },
+        error: error => console.error(error),
       });
   }
 
@@ -99,7 +103,7 @@ export class BrandsComponent implements OnInit {
         cancelColor: 'primary',
         confirmColor: 'warn',
         cancelIcon: 'cancel',
-        confirmIcon: 'confirmIcon',
+        confirmIcon: 'warning',
       },
     });
 
@@ -111,15 +115,13 @@ export class BrandsComponent implements OnInit {
   }
 
   deleteBrand(brand: Brand): void {
-    this.isLoadingAction = true;
     this.brandsService.deleteById(brand.id).subscribe({
       next: () => {
-        this.loadData();
+        this.table.loadData();
         this.snackBar.open(`Marca "${brand.name}" eliminada con éxito.`);
       },
       error: error => {
         console.error(error);
-        this.isLoadingAction = false;
         this.snackBar.open(`La marca "${brand.name}" no se pudo eliminar.`);
       },
     });
@@ -130,12 +132,12 @@ export class BrandsComponent implements OnInit {
       BrandEditDialogComponent,
       BrandEditDialogData,
       BrandEditDialogResult
-    >(BrandEditDialogComponent, this.brandEditDialogConfig);
+    >(BrandEditDialogComponent);
 
     dialogRef.afterClosed().subscribe({
       next: result => {
         if (result?.success) {
-          this.loadData();
+          this.table.loadData();
           this.snackBar.open(`Marca "${result.brand.name}" creada con éxito`);
         } else if (result?.success == false) {
           this.snackBar.open(
@@ -153,7 +155,6 @@ export class BrandsComponent implements OnInit {
       BrandEditDialogData,
       BrandEditDialogResult
     >(BrandEditDialogComponent, {
-      ...this.brandEditDialogConfig,
       data: {
         id: brandId,
       },
@@ -162,7 +163,7 @@ export class BrandsComponent implements OnInit {
     dialogRef.afterClosed().subscribe({
       next: result => {
         if (result?.success) {
-          this.loadData();
+          this.table.loadData();
           this.snackBar.open(
             `Marca "${result.brand.name}" actualizada con éxito.`
           );
