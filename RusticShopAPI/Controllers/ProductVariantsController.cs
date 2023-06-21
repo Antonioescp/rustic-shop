@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
@@ -200,23 +201,16 @@ namespace RusticShopAPI.Controllers
         [HttpDelete("{id}/images/{imageId}")]
         public async Task<ActionResult> DeleteProductVariantImage(long id, long imageId)
         {
-            var productVariant = await _context.ProductVariants
-              .Include(pv => pv.Images)
-              .FirstOrDefaultAsync(pv => pv.Id == id);
+            var productVariantImage = await _context.ProductVariantImages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(pvi => pvi.ProductImageId == imageId && pvi.ProductVariantId == id);
 
-            if (productVariant == null || productVariant.Images == null)
+            if (productVariantImage == null)
             {
                 return NotFound();
             }
 
-            var image = productVariant.Images.FirstOrDefault(i => i.Id == imageId);
-
-            if (image == null)
-            {
-                return NotFound();
-            }
-
-            productVariant.Images.Remove(image);
+            _context.ProductVariantImages.Remove(productVariantImage);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -225,35 +219,13 @@ namespace RusticShopAPI.Controllers
         [HttpPost("{id}/images/{imageId}")]
         public async Task<ActionResult> AddProductVariantImage(long id, long imageId)
         {
-            var productVariant = await _context.ProductVariants
-              .Include(pv => pv.Images)
-              .AsSplitQuery()
-              .FirstOrDefaultAsync(pv => pv.Id == id);
-
-            if (productVariant == null || productVariant.Images == null)
+            var newImage = new ProductVariantImage
             {
-                return NotFound();
-            }
+                ProductVariantId = id,
+                ProductImageId = imageId
+            };
 
-            var product = _context.Products
-                .Include(p => p.Images)
-                .AsSplitQuery()
-                .AsNoTracking()
-                .FirstOrDefault(p => p.Id == productVariant.ProductId);
-
-            if (product == null || product.Images == null)
-            {
-                return NotFound();
-            }
-
-            var image = product.Images.FirstOrDefault(i => i.Id == imageId);
-
-            if (image == null)
-            {
-                return NotFound();
-            }
-
-            productVariant.Images.Add(image);
+            _context.ProductVariantImages.Add(newImage);
             await _context.SaveChangesAsync();
 
             return NoContent();

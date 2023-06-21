@@ -6,6 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { lastValueFrom } from 'rxjs';
 import { ProductVariantsService } from 'src/app/services/product-variants.service';
 import { ProductsService } from 'src/app/services/products.service';
 import {
@@ -38,6 +39,11 @@ export class ProductVariantGalleryDialogComponent
   availableImages: GalleryImage<number>[] = [];
   productVariantImages: GalleryImage<number>[] = [];
 
+  pendingOperations = 0;
+  get isBusy(): boolean {
+    return this.pendingOperations > 0;
+  }
+
   constructor(
     private variantService: ProductVariantsService,
     private productsService: ProductsService,
@@ -58,18 +64,25 @@ export class ProductVariantGalleryDialogComponent
   }
 
   getVariant(variantId: number) {
+    this.pendingOperations++;
     this.variantService.getById(variantId).subscribe({
       next: result => {
+        this.pendingOperations--;
         this.productVariant = result;
         this.getProductImages(result.productId);
       },
-      error: error => console.error(error),
+      error: error => {
+        console.error(error);
+        this.pendingOperations--;
+      },
     });
   }
 
   getProductImages(productId: number) {
+    this.pendingOperations++;
     this.productsService.getImagesByProductId(productId).subscribe({
       next: result => {
+        this.pendingOperations--;
         this.availableImages = result.map(image => {
           return {
             url: image.url,
@@ -77,30 +90,81 @@ export class ProductVariantGalleryDialogComponent
           };
         });
       },
-      error: error => console.error(error),
+      error: error => {
+        console.error(error);
+        this.pendingOperations--;
+      },
     });
   }
 
   getProductVariantImages(variantId: number) {
+    this.pendingOperations++;
     this.variantService.getVariantImagesById(variantId).subscribe({
       next: result => {
-        this.productVariantImages = result.map(image => {
-          return {
-            url: image.url,
-            value: image.id,
-          };
+        this.pendingOperations--;
+        const uniqueImages: GalleryImage<number>[] = [];
+        result.forEach(image => {
+          if (!uniqueImages.some(i => i.value === image.id)) {
+            uniqueImages.push({
+              url: image.url,
+              value: image.id,
+            });
+          }
         });
 
-        this.imageGallery.values = this.productVariantImages
-          .map(image => image.value)
-          .filter((id, index, array) => array.indexOf(id) === index);
+        this.productVariantImages = uniqueImages;
+
+        this.imageGallery.values = this.productVariantImages.map(
+          image => image.value
+        );
       },
-      error: error => console.error(error),
+      error: error => {
+        this.pendingOperations--;
+        console.error(error);
+      },
     });
   }
 
-  onSubmit() {
-    console.log(this.imageGallery.values);
-    console.log(this.productVariantImages);
+  async onSubmit() {
+    const imagesToDelete = this.productVariantImages
+      .filter(pvi => !this.imageGallery.values.includes(pvi.value))
+      .map(pvi => pvi.value);
+
+    const imagesToAdd = this.imageGallery.values.filter(
+      value => !this.productVariantImages.some(pvi => pvi.value === value)
+    );
+
+    this.pendingOperations++;
+
+    const promises: Promise<any>[] = [];
+
+    imagesToAdd.forEach(imageId => {
+      promises.push(
+        lastValueFrom(
+          this.variantService.addImage(
+            this.dialogData.productVariantId,
+            imageId
+          )
+        )
+      );
+    });
+
+    imagesToDelete.forEach(imageId => {
+      promises.push(
+        lastValueFrom(
+          this.variantService.removeImage(
+            this.dialogData.productVariantId,
+            imageId
+          )
+        )
+      );
+    });
+
+    await Promise.allSettled(promises);
+
+    this.dialogRef.close({
+      success: true,
+      resource: this.productVariant!,
+    });
   }
 }

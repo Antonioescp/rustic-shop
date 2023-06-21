@@ -1,9 +1,9 @@
-<div *ngIf="!productVariant" class="loading-view">
+<div *ngIf="isBusy" class="loading-view">
   <mat-spinner></mat-spinner>
 </div>
 
-<div class="container" *ngIf="productVariant">
-  <div mat-dialog-title>Galeria de {{ productVariant.sku }}</div>
+<div class="container" [hidden]="isBusy || !productVariant">
+  <div mat-dialog-title>Galeria de {{ productVariant?.sku }}</div>
   <div mat-dialog-content>
     <app-image-gallery
       [images]="availableImages"
