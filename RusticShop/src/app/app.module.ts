@@ -39,6 +39,7 @@ import { SalesTableComponent } from './admin/sales-table/sales-table.component';
 import { ProductGalleryDialogComponent } from './admin/products/product-gallery-dialog/product-gallery-dialog.component';
 import { ImageGalleryComponent } from './shared/components/image-gallery/image-gallery.component';
 import { ProductVariantGalleryDialogComponent } from './admin/product-variants/product-variant-gallery-dialog/product-variant-gallery-dialog.component';
+import { ProductVariantEditSchemaDialogComponent } from './admin/product-variants/product-variant-edit-schema-dialog/product-variant-edit-schema-dialog.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { ProductVariantGalleryDialogComponent } from './admin/product-variants/p
     ProductGalleryDialogComponent,
     ImageGalleryComponent,
     ProductVariantGalleryDialogComponent,
+    ProductVariantEditSchemaDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,9 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -26,6 +31,11 @@ import {
   ProductVariantGalleryDialogData,
   ProductVariantGalleryDialogResult,
 } from '../product-variant-gallery-dialog/product-variant-gallery-dialog.component';
+import {
+  ProductVariantEditSchemaDialogComponent,
+  ProductVariantEditSchemaDialogData,
+  ProductVariantEditSchemaDialogResult,
+} from '../product-variant-edit-schema-dialog/product-variant-edit-schema-dialog.component';
 
 @Component({
   selector: 'app-product-variants',
@@ -95,6 +105,12 @@ export class ProductVariantsComponent implements AfterViewInit {
       execute: productVariant => this.onUpdateVariant(productVariant.id),
     },
     {
+      tooltip: 'Definir esquema',
+      icon: 'schema',
+      color: 'accent',
+      execute: productVariant => this.onEditSchema(productVariant.id),
+    },
+    {
       tooltip: 'Seleccionar imágenes',
       icon: 'image',
       color: 'accent',
@@ -114,11 +130,12 @@ export class ProductVariantsComponent implements AfterViewInit {
   constructor(
     private productVariantsService: ProductVariantsService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngAfterViewInit(): void {
-    this.table.loadData();
+    this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
   }
 
   fetchData(pageEvent: PageEvent) {
@@ -226,5 +243,19 @@ export class ProductVariantsComponent implements AfterViewInit {
     >(ProductVariantGalleryDialogComponent, {
       data: { productVariantId: productVariant.id },
     });
+
+    // TODO: show message if success
+  }
+
+  onEditSchema(productVariantId: number) {
+    const dialogRef = this.dialog.open<
+      ProductVariantEditSchemaDialogComponent,
+      ProductVariantEditSchemaDialogData,
+      ProductVariantEditSchemaDialogResult
+    >(ProductVariantEditSchemaDialogComponent, {
+      data: { productVariantId },
+    });
+
+    // TODO: add messages
   }
 }

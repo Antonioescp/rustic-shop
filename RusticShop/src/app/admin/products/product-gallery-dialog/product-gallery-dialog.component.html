@@ -12,7 +12,7 @@
       multiple
       hidden
       #fileInput />
-    <div class="actions" *ngIf="imageGallery">
+    <div class="actions" *ngIf="gallery">
       <button mat-flat-button color="primary" (click)="fileInput.click()">
         <mat-icon>upload</mat-icon>
         Subir imágenes
@@ -21,12 +21,13 @@
         mat-flat-button
         color="warn"
         (click)="onDeleteSelected()"
-        [disabled]="imageGallery.values.length === 0">
+        [disabled]="gallery.values.length === 0">
         <mat-icon>delete_forever</mat-icon>
         Borrar seleccionadas
       </button>
     </div>
     <app-image-gallery
+      #gallery
       [images]="productImages"
       [selectable]="true"></app-image-gallery>
   </div>

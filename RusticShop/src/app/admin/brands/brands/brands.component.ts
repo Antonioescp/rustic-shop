@@ -77,7 +77,7 @@ export class BrandsComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.table.loadData();
+    this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
   }
 
   fetchData(pageEvent: PageEvent) {

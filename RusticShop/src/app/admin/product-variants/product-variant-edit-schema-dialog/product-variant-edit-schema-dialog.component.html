@@ -1,0 +1,75 @@
+<div *ngIf="isBusy" class="loading-view">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="container" [hidden]="isBusy || !productVariant">
+  <div mat-dialog-title>Esquema de {{ productVariant?.sku }}</div>
+  <div mat-dialog-content>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>schema</mat-icon>
+            <span>Atributos disponibles</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-chip-listbox multiple>
+          <mat-chip-option
+            *ngFor="let att of availableAttributes"
+            [value]="att.id">
+            {{ att.name }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>list</mat-icon>
+            <span>Definición</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form
+          [formGroup]="form"
+          [style.display]="'flex'"
+          [style.flexFlow]="'column nowrap'">
+          <ng-container formArrayName="attributes">
+            <ng-container
+              *ngFor="let att of attributesFormControls"
+              [formGroup]="att">
+              <input hidden matInput formControlName="attributeId" required />
+              <mat-form-field>
+                <mat-label>{{
+                  getAttributeName(att.get("attributeId")!.value)
+                }}</mat-label>
+                <input matInput formControlName="value" required />
+                <mat-error
+                  *ngFor="
+                    let error of getErrors(
+                      att.get('value')!,
+                      getAttributeName(att.get('attributeId')!.value)
+                    )
+                  ">
+                  {{ error }}
+                </mat-error>
+              </mat-form-field>
+            </ng-container>
+          </ng-container>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-dialog-close mat-flat-button color="warn">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="this.form.invalid"
+      (click)="onSave()">
+      <mat-icon>save</mat-icon>
+      Guardar
+    </button>
+  </div>
+</div>

@@ -69,17 +69,17 @@ export class SalesTableComponent implements AfterViewInit {
 
   displayedColumns = [...this.columns.map(c => c.def), 'actions'];
 
+  constructor(public orderService: CustomerOrderService) {}
+
+  ngAfterViewInit(): void {
+    this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
+  }
+
   fetchData(pageEvent: PageEvent) {
     this.orderService
       .getPaginatedOrderDetails(this.crud.getPagination(pageEvent))
       .subscribe(response => {
         this.crud.updateWithResults(response);
       });
-  }
-
-  constructor(public orderService: CustomerOrderService) {}
-
-  ngAfterViewInit(): void {
-    this.crud.loadData();
   }
 }

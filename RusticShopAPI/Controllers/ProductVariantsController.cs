@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Cms;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
@@ -230,5 +231,50 @@ namespace RusticShopAPI.Controllers
 
             return NoContent();
         }
+
+        #region Attributes
+
+        [HttpGet("{id}/attributes")]
+        public async Task<ActionResult<IEnumerable<ProductVariantAttributeDto>>> GetAttributes(long id)
+        {
+            var result = await _context.ProductVariantAttributes
+                .Include(pva => pva.Attribute)
+                .Where(pva => pva.ProductVariantId == id)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return _mapper.Map<List<ProductVariantAttributeDto>>(result);
+        }
+
+        [HttpPost("{id}/attributes")]
+        public async Task<ActionResult> AddAttribute(long id, ProductVariantAttribute productVariantAttribute)
+        {
+            productVariantAttribute.ProductVariantId = id;
+
+            _context.ProductVariantAttributes.Add(productVariantAttribute);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}/attributes/{attributeId}")]
+        public async Task<ActionResult> DeleteAttribute(long id, long attributeId)
+        {
+            var productVariantAttribute = await _context.ProductVariantAttributes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(pva => pva.ProductVariantId == id && pva.AttributeId == attributeId);
+
+            if (productVariantAttribute == null)
+            {
+                return NotFound();
+            }
+
+            _context.ProductVariantAttributes.Remove(productVariantAttribute);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        #endregion
     }
 }

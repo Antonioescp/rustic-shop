@@ -114,7 +114,7 @@ export class ProductsComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.fetchData({ pageIndex: 0, pageSize: 10, length: 0 });
+    this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
   }
 
   fetchData(pageEvent: PageEvent) {

@@ -83,7 +83,7 @@ export class CategoriesComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.table.loadData();
+    this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
   }
 
   fetchData(pageEvent: PageEvent): void {
