@@ -12,8 +12,8 @@ using RusticShopAPI.Data;
 namespace RusticShopAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230621181616_RemoveProvidersRefundsAndPurchases")]
-    partial class RemoveProvidersRefundsAndPurchases
+    [Migration("20230621185213_RemovedPurchasesRefundsProviders")]
+    partial class RemovedPurchasesRefundsProviders
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -659,140 +659,6 @@ namespace RusticShopAPI.Data.Migrations
                     b.ToTable("ProductVariantImages", (string)null);
                 });
 
-            modelBuilder.Entity("RusticShopAPI.Data.Models.Provider", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Providers", (string)null);
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.Purchase", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("ProviderId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProviderId");
-
-                    b.ToTable("Purchases", (string)null);
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.PurchaseDetail", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<long>("ProductVariantId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PurchaseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("Quantity")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("MONEY");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductVariantId");
-
-                    b.HasIndex("PurchaseId");
-
-                    b.ToTable("PurchaseDetails", (string)null);
-
-                    b.HasCheckConstraint("CK_PurchaseDetails_Quantity_Range", "[Quantity] >= 1");
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.Refund", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Refunds", (string)null);
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.RefundDetail", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<long>("ProductVariantId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("Quantity")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RefundId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductVariantId");
-
-                    b.HasIndex("RefundId");
-
-                    b.ToTable("RefundDetails", (string)null);
-
-                    b.HasCheckConstraint("CK_RefundDetails_Quantity_Range", "[Quantity] > 0");
-                });
-
             modelBuilder.Entity("RusticShopAPI.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -1163,74 +1029,6 @@ namespace RusticShopAPI.Data.Migrations
                     b.Navigation("ProductVariant");
                 });
 
-            modelBuilder.Entity("RusticShopAPI.Data.Models.Purchase", b =>
-                {
-                    b.HasOne("RusticShopAPI.Data.Models.Provider", "Provider")
-                        .WithMany("Purchases")
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Provider");
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.PurchaseDetail", b =>
-                {
-                    b.HasOne("RusticShopAPI.Data.Models.ProductVariant", "ProductVariant")
-                        .WithMany("PurchaseDetails")
-                        .HasForeignKey("ProductVariantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RusticShopAPI.Data.Models.Purchase", "Purchase")
-                        .WithMany("PurchaseDetails")
-                        .HasForeignKey("PurchaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductVariant");
-
-                    b.Navigation("Purchase");
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.Refund", b =>
-                {
-                    b.HasOne("RusticShopAPI.Data.Models.Order", "Order")
-                        .WithMany("Refunds")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RusticShopAPI.Data.Models.User", "User")
-                        .WithMany("Refunds")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.RefundDetail", b =>
-                {
-                    b.HasOne("RusticShopAPI.Data.Models.ProductVariant", "ProductVariant")
-                        .WithMany("RefundDetails")
-                        .HasForeignKey("ProductVariantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RusticShopAPI.Data.Models.Refund", "Refund")
-                        .WithMany("RefundDetails")
-                        .HasForeignKey("RefundId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductVariant");
-
-                    b.Navigation("Refund");
-                });
-
             modelBuilder.Entity("RusticShopAPI.Data.Models.Wishlist", b =>
                 {
                     b.HasOne("RusticShopAPI.Data.Models.ProductVariant", "ProductVariant")
@@ -1283,8 +1081,6 @@ namespace RusticShopAPI.Data.Migrations
             modelBuilder.Entity("RusticShopAPI.Data.Models.Order", b =>
                 {
                     b.Navigation("OrderDetails");
-
-                    b.Navigation("Refunds");
                 });
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.PaymentMethod", b =>
@@ -1308,25 +1104,6 @@ namespace RusticShopAPI.Data.Migrations
                     b.Navigation("ProductVariantAttributes");
 
                     b.Navigation("ProductVariantDiscounts");
-
-                    b.Navigation("PurchaseDetails");
-
-                    b.Navigation("RefundDetails");
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.Provider", b =>
-                {
-                    b.Navigation("Purchases");
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.Purchase", b =>
-                {
-                    b.Navigation("PurchaseDetails");
-                });
-
-            modelBuilder.Entity("RusticShopAPI.Data.Models.Refund", b =>
-                {
-                    b.Navigation("RefundDetails");
                 });
 
             modelBuilder.Entity("RusticShopAPI.Data.Models.User", b =>
@@ -1338,8 +1115,6 @@ namespace RusticShopAPI.Data.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("PaymentMethods");
-
-                    b.Navigation("Refunds");
                 });
 #pragma warning restore 612, 618
         }
