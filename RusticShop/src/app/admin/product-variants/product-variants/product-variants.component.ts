@@ -21,6 +21,11 @@ import {
   TableComponent,
 } from 'src/app/shared/components/table/table.component';
 import { ProductVariantListItem } from 'src/app/shared/models/dtos/product-variants/ProductVariantListItem';
+import {
+  ProductVariantGalleryDialogComponent,
+  ProductVariantGalleryDialogData,
+  ProductVariantGalleryDialogResult,
+} from '../product-variant-gallery-dialog/product-variant-gallery-dialog.component';
 
 @Component({
   selector: 'app-product-variants',
@@ -81,6 +86,13 @@ export class ProductVariantsComponent implements AfterViewInit {
       icon: 'edit',
       color: 'primary',
       execute: productVariant => this.onUpdateVariant(productVariant.id),
+    },
+    {
+      tooltip: 'Seleccionar imágenes',
+      icon: 'image',
+      color: 'accent',
+      execute: productVariant =>
+        this.onEditProductVariantGallery(productVariant),
     },
     {
       tooltip: 'Eliminar',
@@ -196,6 +208,16 @@ export class ProductVariantsComponent implements AfterViewInit {
           `Variante "${result.resource.sku}" no se ha podido actualizar.`
         );
       }
+    });
+  }
+
+  onEditProductVariantGallery(productVariant: ProductVariantListItem): void {
+    const dialogRef = this.dialog.open<
+      ProductVariantGalleryDialogComponent,
+      ProductVariantGalleryDialogData,
+      ProductVariantGalleryDialogResult
+    >(ProductVariantGalleryDialogComponent, {
+      data: { productVariantId: productVariant.id },
     });
   }
 }

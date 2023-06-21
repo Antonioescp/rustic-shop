@@ -22,6 +22,5 @@
         public Address? ShippingAddress { get; set; }
         public ICollection<ProductVariant>? ProductVariants { get; set; }
         public ICollection<OrderDetail>? OrderDetails { get; set; }
-        public ICollection<Refund>? Refunds { get; set; }
     }
 }

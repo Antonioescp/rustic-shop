@@ -6,7 +6,7 @@
         public string BrandName { get; set; } = null!;
         public string ShortDescription { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public long Stock { get; set; }
+        // TODO(Add stock)
 
         public ICollection<ProductVariantDetailDto>? Variants { get; set; }
         public ICollection<CategoryDetailDto>? Categories { get; set; }

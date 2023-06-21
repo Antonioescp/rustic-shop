@@ -60,13 +60,8 @@ namespace RusticShopAPI.Data
         public DbSet<ProductVariantImage> ProductVariantImages => Set<ProductVariantImage>();
         public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
         public DbSet<ProductVariantDiscount> ProductVariantDiscounts => Set<ProductVariantDiscount>();
-        public DbSet<Provider> Providers => Set<Provider>();
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
-        public DbSet<Purchase> Purchases => Set<Purchase>();
-        public DbSet<PurchaseDetail> PurchaseDetails => Set<PurchaseDetail>();
-        public DbSet<Refund> Refunds => Set<Refund>();
-        public DbSet<RefundDetail> RefundDetails => Set<RefundDetail>();
         public DbSet<ProductAttribute> ProductAttributes => Set<ProductAttribute>();
         public DbSet<CategoryProduct> CategoryProducts => Set<CategoryProduct>();
     }

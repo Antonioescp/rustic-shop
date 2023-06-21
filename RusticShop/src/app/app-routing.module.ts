@@ -18,8 +18,6 @@ import {
   canActivateAdministration,
   canActivateAuthRoutes,
 } from './guards/auth.guard';
-import { PurchasesComponent } from './admin/purchases/purchases.component';
-import { ProvidersTableComponent } from './admin/providers-table/providers-table.component';
 import { SalesTableComponent } from './admin/sales-table/sales-table.component';
 
 const routes: Routes = [
@@ -64,8 +62,6 @@ const routes: Routes = [
           { path: 'descuentos', component: DiscountsComponent },
           { path: 'marcas', component: BrandsComponent },
           { path: 'variantes', component: ProductVariantsComponent },
-          { path: 'compras', component: PurchasesComponent },
-          { path: 'proveedores', component: ProvidersTableComponent },
           { path: 'ordenes', component: SalesTableComponent },
         ],
       },

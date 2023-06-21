@@ -35,13 +35,10 @@ import { ProductVariantsComponent } from './admin/product-variants/product-varia
 import { ProductVariantEditDialogComponent } from './admin/product-variants/product-variant-edit-dialog/product-variant-edit-dialog.component';
 import { MainComponent } from './main/main.component';
 import { TableComponent } from './shared/components/table/table.component';
-import { PurchasesComponent } from './admin/purchases/purchases.component';
-import { ProvidersTableComponent } from './admin/providers-table/providers-table.component';
-import { ProviderEditDialogComponent } from './admin/providers-table/provider-edit-dialog/provider-edit-dialog.component';
-import { PurchaseEditDialogComponent } from './admin/purchases/purchase-edit-dialog/purchase-edit-dialog.component';
 import { SalesTableComponent } from './admin/sales-table/sales-table.component';
 import { ProductGalleryDialogComponent } from './admin/products/product-gallery-dialog/product-gallery-dialog.component';
 import { ImageGalleryComponent } from './shared/components/image-gallery/image-gallery.component';
+import { ProductVariantGalleryDialogComponent } from './admin/product-variants/product-variant-gallery-dialog/product-variant-gallery-dialog.component';
 
 @NgModule({
   declarations: [
@@ -72,13 +69,10 @@ import { ImageGalleryComponent } from './shared/components/image-gallery/image-g
     ProductVariantEditDialogComponent,
     MainComponent,
     TableComponent,
-    PurchasesComponent,
-    ProvidersTableComponent,
-    ProviderEditDialogComponent,
-    PurchaseEditDialogComponent,
     SalesTableComponent,
     ProductGalleryDialogComponent,
     ImageGalleryComponent,
+    ProductVariantGalleryDialogComponent,
   ],
   imports: [
     BrowserModule,

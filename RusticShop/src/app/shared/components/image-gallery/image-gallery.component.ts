@@ -36,5 +36,7 @@ export class ImageGalleryComponent<Value> implements OnChanges {
     } else {
       this.values.push(image.value);
     }
+
+    console.log(this.values);
   }
 }
