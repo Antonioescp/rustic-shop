@@ -25,6 +25,11 @@ import {
   TableColumnDef,
   TableComponent,
 } from 'src/app/shared/components/table/table.component';
+import {
+  ProductGalleryDialogComponent,
+  ProductGalleryDialogData,
+  ProductGalleryDialogResult,
+} from '../product-gallery-dialog/product-gallery-dialog.component';
 
 @Component({
   selector: 'app-products',
@@ -79,9 +84,15 @@ export class ProductsComponent implements AfterViewInit {
     },
     {
       tooltip: 'Editar esquema',
-      color: 'primary',
+      color: 'accent',
       icon: 'schema',
       execute: product => this.onEditSchema(product.id),
+    },
+    {
+      tooltip: 'Administrar imágenes',
+      color: 'accent',
+      icon: 'image',
+      execute: product => this.onEditProductGallery(product.id),
     },
     {
       tooltip: 'Eliminar',
@@ -210,6 +221,16 @@ export class ProductsComponent implements AfterViewInit {
       if (result?.success) {
         this.snackBar.open('Actualizado');
       }
+    });
+  }
+
+  onEditProductGallery(productId: number): void {
+    const dialogRef = this.dialog.open<
+      ProductGalleryDialogComponent,
+      ProductGalleryDialogData,
+      ProductGalleryDialogResult
+    >(ProductGalleryDialogComponent, {
+      data: { productId },
     });
   }
 }

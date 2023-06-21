@@ -7,6 +7,7 @@ import Category from '../shared/models/Category';
 import Attribute from '../shared/models/Attribute';
 import { ProductWithBrandName } from '../shared/models/dtos/products/ProductWithBrandName';
 import { BaseCrudService } from '../shared/services/BaseCrudService';
+import { ProductImage } from '../shared/models/ProductImage';
 
 @Injectable({
   providedIn: 'root',
@@ -69,5 +70,25 @@ export class ProductsService extends BaseCrudService<Product> {
     return this.http.delete<any>(
       this.getProductAttributesUrl(productId) + attributeId
     );
+  }
+
+  getImagesByProductId(productId: number): Observable<ProductImage[]> {
+    return this.http.get<ProductImage[]>(
+      this.resourceUrl + productId + '/images'
+    );
+  }
+
+  uploadImages(productId: number, images: File[]): Observable<any> {
+    const url = `${environment.apiBaseUrl}${environment.productsEndpoint}${productId}/images`;
+    const formData = new FormData();
+    images.forEach(image => {
+      formData.append('images', image);
+    });
+    return this.http.post<any>(url, formData);
+  }
+
+  deleteImage(productId: number, imageId: number): Observable<any> {
+    const url = `${environment.apiBaseUrl}${environment.productsEndpoint}${productId}/images/${imageId}`;
+    return this.http.delete<any>(url);
   }
 }

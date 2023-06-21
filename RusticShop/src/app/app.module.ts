@@ -40,6 +40,8 @@ import { ProvidersTableComponent } from './admin/providers-table/providers-table
 import { ProviderEditDialogComponent } from './admin/providers-table/provider-edit-dialog/provider-edit-dialog.component';
 import { PurchaseEditDialogComponent } from './admin/purchases/purchase-edit-dialog/purchase-edit-dialog.component';
 import { SalesTableComponent } from './admin/sales-table/sales-table.component';
+import { ProductGalleryDialogComponent } from './admin/products/product-gallery-dialog/product-gallery-dialog.component';
+import { ImageGalleryComponent } from './shared/components/image-gallery/image-gallery.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +77,8 @@ import { SalesTableComponent } from './admin/sales-table/sales-table.component';
     ProviderEditDialogComponent,
     PurchaseEditDialogComponent,
     SalesTableComponent,
+    ProductGalleryDialogComponent,
+    ImageGalleryComponent,
   ],
   imports: [
     BrowserModule,

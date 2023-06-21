@@ -2,6 +2,15 @@
   white-space: nowrap;
 }
 
-:host ::ng-deep .mat-column-actions {
-  width: 250px;
+:host ::ng-deep {
+
+  .mat-column-actions {
+    width: 280px;
+    border-left: 1px solid grey;
+  }
+
+  .mat-column-isPublished {
+    width: 150px;
+    text-align: center;
+  }
 }
