@@ -1,3 +1,10 @@
-:host ::ng-deep .mat-column-actions {
-  width: 250px;
+:host ::ng-deep {
+  .mat-column-actions {
+    width: 250px;
+  }
+
+  .mat-column-stock {
+    width: 125px;
+    text-align: center;
+  }
 }

@@ -100,7 +100,9 @@ namespace RusticShopAPI.Controllers
             string? filterQuery = null)
         {
             return await PaginatedResult<Product>.CreateAsync(
-                _context.Products,
+                _context.Products
+                    .Include(p => p.Variants)
+                    .AsNoTracking(),
                 pageIndex,
                 pageSize,
                 sortColumn,

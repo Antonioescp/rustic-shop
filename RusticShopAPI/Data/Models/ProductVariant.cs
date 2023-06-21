@@ -16,7 +16,7 @@ namespace RusticShopAPI.Data.Models
         public bool? HasDiscount => ProductVariantDiscounts
             ?.Any(pvd => pvd.EndDate >= DateTime.UtcNow);
 
-        // TODO(Add stock)
+        public long Stock { get; set; }
 
         public ProductVariantDiscount? CurrentDiscount => ProductVariantDiscounts
             ?.OrderBy(pvd => pvd.EndDate)

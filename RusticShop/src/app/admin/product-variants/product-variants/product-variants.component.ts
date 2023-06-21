@@ -44,20 +44,26 @@ export class ProductVariantsComponent implements AfterViewInit {
     },
     {
       def: 'productBrandName',
-      header: 'Marca del producto',
+      header: 'Marca',
       valueGetter: productVariant => productVariant.productBrandName,
-      sortable: true,
+      sortable: false,
     },
     {
       def: 'productName',
-      header: 'Nombre del producto',
+      header: 'Nombre',
       valueGetter: productVariant => productVariant.productName,
-      sortable: true,
+      sortable: false,
     },
     {
       def: 'sku',
       header: 'SKU',
       valueGetter: productVariant => productVariant.sku,
+      sortable: true,
+    },
+    {
+      def: 'stock',
+      header: 'Existencias',
+      valueGetter: productVariant => productVariant.stock.toString(),
       sortable: true,
     },
     {
@@ -68,6 +74,7 @@ export class ProductVariantsComponent implements AfterViewInit {
           style: 'currency',
           currency: 'NIO',
         }),
+      sortable: true,
     },
   ];
 

@@ -58,6 +58,11 @@ export class ProductsComponent implements AfterViewInit {
       valueGetter: product => product.shortDescription ?? 'No aplicable',
     },
     {
+      def: 'stock',
+      header: 'Existencias',
+      valueGetter: product => product.stock?.toString() ?? 'No aplicable',
+    },
+    {
       def: 'isPublished',
       header: 'Publicado',
       valueGetter: product => (product.isPublished ? 'Sí' : 'No'),

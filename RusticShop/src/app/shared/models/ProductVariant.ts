@@ -3,5 +3,6 @@ export interface ProductVariant {
   productId: number;
   sku: string;
   unitPrice: number;
+  stock: number;
   isPublished: boolean;
 }

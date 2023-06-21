@@ -6,11 +6,15 @@
 
   .mat-column-actions {
     width: 280px;
-    border-left: 1px solid grey;
   }
 
   .mat-column-isPublished {
     width: 150px;
+    text-align: center;
+  }
+
+  .mat-column-stock {
+    width: 120px;
     text-align: center;
   }
 }

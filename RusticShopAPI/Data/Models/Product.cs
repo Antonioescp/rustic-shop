@@ -20,6 +20,6 @@ namespace RusticShopAPI.Data.Models
         public ICollection<ProductImage>? Images { get; set; }
 
         // Computed properties
-        // TODO Add Stock
+        public long? Stock => Variants?.Sum(pv => pv.Stock);
     }
 }
