@@ -103,7 +103,7 @@ export class ProductVariantsComponent implements AfterViewInit {
     },
     {
       tooltip: 'Eliminar',
-      icon: 'delete',
+      icon: 'delete_forever',
       color: 'warn',
       execute: productVariant => this.onDeleteVariant(productVariant),
     },

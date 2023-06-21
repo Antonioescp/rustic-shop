@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
@@ -444,7 +445,11 @@ namespace RusticShopAPI.Controllers
         public async Task<ActionResult> DeleteImage(long id, long imageId)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
-            if (productImage == null || productImage.ProductId != id)
+            var productVariantImages = await _context.ProductVariantImages
+                .Include(pvi => pvi.ProductImage)
+                .ToListAsync();
+
+            if (productImage == null || productImage.ProductId != id || productVariantImages == null)
             {
                 return NotFound();
             }
@@ -458,6 +463,18 @@ namespace RusticShopAPI.Controllers
             {
                 System.IO.File.Delete(filePath);
             }
+
+
+
+            // delete product variant images with imageId
+            foreach (var pvi in productVariantImages)
+            {
+                if (pvi.ProductImageId == imageId)
+                {
+                    _context.ProductVariantImages.Remove(pvi);
+                }
+            }
+            await _context.SaveChangesAsync();
 
             _context.ProductImages.Remove(productImage!);
             await _context.SaveChangesAsync();

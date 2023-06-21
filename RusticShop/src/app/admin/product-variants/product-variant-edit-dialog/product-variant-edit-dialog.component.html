@@ -6,25 +6,24 @@
   <h1 mat-dialog-title>{{ title }}</h1>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div mat-dialog-content class="fields">
+      <mat-form-field class="big">
+        <mat-label>Producto</mat-label>
+        <mat-select formControlName="productId">
+          <mat-optgroup *ngFor="let brand of brands" [label]="brand.name">
+            <mat-option
+              *ngFor="let product of brand.products"
+              [value]="product.id">
+              {{ product.name + " (" + brand.name + ")" }}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+        <mat-error
+          *ngFor="let error of getErrors(form.get('productId')!, 'Producto')">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
       <div class="row">
-        <mat-form-field class="big">
-          <mat-label>Producto</mat-label>
-          <mat-select formControlName="productId">
-            <mat-optgroup *ngFor="let brand of brands" [label]="brand.name">
-              <mat-option
-                *ngFor="let product of brand.products"
-                [value]="product.id">
-                {{ product.name + " (" + brand.name + ")" }}
-              </mat-option>
-            </mat-optgroup>
-          </mat-select>
-          <mat-error
-            *ngFor="let error of getErrors(form.get('productId')!, 'Producto')">
-            {{ error }}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field floatLabel="always" class="small margin-left">
+        <mat-form-field floatLabel="always">
           <mat-label>Precio Unitario</mat-label>
           <input
             matInput
@@ -38,6 +37,20 @@
             *ngFor="
               let error of getErrors(form.get('sku')!, 'Precio Unitario')
             ">
+            {{ error }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field floatLabel="always" class="margin-left">
+          <mat-label>Existencias</mat-label>
+          <input
+            matInput
+            type="number"
+            required
+            formControlName="stock"
+            placeholder="0"
+            class="right-align" />
+          <mat-error
+            *ngFor="let error of getErrors(form.get('stock')!, 'Existencias')">
             {{ error }}
           </mat-error>
         </mat-form-field>
