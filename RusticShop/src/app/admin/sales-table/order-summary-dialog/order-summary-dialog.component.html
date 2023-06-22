@@ -1,1 +1,116 @@
-<p>order-summary-dialog works!</p>
+<div *ngIf="isBusy" class="loading-view">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="container" [hidden]="isBusy || !order">
+  <button mat-icon-button color="warn" mat-dialog-close class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+  <div mat-dialog-title>Detalles de orden {{ order?.id }}</div>
+  <div mat-dialog-content>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>person</mat-icon>
+            <h3>Información de cliente</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListItemIcon>person</mat-icon>
+            <span matListItemTitle>{{
+              (order?.userFirstName ? order?.userFirstName + " " : "") +
+                (order?.userLastName ?? "") || "No aplicable"
+            }}</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>email</mat-icon>
+            <span matListItemTitle>{{ order?.userEmail }}</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>phone</mat-icon>
+            <span matListItemTitle>{{
+              order?.userPhoneNumber || "No aplicable"
+            }}</span>
+          </mat-list-item>
+        </mat-list>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>location_on</mat-icon>
+            <h3>Información de envío</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-list>
+          <mat-list-item>
+            <mat-icon matListItemIcon>house</mat-icon>
+            <span matListItemTitle>
+              {{ order?.shippingAddressName }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>tag</mat-icon>
+            <span matListItemTitle>
+              {{ order?.shippingAddressHouseNumber }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>apartment</mat-icon>
+            <span matListItemTitle>
+              {{
+                (order?.shippingAddressNeighborhoodName
+                  ? order?.shippingAddressNeighborhoodName + ", "
+                  : "") +
+                  (order?.shippingAddressNeighborhoodCityName ?? "")
+              }}
+            </span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>fork_right</mat-icon>
+            <span matListItemTitle>
+              {{ order?.shippingAddressDirections }}
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>list</mat-icon>
+            <h3>Productos</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <table mat-table [dataSource]="dataSource">
+          <ng-container *ngFor="let column of columns">
+            <ng-container [matColumnDef]="column.def">
+              <ng-container *ngIf="column.sortable" #else>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  {{ column.header }}
+                </th>
+              </ng-container>
+              <ng-container #else>
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ column.header }}
+                </th>
+              </ng-container>
+              <td mat-cell *matCellDef="let element">
+                {{ column.valueGetter(element) }}
+              </td>
+              <td mat-footer-cell *matFooterCellDef>
+                {{ column.getFooter?.(dataSource) }}
+              </td>
+            </ng-container>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+        </table>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

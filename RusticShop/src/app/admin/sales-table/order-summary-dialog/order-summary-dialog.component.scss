@@ -1,0 +1,20 @@
+.container {
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 100;
+}
+
+tr.mat-mdc-footer-row {
+  font-weight: bold;
+}
+
+.mat-column-quantity {
+  text-align: center;
+}

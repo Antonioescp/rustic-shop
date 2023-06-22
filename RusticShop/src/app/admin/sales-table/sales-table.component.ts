@@ -1,4 +1,5 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { CustomerOrderService } from 'src/app/services/customer-order.service';
 import {
@@ -8,6 +9,11 @@ import {
 } from 'src/app/shared/components/table/table.component';
 import { Order } from 'src/app/shared/models/Order';
 import { OrderDetailsDto } from 'src/app/shared/models/dtos/orders/OrderDetailsDto';
+import {
+  OrderSummaryDialogComponent,
+  OrderSummaryDialogData,
+  OrderSummaryDialogResult,
+} from './order-summary-dialog/order-summary-dialog.component';
 
 @Component({
   selector: 'app-sales-table',
@@ -63,13 +69,16 @@ export class SalesTableComponent implements AfterViewInit {
       color: 'primary',
       icon: 'visibility',
       tooltip: 'Ver',
-      execute: (order: Order) => console.log(order),
+      execute: (order: Order) => this.onViewOrderSummary(order.id),
     },
   ];
 
   displayedColumns = [...this.columns.map(c => c.def), 'actions'];
 
-  constructor(public orderService: CustomerOrderService) {}
+  constructor(
+    public orderService: CustomerOrderService,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit(): void {
     this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
@@ -81,5 +90,17 @@ export class SalesTableComponent implements AfterViewInit {
       .subscribe(response => {
         this.crud.updateWithResults(response);
       });
+  }
+
+  onViewOrderSummary(orderId: number): void {
+    const dialogRef = this.dialog.open<
+      OrderSummaryDialogComponent,
+      OrderSummaryDialogData,
+      OrderSummaryDialogResult
+    >(OrderSummaryDialogComponent, {
+      data: { orderId },
+    });
+
+    // TODO: listen to dialog close event
   }
 }

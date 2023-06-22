@@ -8,16 +8,16 @@ export interface OrderSummaryDto {
   productCount?: number;
 
   // user details
-  userName: string;
-  userLastName: string;
-  userPhoneNumber: string;
+  userFirstName?: string;
+  userLastName?: string;
+  userPhoneNumber?: string;
   userEmail: string;
 
   // address details
   shippingAddressName: string;
   shippingAddressDirections: string;
   shippingAddressHouseNumber: string;
-  shippingAddressNeighborhood: string;
+  shippingAddressNeighborhoodName: string;
   shippingAddressNeighborhoodCityName: string;
 
   // product details
