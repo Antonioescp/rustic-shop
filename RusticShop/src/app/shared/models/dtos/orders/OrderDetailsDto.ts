@@ -3,6 +3,6 @@ export interface OrderDetailsDto {
   userFullName: string;
   status: string;
   date: string;
-  total: number;
-  productCount: number;
+  total?: number;
+  productCount?: number;
 }

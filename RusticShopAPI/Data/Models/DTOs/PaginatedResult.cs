@@ -19,7 +19,7 @@ namespace RusticShopAPI.Data.Models.DTOs
             string? sortColumn,
             string? sortOrder,
             string? filterColumn,
-            string? filterQuery) 
+            string? filterQuery)
         {
             Data = data;
             PageIndex = pageIndex;
@@ -43,8 +43,8 @@ namespace RusticShopAPI.Data.Models.DTOs
         {
             if (!string.IsNullOrEmpty(filterColumn)
                 && !string.IsNullOrEmpty(filterQuery)
-                && IsValidProperty(filterColumn)) 
-            { 
+                && IsValidProperty(filterColumn))
+            {
                 source = source.Where(
                     string.Format("{0}.StartsWith(@0)",
                     filterColumn),
@@ -68,6 +68,12 @@ namespace RusticShopAPI.Data.Models.DTOs
                         sortOrder)
                     );
             }
+            else
+            {
+                // Default sort, previously was having problems
+                // when using pageIndex = 1
+                source = source.OrderBy(x => x);
+            }
 
             source = source
                 .Skip(pageIndex * pageSize)
@@ -76,9 +82,9 @@ namespace RusticShopAPI.Data.Models.DTOs
             var data = await source.ToListAsync();
 
             return new PaginatedResult<T>(
-                data, 
-                count, 
-                pageIndex, 
+                data,
+                count,
+                pageIndex,
                 pageSize,
                 sortColumn,
                 sortOrder,

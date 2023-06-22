@@ -20,6 +20,8 @@ namespace RusticShopAPI.Data.Models.Settings
                 .IsRequired()
                 .HasColumnType("MONEY");
 
+            builder.Ignore(od => od.Total);
+
             // Constraints
             builder
                 .HasCheckConstraint(

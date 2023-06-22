@@ -276,5 +276,54 @@ namespace RusticShopAPI.Controllers
         }
 
         #endregion
+
+        #region Discounts
+
+        [HttpGet("{id}/discounts")]
+        public async Task<ActionResult<IEnumerable<ProductVariantDiscount>>> GetDiscounts(long id)
+        {
+            var result = await _context.ProductVariantDiscounts
+                .Where(pvd => pvd.ProductVariantId == id)
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
+        }
+
+        [HttpPost("{id}/discounts")]
+        public async Task<ActionResult> AddDiscount(long id, ProductVariantDiscount productVariantDiscount)
+        {
+            productVariantDiscount.ProductVariantId = id;
+
+            _context.ProductVariantDiscounts.Add(productVariantDiscount);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}/discounts/{discountId}")]
+        public async Task<ActionResult> DeleteDiscount(long id, long discountId)
+        {
+            var productVariantDiscount = await _context.ProductVariantDiscounts
+                .AsNoTracking()
+                .FirstOrDefaultAsync(pvd => pvd.ProductVariantId == id && pvd.DiscountId == discountId);
+
+            if (productVariantDiscount == null)
+            {
+                return NotFound();
+            }
+
+            _context.ProductVariantDiscounts.Remove(productVariantDiscount);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        #endregion
     }
 }

@@ -38,7 +38,7 @@ export class SalesTableComponent implements AfterViewInit {
       def: 'productCount',
       header: 'Productos',
       valueGetter: (order: OrderDetailsDto) =>
-        order.productCount.toLocaleString('es-NI'),
+        order.productCount?.toLocaleString('es-NI') ?? 'No aplicable',
     },
     {
       def: 'date',
@@ -51,10 +51,10 @@ export class SalesTableComponent implements AfterViewInit {
       def: 'total',
       header: 'Total',
       valueGetter: (order: OrderDetailsDto) =>
-        order.total.toLocaleString('es-NI', {
+        order.total?.toLocaleString('es-NI', {
           style: 'currency',
           currency: 'NIO',
-        }),
+        }) ?? 'No aplicable',
     },
   ];
 

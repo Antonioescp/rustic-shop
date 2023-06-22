@@ -31,7 +31,7 @@ namespace RusticShopAPI.Controllers
             int pageIndex = 0,
             int pageSize = 10,
             string? sortColumn = null,
-            string? sortOrder = null,
+            string? sortOrder = "ASC",
             string? filterColumn = null,
             string? filterQuery = null)
         {
@@ -39,18 +39,19 @@ namespace RusticShopAPI.Controllers
                 .Include(p => p.Categories!)
                 .Include(p => p.Brand!)
                 .Include(p => p.Images!)
-                .Include(p => p.Variants!)
+                .Include(p => p.Variants!.Where(pv => pv.IsPublished))
                     .ThenInclude(pv => pv.ProductVariantAttributes!)
                         .ThenInclude(pva => pva.Attribute)
-                .Include(p => p.Variants!)
+                .Include(p => p.Variants!.Where(pv => pv.IsPublished))
                     .ThenInclude(pv => pv.OrderDetails)
-                .Include(p => p.Variants!)
+                .Include(p => p.Variants!.Where(pv => pv.IsPublished))
                     .ThenInclude(pv => pv.Images)
-                .Include(p => p.Variants!)
+                .Include(p => p.Variants!.Where(pv => pv.IsPublished))
                     .ThenInclude(pv => pv.ProductVariantDiscounts!)
                         .ThenInclude(pv => pv.Discount)
-                .Include(p => p.Variants!)
+                .Include(p => p.Variants!.Where(pv => pv.IsPublished))
                     .ThenInclude(pv => pv.WishlistedByUsers)
+                .Where(p => p.IsPublished && p.Variants!.Any(pv => pv.IsPublished))
                 .AsSplitQuery()
                 .AsNoTracking();
 
