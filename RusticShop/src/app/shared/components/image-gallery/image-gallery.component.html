@@ -1,0 +1,16 @@
+<div class="main-container">
+  <div class="gallery-container">
+    <ng-container *ngFor="let image of images; index as i">
+      <div
+        (click)="onImageClick(image)"
+        class="image-container"
+        [class.selectable]="selectable"
+        [class.selected]="values.includes(image.value) && selectable"
+        [style.backgroundImage]="'url(' + image.url + ')'">
+        <div *ngIf="isImageSelected(image) && selectable" class="checkmark">
+          {{ getSelectedIndex(image) + 1 }}
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -1,69 +1,7 @@
-<div class="categories">
-
-  <h2>Categorías</h2>
-
-  <button mat-flat-button color="primary"
-    *ngIf="categories"
-    (click)="onCreateCategory()">
-    <mat-icon>add</mat-icon>
-    Agregar categoría
-  </button>
-
-  <mat-form-field>
-    <input matInput #filter (keyup)="loadData(filter.value)"
-      placeholder="Filtra por nombre o parte de">
-  </mat-form-field>
-
-  <table matSort class="mat-elevation-z8" mat-table [dataSource]="categories"
-         (matSortChange)="loadData()"
-         [matSortActive]="defaultSortColumn"
-         [matSortDirection]="defaultSortOrder">
-
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-      <td mat-cell *matCellDef="let category">{{ category.id }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-      <td mat-cell *matCellDef="let category">{{ category.name | titlecase }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
-      <td mat-cell *matCellDef="let category">{{ category.description }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Acciones </th>
-      <td mat-cell *matCellDef="let category">
-        <button mat-icon-button
-                matTooltip="Editar categoría"
-                color="primary"
-                [disabled]="isLoadingAction"
-                (click)="onEditCategory(category.id)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button matTooltip="Borrar categoría" color="warn"
-                (click)="onDeleteCategory(category)"
-                [disabled]="isLoadingAction">
-          <mat-icon>delete_forever</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-  </table>
-
-  <mat-paginator [hidden]="!categories"
-                  [pageSizeOptions]="[10, 20, 50]"
-                  [pageSize]="10"
-                  (page)="getData($event)"
-                  showFirstLastButtons
-                  aria-label="Selecciona la pagina de categorias"
-                  class="mat-elevation-z8">
-  </mat-paginator>
-
-</div>
+<app-table
+  title="Categorías"
+  [columns]="columns"
+  [tableActions]="tableActions"
+  [rowActions]="rowActions"
+  [displayedColumns]="displayedColumns"
+  (fetchData)="fetchData($event)"></app-table>

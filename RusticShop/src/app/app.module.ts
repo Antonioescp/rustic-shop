@@ -17,9 +17,7 @@ import { RequestAccountUnlockComponent } from './auth/request-account-unlock/req
 import { UnlockAccountComponent } from './auth/unlock-account/unlock-account.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 
-import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './http-interceptors/AuthInterceptor';
-import { ProductsService } from './services/products.service';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { CategoriesComponent } from './admin/categories/categories/categories.component';
 import { AttributesComponent } from './admin/attributes/attributes/attributes.component';
@@ -36,6 +34,12 @@ import { ProductEditSchemaDialogComponent } from './admin/products/product-edit-
 import { ProductVariantsComponent } from './admin/product-variants/product-variants/product-variants.component';
 import { ProductVariantEditDialogComponent } from './admin/product-variants/product-variant-edit-dialog/product-variant-edit-dialog.component';
 import { MainComponent } from './main/main.component';
+import { TableComponent } from './shared/components/table/table.component';
+import { SalesTableComponent } from './admin/sales-table/sales-table.component';
+import { ProductGalleryDialogComponent } from './admin/products/product-gallery-dialog/product-gallery-dialog.component';
+import { ImageGalleryComponent } from './shared/components/image-gallery/image-gallery.component';
+import { ProductVariantGalleryDialogComponent } from './admin/product-variants/product-variant-gallery-dialog/product-variant-gallery-dialog.component';
+import { ProductVariantEditSchemaDialogComponent } from './admin/product-variants/product-variant-edit-schema-dialog/product-variant-edit-schema-dialog.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +69,12 @@ import { MainComponent } from './main/main.component';
     ProductVariantsComponent,
     ProductVariantEditDialogComponent,
     MainComponent,
+    TableComponent,
+    SalesTableComponent,
+    ProductGalleryDialogComponent,
+    ImageGalleryComponent,
+    ProductVariantGalleryDialogComponent,
+    ProductVariantEditSchemaDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,8 +90,6 @@ import { MainComponent } from './main/main.component';
       useClass: AuthInterceptor,
       multi: true,
     },
-    { provide: AuthService },
-    { provide: ProductsService },
   ],
   bootstrap: [AppComponent],
 })

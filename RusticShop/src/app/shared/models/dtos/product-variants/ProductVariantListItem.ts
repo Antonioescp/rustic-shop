@@ -4,5 +4,6 @@ export interface ProductVariantListItem {
   productBrandName: string;
   sku: string;
   unitPrice: number;
+  stock: number;
   isPublished: boolean;
 }

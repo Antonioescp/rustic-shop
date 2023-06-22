@@ -1,9 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { ProductVariantsService } from 'src/app/services/product-variants.service';
 import {
   BaseEditDialogData,
@@ -16,85 +19,139 @@ import {
 } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import { ProductVariant } from 'src/app/shared/models/ProductVariant';
 import { ProductVariantEditDialogComponent } from '../product-variant-edit-dialog/product-variant-edit-dialog.component';
+import {
+  RowActionsDef,
+  TableActionDef,
+  TableColumnDef,
+  TableComponent,
+} from 'src/app/shared/components/table/table.component';
 import { ProductVariantListItem } from 'src/app/shared/models/dtos/product-variants/ProductVariantListItem';
-import { Pagination } from 'src/app/services/categories.service';
+import {
+  ProductVariantGalleryDialogComponent,
+  ProductVariantGalleryDialogData,
+  ProductVariantGalleryDialogResult,
+} from '../product-variant-gallery-dialog/product-variant-gallery-dialog.component';
+import {
+  ProductVariantEditSchemaDialogComponent,
+  ProductVariantEditSchemaDialogData,
+  ProductVariantEditSchemaDialogResult,
+} from '../product-variant-edit-schema-dialog/product-variant-edit-schema-dialog.component';
 
 @Component({
   selector: 'app-product-variants',
   templateUrl: './product-variants.component.html',
   styleUrls: ['./product-variants.component.scss'],
 })
-export class ProductVariantsComponent implements OnInit {
-  variants!: MatTableDataSource<ProductVariantListItem>;
-  displayedColumns = [
-    'id',
-    'productName',
-    'productBrandName',
-    'sku',
-    'unitPrice',
-    'isPublished',
-    'actions',
+export class ProductVariantsComponent implements AfterViewInit {
+  @ViewChild(TableComponent) table!: TableComponent<ProductVariantListItem>;
+
+  columns: TableColumnDef<ProductVariantListItem>[] = [
+    {
+      def: 'id',
+      header: 'ID',
+      valueGetter: productVariant => productVariant.id.toString(),
+      sortable: true,
+    },
+    {
+      def: 'productBrandName',
+      header: 'Marca',
+      valueGetter: productVariant => productVariant.productBrandName,
+      sortable: false,
+    },
+    {
+      def: 'productName',
+      header: 'Nombre',
+      valueGetter: productVariant => productVariant.productName,
+      sortable: false,
+    },
+    {
+      def: 'sku',
+      header: 'SKU',
+      valueGetter: productVariant => productVariant.sku,
+      sortable: true,
+    },
+    {
+      def: 'stock',
+      header: 'Existencias',
+      valueGetter: productVariant => productVariant.stock.toString(),
+      sortable: true,
+    },
+    {
+      def: 'unitPrice',
+      header: 'Precio unitario',
+      valueGetter: productVariant =>
+        productVariant.unitPrice.toLocaleString('es-NI', {
+          style: 'currency',
+          currency: 'NIO',
+        }),
+      sortable: true,
+    },
   ];
 
-  defaultPageIndex = 0;
-  defaultPageSize = 10;
-  public defaultSortColumn = 'id';
-  public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn = 'sku';
-  filterQuery?: string;
+  tableActions: TableActionDef[] = [
+    {
+      label: 'Agregar variante',
+      icon: 'add',
+      color: 'primary',
+      execute: () => this.onCreateVariant(),
+    },
+  ];
 
-  isLoadingAction = false;
+  rowActions: RowActionsDef<ProductVariantListItem>[] = [
+    {
+      tooltip: 'Editar',
+      icon: 'edit',
+      color: 'primary',
+      execute: productVariant => this.onUpdateVariant(productVariant.id),
+    },
+    {
+      tooltip: 'Definir esquema',
+      icon: 'schema',
+      color: 'accent',
+      execute: productVariant => this.onEditSchema(productVariant.id),
+    },
+    {
+      tooltip: 'Seleccionar imágenes',
+      icon: 'image',
+      color: 'accent',
+      execute: productVariant =>
+        this.onEditProductVariantGallery(productVariant),
+    },
+    {
+      tooltip: 'Eliminar',
+      icon: 'delete_forever',
+      color: 'warn',
+      execute: productVariant => this.onDeleteVariant(productVariant),
+    },
+  ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  displayedColumns = [...this.columns.map(column => column.def), 'actions'];
 
   constructor(
     private productVariantsService: ProductVariantsService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cd: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
-    this.loadData();
+  ngAfterViewInit(): void {
+    this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
   }
 
-  loadData(query?: string) {
-    const pageEvent = new PageEvent();
-    pageEvent.pageIndex = this.defaultPageIndex;
-    pageEvent.pageSize = this.defaultPageSize;
-    this.filterQuery = query;
-    this.getData(pageEvent);
-  }
-
-  getData(event: PageEvent): void {
+  fetchData(pageEvent: PageEvent) {
     this.productVariantsService
-      .getPaginatedListItem(
-        new Pagination({
-          defaultSortColumn: this.defaultSortColumn,
-          defaultSortOrder: this.defaultSortOrder,
-          pageIndex: event.pageIndex,
-          pageSize: event.pageSize,
-          sort: this.sort,
-          defaultFilterColumn: this.defaultFilterColumn,
-          filterQuery: this.filterQuery,
-        })
-      )
+      .getPaginatedListItem(this.table.getPagination(pageEvent))
       .subscribe({
-        next: result => {
-          this.paginator.length = result.totalCount;
-          this.paginator.pageIndex = result.pageIndex;
-          this.paginator.pageSize = result.pageSize;
-          this.variants = new MatTableDataSource(result.data);
-          this.isLoadingAction = false;
+        next: results => {
+          this.table.updateWithResults(results);
         },
         error: error => {
-          console.log(error);
-          this.isLoadingAction = false;
+          console.error(error);
         },
       });
   }
 
-  onDeleteVariant(productVariant: ProductVariant): void {
+  onDeleteVariant(productVariant: ProductVariantListItem): void {
     const dialogRef = this.dialog.open<
       ConfirmDialogComponent,
       ConfirmDialogData,
@@ -117,11 +174,10 @@ export class ProductVariantsComponent implements OnInit {
     });
   }
 
-  deleteVariant(productVariant: ProductVariant) {
-    this.isLoadingAction = true;
+  deleteVariant(productVariant: ProductVariantListItem) {
     this.productVariantsService.deleteById(productVariant.id).subscribe({
       next: () => {
-        this.loadData();
+        this.table.loadData();
         this.snackBar.open(
           `Variante "${productVariant.sku} eliminado con éxito."`
         );
@@ -132,7 +188,6 @@ export class ProductVariantsComponent implements OnInit {
           `Variante "${productVariant.sku} no se ha podido eliminar."`
         );
       },
-      complete: () => (this.isLoadingAction = false),
     });
   }
 
@@ -145,7 +200,7 @@ export class ProductVariantsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
-        this.loadData();
+        this.table.loadData();
         this.snackBar.open(
           `Variante "${result.resource.sku}" ha sido creado con éxito.`
         );
@@ -168,7 +223,7 @@ export class ProductVariantsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
-        this.loadData();
+        this.table.loadData();
         this.snackBar.open(
           `Variante "${result.resource.sku}" ha sido actualizado con éxito.`
         );
@@ -178,5 +233,29 @@ export class ProductVariantsComponent implements OnInit {
         );
       }
     });
+  }
+
+  onEditProductVariantGallery(productVariant: ProductVariantListItem): void {
+    const dialogRef = this.dialog.open<
+      ProductVariantGalleryDialogComponent,
+      ProductVariantGalleryDialogData,
+      ProductVariantGalleryDialogResult
+    >(ProductVariantGalleryDialogComponent, {
+      data: { productVariantId: productVariant.id },
+    });
+
+    // TODO: show message if success
+  }
+
+  onEditSchema(productVariantId: number) {
+    const dialogRef = this.dialog.open<
+      ProductVariantEditSchemaDialogComponent,
+      ProductVariantEditSchemaDialogData,
+      ProductVariantEditSchemaDialogResult
+    >(ProductVariantEditSchemaDialogComponent, {
+      data: { productVariantId },
+    });
+
+    // TODO: add messages
   }
 }

@@ -1,0 +1,16 @@
+.actions {
+  display: flex;
+  flex-flow: row;
+  gap: 10px;
+}
+
+.loading-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+}
+
+.main-container {
+  width: 800px;
+}

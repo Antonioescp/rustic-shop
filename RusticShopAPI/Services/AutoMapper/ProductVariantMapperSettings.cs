@@ -11,6 +11,7 @@ namespace RusticShopAPI.Services.AutoMapper
         {
             CreateMap<ProductVariant, ProductVariantListItem>();
             CreateMap<PaginatedResult<ProductVariant>, PaginatedResult<ProductVariantListItem>>();
+            CreateMap<ProductVariantAttribute, ProductVariantAttributeDto>();
         }
     }
 }

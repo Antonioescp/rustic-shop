@@ -1,40 +1,20 @@
-table.mat-mdc-table {
+:host ::ng-deep table {
   white-space: nowrap;
-  width: 100%;
-  max-width: 100%;
-  table-layout: fixed;
+}
+
+:host ::ng-deep {
 
   .mat-column-actions {
-      width: 250px;
+    width: 280px;
   }
 
-  .mat-column-isPublished, .mat-column-id {
-      width: 100px;
+  .mat-column-isPublished {
+    width: 150px;
+    text-align: center;
   }
-}
 
-mat-paginator {
-  margin-bottom: 15px;
-}
-
-mat-form-field {
-  font-size: 14px;
-  width: 100%;
-  margin-top: 15px;
-}
-
-.mat-column-actions {
-  text-align: center;
-
-  button {
-    margin-left: 10px;
-  }
-}
-
-.products {
-  margin: 25px;
-
-  button {
-    margin-top: 15px;
+  .mat-column-stock {
+    width: 120px;
+    text-align: center;
   }
 }

@@ -1,31 +1,10 @@
-table {
-  width: 100%;
-  margin-top: 15px;
-  table-layout: fixed;
-}
-
-mat-paginator {
-  margin-bottom: 15px;
-}
-
-mat-form-field {
-  font-size: 14px;
-  width: 100%;
-  margin-top: 15px;
-}
-
-.mat-column-actions {
-  text-align: center;
-
-  button {
-    margin-left: 10px;
+:host ::ng-deep {
+  .mat-column-actions {
+    width: 280px;
   }
-}
 
-.variants {
-  margin: 25px;
-
-  button {
-    margin-top: 15px;
+  .mat-column-stock {
+    width: 125px;
+    text-align: center;
   }
 }

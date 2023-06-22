@@ -1,0 +1,44 @@
+<div *ngIf="isBusy" class="loading-view">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="!isBusy && product" class="main-container">
+  <div mat-dialog-title>Galeria de {{ product.name }}</div>
+  <div mat-dialog-content>
+    <input
+      (change)="onFileChange($event)"
+      accept="image/*"
+      type="file"
+      multiple
+      hidden
+      #fileInput />
+    <div class="actions" *ngIf="gallery">
+      <button mat-flat-button color="primary" (click)="fileInput.click()">
+        <mat-icon>upload</mat-icon>
+        Subir imágenes
+      </button>
+      <button
+        mat-flat-button
+        color="warn"
+        (click)="onDeleteSelected()"
+        [disabled]="gallery.values.length === 0">
+        <mat-icon>delete_forever</mat-icon>
+        Borrar seleccionadas
+      </button>
+    </div>
+    <app-image-gallery
+      #gallery
+      [images]="productImages"
+      [selectable]="true"></app-image-gallery>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button type="button" mat-flat-button mat-dialog-close color="warn">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button (click)="onSubmit()" mat-flat-button color="primary">
+      <mat-icon>save</mat-icon>
+      Guardar
+    </button>
+  </div>
+</div>

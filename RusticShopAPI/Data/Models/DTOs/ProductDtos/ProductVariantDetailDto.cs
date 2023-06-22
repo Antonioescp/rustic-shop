@@ -5,9 +5,9 @@
         public long Id { get; set; }
         public string SKU { get; set; } = null!;
         public decimal UnitPrice { get; set; }
+        public long Stock { get; set; }
 
         // Computed properties
-        public long? Stock { get; set; }
         public long? WishlistedCount { get; set; }
         public bool? HasDiscount { get; set; }
         public ProductVariantDiscountDetailDto? CurrentDiscount { get; set; }

@@ -40,9 +40,7 @@ export class AdminPanelComponent {
         {
           label: 'Transacciones',
           children: [
-            { label: 'Compras', path: '', icon: '' },
-            { label: 'Ventas', path: '', icon: '' },
-            { label: 'Reembolsos', path: '', icon: '' },
+            { label: 'Ventas', path: 'ordenes', icon: 'shopping_bag' },
           ],
         },
       ]

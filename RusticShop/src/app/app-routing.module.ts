@@ -20,6 +20,7 @@ import {
   canActivateProgrammerRoutes,
   canActivateEmployeeRoutes,
 } from './guards/auth.guard';
+import { SalesTableComponent } from './admin/sales-table/sales-table.component';
 
 const routes: Routes = [
   {
@@ -83,6 +84,7 @@ const routes: Routes = [
             component: BrandsComponent,
           },
           { path: 'variantes', component: ProductVariantsComponent },
+          { path: 'ordenes', component: SalesTableComponent },
         ],
       },
     ],

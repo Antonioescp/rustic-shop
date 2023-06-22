@@ -4,5 +4,6 @@ export interface Product {
   name: string;
   shortDescription: string;
   description: string | null;
+  stock: number | null;
   isPublished: boolean;
 }

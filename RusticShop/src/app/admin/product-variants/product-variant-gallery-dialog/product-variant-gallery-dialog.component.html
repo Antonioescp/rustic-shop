@@ -1,0 +1,22 @@
+<div *ngIf="isBusy" class="loading-view">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="container" [hidden]="isBusy || !productVariant">
+  <div mat-dialog-title>Galeria de {{ productVariant?.sku }}</div>
+  <div mat-dialog-content>
+    <app-image-gallery
+      [images]="availableImages"
+      [selectable]="true"></app-image-gallery>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-flat-button mat-dialog-close color="warn">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button mat-flat-button color="primary" (click)="onSubmit()">
+      <mat-icon>save</mat-icon>
+      Guardar
+    </button>
+  </div>
+</div>

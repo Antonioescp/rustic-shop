@@ -23,8 +23,7 @@ namespace RusticShopAPI.Data.Models.Settings
                 .IsRequired()
                 .HasDefaultValue(false);
 
-            builder
-                .Ignore(p => p.Stock);
+            builder.Ignore(p => p.Stock);
 
             // Relationships
             builder

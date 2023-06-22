@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.Settings;
@@ -43,6 +44,22 @@ namespace RusticShopAPI.Data
                     .WithOne(pm => pm.CardHolder)
                     .HasForeignKey(pm => pm.CardHolderId);
             });
+
+            builder.Entity<IdentityRole>()
+                .HasData(
+                    new IdentityRole
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = "Administrator",
+                        NormalizedName = "ADMINISTRATOR"
+                    },
+                    new IdentityRole
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = "Customer",
+                        NormalizedName = "CUSTOMER"
+                    }
+                );
         }
 
         public DbSet<City> Cities => Set<City>();
@@ -61,13 +78,8 @@ namespace RusticShopAPI.Data
         public DbSet<ProductVariantImage> ProductVariantImages => Set<ProductVariantImage>();
         public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
         public DbSet<ProductVariantDiscount> ProductVariantDiscounts => Set<ProductVariantDiscount>();
-        public DbSet<Provider> Providers => Set<Provider>();
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
-        public DbSet<Purchase> Purchases => Set<Purchase>();
-        public DbSet<PurchaseDetail> PurchaseDetails => Set<PurchaseDetail>();
-        public DbSet<Refund> Refunds => Set<Refund>();
-        public DbSet<RefundDetail> RefundDetails => Set<RefundDetail>();
         public DbSet<ProductAttribute> ProductAttributes => Set<ProductAttribute>();
         public DbSet<CategoryProduct> CategoryProducts => Set<CategoryProduct>();
         public DbSet<ProductSales> ProductSales => Set<ProductSales>(); 

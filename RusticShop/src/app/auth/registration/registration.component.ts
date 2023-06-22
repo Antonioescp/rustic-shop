@@ -80,6 +80,7 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
 
     this.authService.register(registrationRequest).subscribe({
       next: res => {
+        this.isBusy = false;
         this.registrationResponse = res;
         if (res.success) {
           this.snackBar.open(
@@ -89,13 +90,11 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
         }
       },
       error: error => {
+        this.isBusy = false;
         this.snackBar.open('Ha ocurrido un error.');
         if (error.status === 400) {
           this.registrationResponse = error.error;
         }
-      },
-      complete: () => {
-        this.isBusy = false;
       },
     });
   }

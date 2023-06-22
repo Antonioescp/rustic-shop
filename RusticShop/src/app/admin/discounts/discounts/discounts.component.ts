@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { DiscountsService } from 'src/app/services/discounts.service';
 import Discount from 'src/app/shared/models/Discount';
 import {
@@ -16,28 +13,68 @@ import {
   ConfirmDialogResult,
 } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DiscountEditDialogComponent } from '../discount-edit-dialog/discount-edit-dialog.component';
-import { Pagination } from 'src/app/services/categories.service';
+import { PageEvent } from '@angular/material/paginator';
+import {
+  RowActionsDef,
+  TableActionDef,
+  TableColumnDef,
+  TableComponent,
+} from 'src/app/shared/components/table/table.component';
 
 @Component({
   selector: 'app-discounts',
   templateUrl: './discounts.component.html',
   styleUrls: ['./discounts.component.scss'],
 })
-export class DiscountsComponent implements OnInit {
-  discounts!: MatTableDataSource<Discount>;
-  displayedColumns = ['id', 'name', 'description', 'actions'];
+export class DiscountsComponent implements AfterViewInit {
+  @ViewChild(TableComponent) table!: TableComponent<Discount>;
 
-  defaultPageIndex = 0;
-  defaultPageSize = 10;
-  public defaultSortColumn = 'name';
-  public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn = 'name';
-  filterQuery?: string;
+  columns: TableColumnDef<Discount>[] = [
+    {
+      def: 'id',
+      header: 'ID',
+      valueGetter: discount => discount.id.toString(),
+      sortable: true,
+    },
+    {
+      def: 'name',
+      header: 'Nombre',
+      valueGetter: discount => discount.name,
+      sortable: true,
+    },
+    {
+      def: 'description',
+      header: 'Descripción',
+      valueGetter: discount => discount.description,
+      sortable: true,
+    },
+  ];
 
-  isLoadingAction = false;
+  displayedColumns = [...this.columns.map(c => c.def), 'actions'];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  tableActions: TableActionDef[] = [
+    {
+      label: 'Agregar descuento',
+      icon: 'add',
+      execute: () => this.onCreateDiscount(),
+      color: 'primary',
+    },
+  ];
+
+  rowActions: RowActionsDef<Discount>[] = [
+    {
+      icon: 'edit',
+      execute: discount => this.onUpdateDiscount(discount.id),
+      tooltip: 'Editar',
+      color: 'primary',
+    },
+    {
+      icon: 'delete_forever',
+      execute: discount => this.onDeleteDiscount(discount),
+      tooltip: 'Eliminar',
+      color: 'warn',
+    },
+  ];
 
   constructor(
     private discountsService: DiscountsService,
@@ -45,42 +82,19 @@ export class DiscountsComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {
-    this.loadData();
+  ngAfterViewInit(): void {
+    this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
   }
 
-  loadData(query?: string) {
-    const pageEvent = new PageEvent();
-    pageEvent.pageIndex = this.defaultPageIndex;
-    pageEvent.pageSize = this.defaultPageSize;
-    this.filterQuery = query;
-    this.getData(pageEvent);
-  }
-
-  getData(event: PageEvent): void {
+  fetchData(pageEvent: PageEvent) {
     this.discountsService
-      .getPaginated(
-        new Pagination({
-          defaultSortColumn: this.defaultSortColumn,
-          defaultSortOrder: this.defaultSortOrder,
-          pageIndex: event.pageIndex,
-          pageSize: event.pageSize,
-          sort: this.sort,
-          defaultFilterColumn: this.defaultFilterColumn,
-          filterQuery: this.filterQuery,
-        })
-      )
+      .getPaginated(this.table.getPagination(pageEvent))
       .subscribe({
         next: result => {
-          this.paginator.length = result.totalCount;
-          this.paginator.pageIndex = result.pageIndex;
-          this.paginator.pageSize = result.pageSize;
-          this.discounts = new MatTableDataSource(result.data);
-          this.isLoadingAction = false;
+          this.table.updateWithResults(result);
         },
         error: error => {
-          console.log(error);
-          this.isLoadingAction = false;
+          console.error(error);
         },
       });
   }
@@ -109,20 +123,17 @@ export class DiscountsComponent implements OnInit {
   }
 
   deleteDiscount(discount: Discount) {
-    this.isLoadingAction = true;
     this.discountsService.deleteById(discount.id).subscribe({
-      next: result => {
-        this.loadData();
+      next: () => {
+        this.table.loadData();
         this.snackBar.open(`Descuento "${discount.name}" eliminado con éxito.`);
       },
       error: error => {
         console.error(error);
-        this.isLoadingAction = false;
         this.snackBar.open(
           `Descuento "${discount.name}" no pudo ser eliminado.`
         );
       },
-      complete: () => (this.isLoadingAction = false),
     });
   }
 
@@ -135,7 +146,7 @@ export class DiscountsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
-        this.loadData();
+        this.table.loadData();
         this.snackBar.open(
           `Descuento "${result.resource.name}" creado con éxito.`
         );
@@ -158,7 +169,7 @@ export class DiscountsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
-        this.loadData();
+        this.table.loadData();
         this.snackBar.open(
           `Descuento "${result.resource.name}" actualizado con éxito.`
         );

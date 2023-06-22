@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { ProductsService } from 'src/app/services/products.service';
 import { Product } from 'src/app/shared/models/Product';
 import {
@@ -21,35 +19,93 @@ import {
   ProductEditSchemaDialogData,
   ProductEditSchemaDialogResult,
 } from '../product-edit-schema-dialog/product-edit-schema-dialog.component';
-import { Pagination } from 'src/app/services/categories.service';
+import {
+  RowActionsDef,
+  TableActionDef,
+  TableColumnDef,
+  TableComponent,
+} from 'src/app/shared/components/table/table.component';
+import {
+  ProductGalleryDialogComponent,
+  ProductGalleryDialogData,
+  ProductGalleryDialogResult,
+} from '../product-gallery-dialog/product-gallery-dialog.component';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
-export class ProductsComponent implements OnInit {
-  products!: MatTableDataSource<Product>;
-  displayedColumns = [
-    'id',
-    'name',
-    'shortDescription',
-    'description',
-    'isPublished',
-    'actions',
+export class ProductsComponent implements AfterViewInit {
+  @ViewChild(TableComponent) crud!: TableComponent<Product>;
+
+  columns: TableColumnDef<Product>[] = [
+    {
+      def: 'id',
+      header: 'ID',
+      valueGetter: product => product.id.toString(),
+      sortable: true,
+    },
+    {
+      def: 'name',
+      header: 'Nombre',
+      valueGetter: product => product.name,
+      sortable: true,
+    },
+    {
+      def: 'shortDescription',
+      header: 'Descripción corta',
+      valueGetter: product => product.shortDescription ?? 'No aplicable',
+    },
+    {
+      def: 'stock',
+      header: 'Existencias',
+      valueGetter: product => product.stock?.toString() ?? 'No aplicable',
+    },
+    {
+      def: 'isPublished',
+      header: 'Publicado',
+      valueGetter: product => (product.isPublished ? 'Sí' : 'No'),
+    },
   ];
 
-  defaultPageIndex = 0;
-  defaultPageSize = 10;
-  public defaultSortColumn = 'name';
-  public defaultSortOrder: 'asc' | 'desc' = 'asc';
-  defaultFilterColumn = 'name';
-  filterQuery?: string;
+  displayedColumns = [...this.columns.map(c => c.def), 'actions'];
 
-  isLoadingAction = false;
+  tableActions: TableActionDef[] = [
+    {
+      label: 'Agregar producto',
+      color: 'primary',
+      icon: 'add',
+      execute: () => this.onCreateProduct(),
+    },
+  ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  rowActions: RowActionsDef<Product>[] = [
+    {
+      tooltip: 'Editar',
+      color: 'primary',
+      icon: 'edit',
+      execute: product => this.onUpdateProduct(product.id),
+    },
+    {
+      tooltip: 'Editar esquema',
+      color: 'accent',
+      icon: 'schema',
+      execute: product => this.onEditSchema(product.id),
+    },
+    {
+      tooltip: 'Administrar imágenes',
+      color: 'accent',
+      icon: 'image',
+      execute: product => this.onEditProductGallery(product.id),
+    },
+    {
+      tooltip: 'Eliminar',
+      color: 'warn',
+      icon: 'delete_forever',
+      execute: product => this.onDelete(product),
+    },
+  ];
 
   constructor(
     private productsService: ProductsService,
@@ -57,42 +113,19 @@ export class ProductsComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {
-    this.loadData();
+  ngAfterViewInit(): void {
+    this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
   }
 
-  loadData(query?: string) {
-    const pageEvent = new PageEvent();
-    pageEvent.pageIndex = this.defaultPageIndex;
-    pageEvent.pageSize = this.defaultPageSize;
-    this.filterQuery = query;
-    this.getData(pageEvent);
-  }
-
-  getData(event: PageEvent): void {
+  fetchData(pageEvent: PageEvent) {
     this.productsService
-      .getPaginated(
-        new Pagination({
-          defaultSortColumn: this.defaultSortColumn,
-          defaultSortOrder: this.defaultSortOrder,
-          pageIndex: event.pageIndex,
-          pageSize: event.pageSize,
-          sort: this.sort,
-          defaultFilterColumn: this.defaultFilterColumn,
-          filterQuery: this.filterQuery,
-        })
-      )
+      .getPaginated(this.crud.getPagination(pageEvent))
       .subscribe({
         next: result => {
-          this.paginator.length = result.totalCount;
-          this.paginator.pageIndex = result.pageIndex;
-          this.paginator.pageSize = result.pageSize;
-          this.products = new MatTableDataSource(result.data);
-          this.isLoadingAction = false;
+          this.crud.updateWithResults(result);
         },
         error: error => {
-          console.log(error);
-          this.isLoadingAction = false;
+          console.error(error);
         },
       });
   }
@@ -115,21 +148,20 @@ export class ProductsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.confirmed) {
+        this.crud.loadData();
         this.deleteProduct(product);
       }
     });
   }
 
   deleteProduct(product: Product) {
-    this.isLoadingAction = true;
     this.productsService.deleteById(product.id).subscribe({
       next: () => {
-        this.loadData();
+        this.crud.loadData();
         this.snackBar.open(`Producto "${product.name}" eliminado con éxito.`);
       },
       error: error => {
         console.error(error);
-        this.isLoadingAction = false;
         this.snackBar.open(
           `El producto "${product.name}" no se ha podido eliminar.`
         );
@@ -146,15 +178,14 @@ export class ProductsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
+        this.crud.loadData();
         this.snackBar.open(
           `Producto "${result.resource.name}" creado con éxito.`
         );
-        this.loadData();
       } else if (result?.success == false) {
         this.snackBar.open(
           `Producto "${result.resource.name}" no se ha podido crear.`
         );
-        this.loadData();
       }
     });
   }
@@ -170,15 +201,14 @@ export class ProductsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
+        this.crud.loadData();
         this.snackBar.open(
           `Producto "${result.resource.name}" actualizado con éxito.`
         );
-        this.loadData();
       } else if (result?.success == false) {
         this.snackBar.open(
           `Producto "${result.resource.name}" no se ha podido actualizado.`
         );
-        this.loadData();
       }
     });
   }
@@ -196,6 +226,16 @@ export class ProductsComponent implements OnInit {
       if (result?.success) {
         this.snackBar.open('Actualizado');
       }
+    });
+  }
+
+  onEditProductGallery(productId: number): void {
+    const dialogRef = this.dialog.open<
+      ProductGalleryDialogComponent,
+      ProductGalleryDialogData,
+      ProductGalleryDialogResult
+    >(ProductGalleryDialogComponent, {
+      data: { productId },
     });
   }
 }

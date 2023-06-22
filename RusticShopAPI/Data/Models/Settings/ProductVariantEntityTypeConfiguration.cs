@@ -9,7 +9,7 @@ namespace RusticShopAPI.Data.Models.Settings
         {
             builder.ToTable("ProductVariants");
             builder.HasKey(pv => pv.Id);
-            
+
             builder
                 .HasIndex(pv => pv.SKU)
                 .IsUnique();
@@ -29,7 +29,6 @@ namespace RusticShopAPI.Data.Models.Settings
                 .IsRequired();
 
             builder
-                .Ignore(pv => pv.Stock)
                 .Ignore(pv => pv.CurrentDiscount)
                 .Ignore(pv => pv.HasDiscount)
                 .Ignore(pv => pv.WishlistedCount)
@@ -50,7 +49,7 @@ namespace RusticShopAPI.Data.Models.Settings
                 .HasMany(pv => pv.Discounts)
                 .WithMany(d => d.ProductVariants)
                 .UsingEntity<ProductVariantDiscount>();
-                
+
         }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using RusticShopAPI.Data.Models.DTOs.ProctImageDtos;
 
 namespace RusticShopAPI.Controllers
 {
@@ -17,20 +18,22 @@ namespace RusticShopAPI.Controllers
     public class ProductImagesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public ProductImagesController(ApplicationDbContext context)
+        public ProductImagesController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: api/ProductImages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductImage>>> GetProductImages()
         {
-          if (_context.ProductImages == null)
-          {
-              return NotFound();
-          }
+            if (_context.ProductImages == null)
+            {
+                return NotFound();
+            }
             return await _context.ProductImages.ToListAsync();
         }
 
@@ -38,10 +41,10 @@ namespace RusticShopAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductImage>> GetProductImage(long id)
         {
-          if (_context.ProductImages == null)
-          {
-              return NotFound();
-          }
+            if (_context.ProductImages == null)
+            {
+                return NotFound();
+            }
             var productImage = await _context.ProductImages.FindAsync(id);
 
             if (productImage == null)
@@ -88,10 +91,10 @@ namespace RusticShopAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductImage>> PostProductImage(ProductImage productImage)
         {
-          if (_context.ProductImages == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.ProductImages'  is null.");
-          }
+            if (_context.ProductImages == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.ProductImages'  is null.");
+            }
             _context.ProductImages.Add(productImage);
             await _context.SaveChangesAsync();
 

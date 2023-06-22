@@ -42,6 +42,7 @@ export class LoginComponent extends BaseFormComponent {
 
     this.authService.login(loginRequest).subscribe({
       next: result => {
+        this.isBusy = false;
         this.loginResponse = result;
         if (result.success) {
           this.snackBar.open('Sesión iniciada con éxito');
@@ -63,8 +64,6 @@ export class LoginComponent extends BaseFormComponent {
         if (error.status === HttpStatusCode.Unauthorized) {
           this.accountLocked = true;
         }
-      },
-      complete: () => {
         this.isBusy = false;
       },
     });

@@ -11,8 +11,10 @@
 
         // Computed properties
         public decimal? Total => ProductVariants?.Aggregate(
-                    0M, 
+                    0M,
                     (decimal current, ProductVariant product) => current + product.UnitPrice);
+
+        public long? ProductCount => ProductVariants?.Count;
 
         // Nav properties
         public User? User { get; set; }
@@ -20,6 +22,5 @@
         public Address? ShippingAddress { get; set; }
         public ICollection<ProductVariant>? ProductVariants { get; set; }
         public ICollection<OrderDetail>? OrderDetails { get; set; }
-        public ICollection<Refund>? Refunds { get; set; }
     }
 }

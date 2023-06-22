@@ -55,10 +55,14 @@ export class ProductVariantEditDialogComponent
       }),
       unitPrice: new FormControl<number | null>(null, {
         nonNullable: false,
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.min(0)],
       }),
       isPublished: new FormControl<boolean>(false, {
         nonNullable: true,
+      }),
+      stock: new FormControl<number | null>(null, {
+        nonNullable: false,
+        validators: [Validators.required, Validators.min(0)],
       }),
     });
   }
@@ -90,6 +94,7 @@ export class ProductVariantEditDialogComponent
     productVariant.sku = this.form.controls['sku'].value;
     productVariant.isPublished = this.form.controls['isPublished'].value;
     productVariant.unitPrice = this.form.controls['unitPrice'].value;
+    productVariant.stock = this.form.controls['stock'].value;
 
     if (this.data?.id) {
       productVariant.id = this.data.id;
