@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.Settings;
@@ -42,6 +43,22 @@ namespace RusticShopAPI.Data
                     .WithOne(pm => pm.CardHolder)
                     .HasForeignKey(pm => pm.CardHolderId);
             });
+
+            builder.Entity<IdentityRole>()
+                .HasData(
+                    new IdentityRole
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = "Administrator",
+                        NormalizedName = "ADMINISTRATOR"
+                    },
+                    new IdentityRole
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = "Customer",
+                        NormalizedName = "CUSTOMER"
+                    }
+                );
         }
 
         public DbSet<City> Cities => Set<City>();
