@@ -160,6 +160,26 @@ namespace RusticShopAPI.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id}/summary")]
+        public async Task<ActionResult<OrderSummaryDto>> GetSummary(long id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.ShippingAddress!)
+                    .ThenInclude(sa => sa.Neighborhood!)
+                        .ThenInclude(n => n.City)
+                .Include(o => o.OrderDetails!)
+                    .ThenInclude(od => od.ProductVariant)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<OrderSummaryDto>(order);
+        }
+
         private bool OrderExists(long id)
         {
             return (_context.Orders?.Any(e => e.Id == id)).GetValueOrDefault();

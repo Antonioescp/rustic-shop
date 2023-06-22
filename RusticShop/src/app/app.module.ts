@@ -41,6 +41,7 @@ import { ImageGalleryComponent } from './shared/components/image-gallery/image-g
 import { ProductVariantGalleryDialogComponent } from './admin/product-variants/product-variant-gallery-dialog/product-variant-gallery-dialog.component';
 import { ProductVariantEditSchemaDialogComponent } from './admin/product-variants/product-variant-edit-schema-dialog/product-variant-edit-schema-dialog.component';
 import { ProductVariantDiscountManagementDialogComponent } from './admin/product-variants/product-variant-discount-management-dialog/product-variant-discount-management-dialog.component';
+import { OrderSummaryDialogComponent } from './admin/sales-table/order-summary-dialog/order-summary-dialog.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { ProductVariantDiscountManagementDialogComponent } from './admin/product
     ProductVariantGalleryDialogComponent,
     ProductVariantEditSchemaDialogComponent,
     ProductVariantDiscountManagementDialogComponent,
+    OrderSummaryDialogComponent,
   ],
   imports: [
     BrowserModule,

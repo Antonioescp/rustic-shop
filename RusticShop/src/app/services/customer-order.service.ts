@@ -7,6 +7,7 @@ import { Pagination } from './categories.service';
 import { OrderDetailsDto } from '../shared/models/dtos/orders/OrderDetailsDto';
 import { Observable } from 'rxjs';
 import { PaginatedResponse } from '../shared/models/dtos/PaginatedResponse';
+import { OrderSummaryDto } from '../shared/models/dtos/orders/OrderSummaryDto';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +25,10 @@ export class CustomerOrderService extends BaseCrudService<Order> {
     return this.http.get<PaginatedResponse<OrderDetailsDto>>(url, {
       params: pagination.toHttpParams(),
     });
+  }
+
+  getOrderSummaryById(id: number): Observable<OrderSummaryDto> {
+    const url = `${this.resourceUrl}${id}/summary`;
+    return this.http.get<OrderSummaryDto>(url);
   }
 }
