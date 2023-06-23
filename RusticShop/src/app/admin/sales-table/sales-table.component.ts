@@ -14,6 +14,7 @@ import {
   OrderSummaryDialogData,
   OrderSummaryDialogResult,
 } from './order-summary-dialog/order-summary-dialog.component';
+import { ReportServiceService } from 'src/app/services/report-service.service';
 
 @Component({
   selector: 'app-sales-table',
@@ -68,8 +69,14 @@ export class SalesTableComponent implements AfterViewInit {
     {
       color: 'primary',
       icon: 'visibility',
-      tooltip: 'Ver',
+      tooltip: 'Ver detalles',
       execute: (order: Order) => this.onViewOrderSummary(order.id),
+    },
+    {
+      color: 'accent',
+      icon: 'receipt_long',
+      tooltip: 'Generar reporte',
+      execute: (order: Order) => this.generateReport(order.id),
     },
   ];
 
@@ -77,7 +84,8 @@ export class SalesTableComponent implements AfterViewInit {
 
   constructor(
     public orderService: CustomerOrderService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private reportService: ReportServiceService
   ) {}
 
   ngAfterViewInit(): void {
@@ -102,5 +110,17 @@ export class SalesTableComponent implements AfterViewInit {
     });
 
     // TODO: listen to dialog close event
+  }
+
+  generateReport(orderId: number): void {
+    this.reportService.getOrderSummaryReport(orderId).subscribe(data => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `Resumen de orden #${orderId}.pdf`;
+      link.click();
+    });
   }
 }

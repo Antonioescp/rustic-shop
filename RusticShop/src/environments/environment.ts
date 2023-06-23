@@ -20,4 +20,5 @@ export const environment = {
   providersEndpoint: 'Providers/',
   ordersEndpoint: 'Orders/',
   productImageEndpoint: 'ProductImages/',
+  reportsEndpoint: 'Reports/',
 };
