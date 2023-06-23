@@ -27,6 +27,7 @@ import {
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 const materialModules = [
   MatSidenavModule,
@@ -53,6 +54,7 @@ const materialModules = [
   MatSnackBarModule,
   MatNativeDateModule,
   MatDatepickerModule,
+  MatGridListModule,
 ];
 
 @NgModule({

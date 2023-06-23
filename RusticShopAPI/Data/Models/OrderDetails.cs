@@ -8,6 +8,8 @@
         public long Quantity { get; set; }
         public decimal UnitPrice { get; set; }
 
+        public decimal Total => Quantity * UnitPrice;
+
         // Nav properties
         public Order? Order { get; set; }
         public ProductVariant? ProductVariant { get; set; }

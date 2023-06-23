@@ -15,6 +15,8 @@ namespace RusticShopAPI.Services.AutoMapper
                     opt => opt.MapFrom(src => $"{src.User!.FirstName} {src.User!.LastName}"));
 
             CreateMap<PaginatedResult<Order>, PaginatedResult<OrderDetailsDto>>();
+            CreateMap<OrderDetail, OrderSummaryDetailDto>();
+            CreateMap<Order, OrderSummaryDto>();
         }
     }
 }

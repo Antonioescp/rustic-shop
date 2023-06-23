@@ -36,6 +36,11 @@ import {
   ProductVariantEditSchemaDialogData,
   ProductVariantEditSchemaDialogResult,
 } from '../product-variant-edit-schema-dialog/product-variant-edit-schema-dialog.component';
+import {
+  ProductVariantDiscountManagementDialogComponent,
+  ProductVariantDiscountManagementDialogData,
+  ProductVariantDiscountManagementDialogResult,
+} from '../product-variant-discount-management-dialog/product-variant-discount-management-dialog.component';
 
 @Component({
   selector: 'app-product-variants',
@@ -116,6 +121,12 @@ export class ProductVariantsComponent implements AfterViewInit {
       color: 'accent',
       execute: productVariant =>
         this.onEditProductVariantGallery(productVariant),
+    },
+    {
+      tooltip: 'Descuentos',
+      icon: 'local_offer',
+      color: 'accent',
+      execute: productVariant => this.onEditDiscounts(productVariant.id),
     },
     {
       tooltip: 'Eliminar',
@@ -257,5 +268,17 @@ export class ProductVariantsComponent implements AfterViewInit {
     });
 
     // TODO: add messages
+  }
+
+  onEditDiscounts(productVariantId: number): void {
+    const dialogRef = this.dialog.open<
+      ProductVariantDiscountManagementDialogComponent,
+      ProductVariantDiscountManagementDialogData,
+      ProductVariantDiscountManagementDialogResult
+    >(ProductVariantDiscountManagementDialogComponent, {
+      data: { productVariantId },
+    });
+
+    // TODO: add user feedback
   }
 }

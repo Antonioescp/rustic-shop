@@ -10,11 +10,9 @@
         public DateTime Date { get; set; }
 
         // Computed properties
-        public decimal? Total => ProductVariants?.Aggregate(
-                    0M,
-                    (decimal current, ProductVariant product) => current + product.UnitPrice);
+        public decimal? Total => OrderDetails?.Aggregate(0M, (acc, od) => acc + od.Total);
 
-        public long? ProductCount => ProductVariants?.Count;
+        public long? ProductCount => OrderDetails?.Aggregate(0L, (acc, od) => acc + od.Quantity);
 
         // Nav properties
         public User? User { get; set; }

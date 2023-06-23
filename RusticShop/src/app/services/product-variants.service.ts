@@ -8,6 +8,7 @@ import { Pagination } from './categories.service';
 import { ProductImage } from '../shared/models/ProductImage';
 import { ProductVariantAttributeDto } from '../shared/models/dtos/product-variants/ProductVariantAttributeDto';
 import { ProductVariantAttribute } from '../shared/models/ProductVariantAttribute';
+import { ProductVariantDiscount } from '../shared/models/ProductVariantDiscount';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,24 @@ export class ProductVariantsService extends BaseCrudService<ProductVariant> {
 
   deleteAttribute(variantId: number, attributeId: number): Observable<any> {
     const url = `${this.resourceUrl}${variantId}/attributes/${attributeId}`;
+    return this.http.delete<any>(url);
+  }
+
+  getDiscounts(variantId: number): Observable<ProductVariantDiscount[]> {
+    const url = `${this.resourceUrl}${variantId}/discounts`;
+    return this.http.get<ProductVariantDiscount[]>(url);
+  }
+
+  addDiscount(
+    variantId: number,
+    discountData: Omit<ProductVariantDiscount, 'id' | 'productVariantId'>
+  ): Observable<any> {
+    const url = `${this.resourceUrl}${variantId}/discounts`;
+    return this.http.post<any>(url, discountData);
+  }
+
+  removeDiscount(variantId: number, discountId: number): Observable<any> {
+    const url = `${this.resourceUrl}${variantId}/discounts/${discountId}`;
     return this.http.delete<any>(url);
   }
 }

@@ -10,7 +10,7 @@ using RusticShopAPI.Services.Mail;
 using System.Text;
 using System.Text.Json.Serialization;
 
-// Setting QuestPDF License
+// setting up quest license
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);

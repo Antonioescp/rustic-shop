@@ -1,4 +1,5 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { CustomerOrderService } from 'src/app/services/customer-order.service';
 import {
@@ -8,6 +9,12 @@ import {
 } from 'src/app/shared/components/table/table.component';
 import { Order } from 'src/app/shared/models/Order';
 import { OrderDetailsDto } from 'src/app/shared/models/dtos/orders/OrderDetailsDto';
+import {
+  OrderSummaryDialogComponent,
+  OrderSummaryDialogData,
+  OrderSummaryDialogResult,
+} from './order-summary-dialog/order-summary-dialog.component';
+import { ReportServiceService } from 'src/app/services/report-service.service';
 
 @Component({
   selector: 'app-sales-table',
@@ -38,7 +45,7 @@ export class SalesTableComponent implements AfterViewInit {
       def: 'productCount',
       header: 'Productos',
       valueGetter: (order: OrderDetailsDto) =>
-        order.productCount.toLocaleString('es-NI'),
+        order.productCount?.toLocaleString('es-NI') ?? 'No aplicable',
     },
     {
       def: 'date',
@@ -51,10 +58,10 @@ export class SalesTableComponent implements AfterViewInit {
       def: 'total',
       header: 'Total',
       valueGetter: (order: OrderDetailsDto) =>
-        order.total.toLocaleString('es-NI', {
+        order.total?.toLocaleString('es-NI', {
           style: 'currency',
           currency: 'NIO',
-        }),
+        }) ?? 'No aplicable',
     },
   ];
 
@@ -62,14 +69,24 @@ export class SalesTableComponent implements AfterViewInit {
     {
       color: 'primary',
       icon: 'visibility',
-      tooltip: 'Ver',
-      execute: (order: Order) => console.log(order),
+      tooltip: 'Ver detalles',
+      execute: (order: Order) => this.onViewOrderSummary(order.id),
+    },
+    {
+      color: 'accent',
+      icon: 'receipt_long',
+      tooltip: 'Generar reporte',
+      execute: (order: Order) => this.generateReport(order.id),
     },
   ];
 
   displayedColumns = [...this.columns.map(c => c.def), 'actions'];
 
-  constructor(public orderService: CustomerOrderService) {}
+  constructor(
+    public orderService: CustomerOrderService,
+    private dialog: MatDialog,
+    private reportService: ReportServiceService
+  ) {}
 
   ngAfterViewInit(): void {
     this.fetchData({ pageIndex: 0, pageSize: 5, length: 0 });
@@ -81,5 +98,29 @@ export class SalesTableComponent implements AfterViewInit {
       .subscribe(response => {
         this.crud.updateWithResults(response);
       });
+  }
+
+  onViewOrderSummary(orderId: number): void {
+    const dialogRef = this.dialog.open<
+      OrderSummaryDialogComponent,
+      OrderSummaryDialogData,
+      OrderSummaryDialogResult
+    >(OrderSummaryDialogComponent, {
+      data: { orderId },
+    });
+
+    // TODO: listen to dialog close event
+  }
+
+  generateReport(orderId: number): void {
+    this.reportService.getOrderSummaryReport(orderId).subscribe(data => {
+      const blob = new Blob([data], { type: 'application/pdf' });
+
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `Resumen de orden #${orderId}.pdf`;
+      link.click();
+    });
   }
 }
