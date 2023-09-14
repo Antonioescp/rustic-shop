@@ -411,7 +411,16 @@ namespace RusticShopAPI.Controllers
         public async Task<ActionResult> UploadImage(long id, List<IFormFile> images)
         {
             var files = images.ToList();
-            var path = Path.Combine(_hostEnvironment.WebRootPath, "Products", $"{id}");
+
+            var rootDir = _hostEnvironment.WebRootPath
+                ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+            if (!Directory.Exists(rootDir))
+            {
+                Directory.CreateDirectory(rootDir);
+            }
+
+            var path = Path.Combine(rootDir, "Products", $"{id}");
             var hostUrl = $"{Request.Scheme}://{Request.Host.Value}/gallery";
 
             if (!Directory.Exists(path))
@@ -455,17 +464,19 @@ namespace RusticShopAPI.Controllers
                 return NotFound();
             }
 
-            var hostUrl = $"{Request.Scheme}://{Request.Host.Value}/gallery/";
-            var filePath = Path.Combine(
-                _hostEnvironment.WebRootPath,
-                productImage.URL.Replace(hostUrl, ""));
-
-            if (System.IO.File.Exists(filePath))
+            if (_hostEnvironment.WebRootPath != null)
             {
-                System.IO.File.Delete(filePath);
+                var hostUrl = $"{Request.Scheme}://{Request.Host.Value}/gallery/";
+                var filePath = Path.Combine(
+                    _hostEnvironment.WebRootPath,
+                    productImage.URL.Replace(hostUrl, ""));
+
+                if (Directory.Exists(_hostEnvironment.WebRootPath)
+                    && System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
             }
-
-
 
             // delete product variant images with imageId
             foreach (var pvi in productVariantImages)
