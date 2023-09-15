@@ -558,6 +558,37 @@ namespace RusticShopAPI.Controllers
 
         #endregion
 
+        [HttpGet("featured")]
+        public async Task<ActionResult<IEnumerable<ProductVariantFeaturedDto>>> GetFeaturedProducts([FromQuery] int count = 3)
+        {
+            if (count < 1)
+            {
+                return BadRequest();
+            }
+
+            var featuredProducts = await _context.ProductVariants
+                .Include(pv => pv.Product!)
+                    .ThenInclude(p => p.Brand!)
+                .Include(pv => pv.ProductVariantDiscounts!)
+                .Include(pv => pv.Images!)
+                .Where(pv => pv.IsPublished && pv.Product!.IsPublished && pv.Stock > 0)
+                .OrderByDescending(pv => pv.ProductVariantDiscounts!
+                    .OrderBy(pvd => pvd.EndDate)
+                    .FirstOrDefault(pvd => pvd.EndDate > DateTime.UtcNow))
+                .Take(count)
+                .AsSplitQuery()
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (featuredProducts == null)
+            {
+                return NotFound();
+            }
+
+            var featuredProductsDto = _mapper.Map<List<ProductVariantFeaturedDto>>(featuredProducts);
+            return featuredProductsDto;
+        }
+
         #endregion
     }
 }
