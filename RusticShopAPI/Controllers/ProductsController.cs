@@ -572,9 +572,11 @@ namespace RusticShopAPI.Controllers
                 .Include(pv => pv.ProductVariantDiscounts!)
                 .Include(pv => pv.Images!)
                 .Where(pv => pv.IsPublished && pv.Product!.IsPublished && pv.Stock > 0)
-                .OrderByDescending(pv => pv.ProductVariantDiscounts!
-                    .OrderBy(pvd => pvd.EndDate)
-                    .FirstOrDefault(pvd => pvd.EndDate > DateTime.UtcNow))
+                .OrderByDescending(pv =>
+                    pv.ProductVariantDiscounts!
+                        .OrderBy(pvd => pvd.EndDate)
+                        .FirstOrDefault(pvd => pvd.EndDate > DateTime.UtcNow))
+                    .ThenByDescending(pv => pv.Images!.Count)
                 .Take(count)
                 .AsSplitQuery()
                 .AsNoTracking()
