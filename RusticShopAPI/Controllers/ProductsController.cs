@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using RusticShopAPI.Data;
 using RusticShopAPI.Data.Models;
 using RusticShopAPI.Data.Models.DTOs;
-using RusticShopAPI.Data.Models.DTOs.ProctImageDtos;
 using RusticShopAPI.Data.Models.DTOs.ProductDtos;
 using AttributeModel = RusticShopAPI.Data.Models.Attribute;
+using static RusticShopAPI.Shared.Patterns;
 
 namespace RusticShopAPI.Controllers
 {
@@ -430,7 +429,14 @@ namespace RusticShopAPI.Controllers
 
             foreach (var file in files)
             {
-                var filePath = Path.Combine(path, file.FileName);
+                // Sustituye los espacios en blanco por guiones
+                // y elimina los caracteres no válidos para una URL
+                var normalizedFileName = InvalidUrlCharacters.Replace(
+                    Whitespaces.Replace(file.FileName, "-"),
+                    ""
+                );
+
+                var filePath = Path.Combine(path, normalizedFileName);
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
@@ -442,7 +448,7 @@ namespace RusticShopAPI.Controllers
                 _context.ProductImages.Add(new ProductImage
                 {
                     ProductId = id,
-                    URL = $"{hostUrl}/Products/{id}/{file.FileName}"
+                    URL = $"{hostUrl}/Products/{id}/{normalizedFileName}"
                 });
             }
 
