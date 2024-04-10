@@ -22,17 +22,21 @@ export class AuthService {
   constructor(protected http: HttpClient) {}
 
   hasRole(role: string): boolean {
-    if (this.token) {
-      const decodedToken = jwtDecode<AuthenticationToken>(this.token);
-      if (Array.isArray(decodedToken.role)) {
-        return decodedToken.role.includes(role);
-      } else if (
-        typeof decodedToken.role === 'string' &&
-        decodedToken.role === role
-      ) {
-        return true;
-      }
+    if (!this.token) {
+      return false;
     }
+
+    const decodedToken = jwtDecode<AuthenticationToken>(this.token);
+
+    if (Array.isArray(decodedToken.role)) {
+      return decodedToken.role.includes(role);
+    } else if (
+      typeof decodedToken.role === 'string' &&
+      decodedToken.role === role
+    ) {
+      return true;
+    }
+
     return false;
   }
 

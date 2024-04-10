@@ -20,4 +20,7 @@
   <ItemGroup>
     <None Remove="src\models\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Script Include="tsconfig.json" />
+  </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@ import {
   canActivateAuthRoutes,
 } from './guards/auth.guard';
 import { SalesTableComponent } from './admin/sales-table/sales-table.component';
+import { NotFoundPageComponent } from './shared/not-found-page/not-found-page.component';
 
 const routes: Routes = [
   {
@@ -68,13 +69,13 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'home',
-    component: MainComponent,
+    path: '',
+    redirectTo: '/admin/panel',
+    pathMatch: 'full',
   },
   {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'home',
+    path: '**',
+    component: NotFoundPageComponent,
   },
 ];
 

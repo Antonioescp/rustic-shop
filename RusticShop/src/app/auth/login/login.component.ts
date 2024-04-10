@@ -44,9 +44,14 @@ export class LoginComponent extends BaseFormComponent {
       next: result => {
         this.isBusy = false;
         this.loginResponse = result;
-        if (result.success) {
+
+        if (result.success && this.authService.isAdmin) {
           this.snackBar.open('Sesión iniciada con éxito');
-          this.router.navigate(['/']);
+          this.router.navigate(['/admin/panel/productos']);
+        } else {
+          this.form.reset();
+          this.authService.logout();
+          this.loginResponse.message = 'Acceso denegado';
         }
       },
       error: error => {

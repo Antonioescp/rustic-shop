@@ -9,7 +9,6 @@ import { MaterialModule } from './shared/modules/material/material.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './auth/login/login.component';
-import { NavComponent } from './nav/nav.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
 import { PasswordResetRequestComponent } from './auth/password-reset-request/password-reset-request.component';
 import { PasswordResetComponent } from './auth/password-reset/password-reset.component';
@@ -42,13 +41,13 @@ import { ProductVariantGalleryDialogComponent } from './admin/product-variants/p
 import { ProductVariantEditSchemaDialogComponent } from './admin/product-variants/product-variant-edit-schema-dialog/product-variant-edit-schema-dialog.component';
 import { ProductVariantDiscountManagementDialogComponent } from './admin/product-variants/product-variant-discount-management-dialog/product-variant-discount-management-dialog.component';
 import { OrderSummaryDialogComponent } from './admin/sales-table/order-summary-dialog/order-summary-dialog.component';
+import { NotFoundPageComponent } from './shared/not-found-page/not-found-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    NavComponent,
     RegistrationComponent,
     PasswordResetRequestComponent,
     PasswordResetComponent,
@@ -79,6 +78,7 @@ import { OrderSummaryDialogComponent } from './admin/sales-table/order-summary-d
     ProductVariantEditSchemaDialogComponent,
     ProductVariantDiscountManagementDialogComponent,
     OrderSummaryDialogComponent,
+    NotFoundPageComponent,
   ],
   imports: [
     BrowserModule,

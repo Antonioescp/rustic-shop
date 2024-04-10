@@ -271,7 +271,7 @@ namespace RusticShopAPI.Controllers
             var user = await _userManager.FindByEmailAsync(data.Email);
             if (user == null)
             {
-                return Unauthorized();
+                return Ok();
             }
 
             if (!await _userManager.IsLockedOutAsync(user))
